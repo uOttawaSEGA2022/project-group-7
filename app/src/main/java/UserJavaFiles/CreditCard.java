@@ -1,4 +1,4 @@
-package OtherJavaFiles;
+package UserJavaFiles;
 
 import java.util.Date;
 

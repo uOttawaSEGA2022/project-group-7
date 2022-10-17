@@ -1,8 +1,7 @@
-package OtherJavaFiles;
+package UserJavaFiles;
 import android.graphics.Bitmap;
 
 public class Cook extends User{
-    //private String firstName, lastName, email, password;
     private Bitmap blankCheque;
 
     public Cook(String firstName,String lastName,String email,String password,String address){

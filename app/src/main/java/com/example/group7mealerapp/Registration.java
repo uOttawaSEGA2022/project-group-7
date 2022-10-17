@@ -1,43 +1,47 @@
 package com.example.group7mealerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.BitmapKt;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.DatabaseReference;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
 import android.os.Bundle;
 
 import java.util.Date;
 
-import OtherJavaFiles.Client;
-import OtherJavaFiles.CreditCard;
-import OtherJavaFiles.User;
+import UserJavaFiles.CreditCard;
+import UserJavaFiles.UserPOJO;
 
+/**
+ * The registration page takes the basics as of now (first and last name, email, password, address)
+ * and makes the other fields null ie credit card info and blank cheque which will later be
+ * implemented
+ */
 public class Registration extends AppCompatActivity
 {
     //create an instance for firebase
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
     DatabaseReference databaseReference;
-    //reference to the user object will be made into info
-    User user;
+    //this POJO object will be used to store data within firebase in a digestable manner
+    UserPOJO user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        //gets the instance on firebase ie the entire database
         firebaseDatabase = FirebaseDatabase.getInstance();
+        //make sure we write our info under UserInfo database
         databaseReference = firebaseDatabase.getReference("UserInfo");
     }
 
@@ -45,7 +49,7 @@ public class Registration extends AppCompatActivity
     /**
      * This method registers the user into the database.
      * To register, it is required to fill out a First name, Last name, Email, Password and Role
-     *
+     * TODO: add address field and make sure type is listened to!
      * Validity of the field entries are also checked in this method
      */
     public void RegisterButtonClick(View view)
@@ -103,16 +107,21 @@ public class Registration extends AppCompatActivity
             rePassword.setError("Passwords must match");
             return;
         }
-        //Write to file
-        //dont need these at the time but implementing anyways
-        String dummyAdress = "2360 ajax" ;
-        Date date = new Date(20);
-        CreditCard card = new CreditCard(strFname,strLname,dummyAdress,1000,123,date);
-        //creates a new user of CLIENT should implement so button listens properly!!
-        user = new Client(strFname, strLname, strEmail, strPassword, dummyAdress,card);
-        databaseReference.setValue(user);
-
-
+        //temporary address var make sure to implement so this is not generic
+        String dummyAddress = "2360 ajax" ;
+        //make sure type is being listened to from the radio buttons!
+        String type = "Client";
+        //dummy date to be added to credit card expr
+        Date date= new Date(6);
+        //dummy var for credit card when you make a client
+        CreditCard card = new CreditCard(strFname,strLname,dummyAddress,1234567,123,date);
+        //dummy bitmap for the blank cheque pic
+        //IMPORTANT NOTE, bitmaps are not storeable in firebase so store bitmap as ID or something else
+        Bitmap cheque = null;
+        //creates a POJO user with a type, type will be used to specify what object to create
+        user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress,type,card,cheque);
+        //we push onto the database under UserInfo all our information
+        databaseReference.push().setValue(user);
     }
 
 

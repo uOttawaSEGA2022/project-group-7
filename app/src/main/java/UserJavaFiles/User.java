@@ -1,22 +1,22 @@
-package OtherJavaFiles;
+package UserJavaFiles;
 
-import java.io.IOException;
 
 public abstract class User {
     private String firstName, lastName, email, password, address;
 
     //constructor for User, includes attributes firstName, lastName, email, password, address and checks if the input is correct.
     public User(String firstName,String lastName,String email,String password,String address) throws IllegalArgumentException{
-        //if(checkFirstName(firstName) && checkLastName(lastName) && checkEmail(email) && checkPassword(password) && checkAddress(address)){
+        if(checkFirstName(firstName) && checkLastName(lastName) && checkEmail(email) && checkPassword(password) && checkAddress(address)){
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.password = password;
             this.address = address;
-       // }else{
-           // throw new IllegalArgumentException("Invalid parameter input");
-       // }
+        }else{
+            throw new IllegalArgumentException("Invalid parameter input");
+        }
     }
+
 
     //getter and setter methods
     public String getFirstName(){
