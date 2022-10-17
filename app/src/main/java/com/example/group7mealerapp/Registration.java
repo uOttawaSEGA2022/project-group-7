@@ -111,6 +111,7 @@ public class Registration extends AppCompatActivity
             rePassword.setError("Passwords must match");
             return;
         }
+        String dummyDescription = "Krusty Krab employee since 1998";
         //temporary address var make sure to implement so this is not generic
         String dummyAddress = "2360 ajax" ;
         //make sure type is being listened to from the radio buttons!
@@ -123,7 +124,7 @@ public class Registration extends AppCompatActivity
         //IMPORTANT NOTE, bitmaps are not storeable in firebase so store bitmap as ID or something else
         Bitmap cheque = null;
         //creates a POJO user with a type, type will be used to specify what object to create
-        user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress,type,card,cheque);
+        user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress,type,dummyDescription,card,cheque);
         //we push onto the database under UserInfo all our information
         databaseReference.push().setValue(user);
         //call either the convert to client OR the convert to cook depending on type

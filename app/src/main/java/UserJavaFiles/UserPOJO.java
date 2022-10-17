@@ -15,11 +15,11 @@ public class UserPOJO {
      * things like credit card info and blank cheque can be null depending on what data the
      * pojo is given (client or cook or admin type)
      */
-    private String firstName, lastName, email, password, address,type;
+    private String firstName, lastName, email, password, address,type,description;
     private CreditCard creditCardInfo;
     private Bitmap blankCheque;
 
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type,CreditCard creditCardInfo, Bitmap blankCheque){
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, Bitmap blankCheque){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -28,6 +28,7 @@ public class UserPOJO {
         this.type = type;
         this.creditCardInfo = creditCardInfo;
         this.blankCheque = blankCheque;
+        this.description = description;
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
@@ -67,6 +68,8 @@ public class UserPOJO {
         return blankCheque;
     }
 
+    public String getDescription() {return description;}
+
     //setters
 
     public void setFirstName(String firstName) {
@@ -93,13 +96,13 @@ public class UserPOJO {
         this.type = type;
     }
 
-    public void setCreditCardInfo(CreditCard creditCardInfo) {
-        this.creditCardInfo = creditCardInfo;
-    }
+    public void setCreditCardInfo(CreditCard creditCardInfo) {this.creditCardInfo = creditCardInfo;}
 
     public void setBlankCheque(Bitmap blankCheque) {
         this.blankCheque = blankCheque;
     }
+
+    public void setDescription(String description) {this.description = description;}
 
     //converts the POJO to an actual client class
     public Client convertToClient(){
@@ -117,7 +120,7 @@ public class UserPOJO {
         Cook cook;
         try{
             //blank cheque not needed for now
-            cook = new Cook(firstName,lastName,email,password,address);
+            cook = new Cook(firstName,lastName,email,password,address,description);
         }
         catch (Exception e){
             return null;

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //see comments in registration for explanation
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("UserInfo");
     }
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public void btnRegisterClick(View view)
     {
         Intent intent = new Intent(getApplicationContext(),Registration.class);
-        startActivityForResult(intent,0);
+        startActivityForResult(intent,0);//convert this method, it is depricated
 
     }
     /**
@@ -48,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
      * TODO: once done store in appropriate object dependent on type and send to next screen
      */
     public void btnLoginClick(View view){
-        EditText email = (EditText) findViewById(R.id.loginEmail);
-        EditText password = (EditText) findViewById(R.id.loginPassword);
+        //text field variables
+        EditText email =  findViewById(R.id.loginEmail);
+        EditText password =  findViewById(R.id.loginPassword);
         //listens to the database in real time
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 //call either convert to client or convert to cook here or convert to admin
-                Client currentUser = user.convertToClient();
+                Client currentUser = user.convertToClient();//surround in try and catch block
                 //checks if it got the right data for debugging
                 System.out.println(currentUser.getEmail());
                 }
