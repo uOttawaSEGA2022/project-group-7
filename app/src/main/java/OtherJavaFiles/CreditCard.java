@@ -9,7 +9,7 @@ public class CreditCard{
     private Date expirationDate;
 
     public CreditCard(String firstName,String lastName,String address, long number, int pin, Date expirationDate) throws IllegalArgumentException{
-        if(firstName == null || firstName.isEmpty()){
+        /*if(firstName == null || firstName.isEmpty()){
             throw new IllegalArgumentException("First name is invalid");
         }else if(lastName == null || lastName.isEmpty()){
             throw new IllegalArgumentException("Last name is invalid");
@@ -19,7 +19,7 @@ public class CreditCard{
             throw new IllegalArgumentException("Credit card number is either too long or too short");
         }else if(String.valueOf(pin).length() != 3){
             throw new IllegalArgumentException("PIN is invalid");
-        }
+        }*/
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

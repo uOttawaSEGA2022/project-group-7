@@ -2,57 +2,45 @@ package com.example.group7mealerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DatabaseReference;
+
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 import android.os.Bundle;
 
+import java.util.Date;
+
+import OtherJavaFiles.Client;
+import OtherJavaFiles.CreditCard;
+import OtherJavaFiles.User;
+
 public class Registration extends AppCompatActivity
 {
-
-    //Separates each field that the user enters
-    final String separator = ";";
-
-    //Separates each user in csv file
-    final String lineSeparator = ",";
-
+    //create an instance for firebase
+    FirebaseDatabase firebaseDatabase;
+    //reference to the actual database in firebase
+    DatabaseReference databaseReference;
+    //reference to the user object will be made into info
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("UserInfo");
     }
 
-    //Helper method
-
-    /**
-     * Helper Method
-     *
-     * Writes user registration info to csv
-     * @param fileName of the file to append registration info to
-     * @param content to be appended about users
-     */
-    public void writeToFile(String fileName, String content)
-    {
-        File path = getApplicationContext().getFilesDir();
-        try
-        {
-            FileOutputStream w = new FileOutputStream(new File(path, fileName));
-            w.write(content.getBytes());
-            w.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * This method registers the user into the database.
@@ -115,26 +103,16 @@ public class Registration extends AppCompatActivity
             rePassword.setError("Passwords must match");
             return;
         }
-
         //Write to file
-        String content = strFname + separator + strLname + separator + strEmail + separator
-                + strPassword + separator + strrePassword + lineSeparator;
-        writeToFile("reg.txt", content);
-//        File f = new File("registration.txt");
-//        try
-//        {
-//            FileWriter w = new FileWriter(f,true);
-//            w.write(strFname + separator + strLname + separator + strEmail + separator
-//                    + strPassword + separator + strrePassword + lineSeparator);
-//            w.close();
-//        }
-//        catch(IOException e)
-//        {
-//            System.out.println("Error occurred. Unable to register account");
-//        }
+        //dont need these at the time but implementing anyways
+        String dummyAdress = "2360 ajax" ;
+        Date date = new Date(20);
+        CreditCard card = new CreditCard(strFname,strLname,dummyAdress,1000,123,date);
+        //creates a new user of CLIENT should implement so button listens properly!!
+        user = new Client(strFname, strLname, strEmail, strPassword, dummyAdress,card);
+        databaseReference.setValue(user);
 
-//        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-//        startActivityForResult(intent,0);
+
     }
 
 

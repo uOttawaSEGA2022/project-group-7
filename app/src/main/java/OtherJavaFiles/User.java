@@ -7,14 +7,15 @@ public abstract class User {
 
     //constructor for User, includes attributes firstName, lastName, email, password, address and checks if the input is correct.
     public User(String firstName,String lastName,String email,String password,String address) throws IllegalArgumentException{
-        if(checkFirstName(firstName) && checkLastName(lastName) && checkEmail(email) && checkPassword(password) && checkAddress(address)){
+        //if(checkFirstName(firstName) && checkLastName(lastName) && checkEmail(email) && checkPassword(password) && checkAddress(address)){
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.password = password;
-        }else{
-            throw new IllegalArgumentException("Invalid parameter input");
-        }
+            this.address = address;
+       // }else{
+           // throw new IllegalArgumentException("Invalid parameter input");
+       // }
     }
 
     //getter and setter methods
