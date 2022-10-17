@@ -1,7 +1,6 @@
 package com.example.group7mealerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.BitmapKt;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -17,7 +16,9 @@ import android.os.Bundle;
 
 import java.util.Date;
 
+import UserJavaFiles.Client;
 import UserJavaFiles.CreditCard;
+import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 
 /**
@@ -27,6 +28,8 @@ import UserJavaFiles.UserPOJO;
  */
 public class Registration extends AppCompatActivity
 {
+    //current user is going to be passed to the welcome page same with login page
+    User currentUser;
     //create an instance for firebase
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
@@ -122,6 +125,10 @@ public class Registration extends AppCompatActivity
         user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress,type,card,cheque);
         //we push onto the database under UserInfo all our information
         databaseReference.push().setValue(user);
+        //call either the convert to client OR the convert to cook depending on type
+        currentUser = user.convertToClient();
+        //if there are no problems ie error catch if fields are blank,
+        //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
     }
 
 

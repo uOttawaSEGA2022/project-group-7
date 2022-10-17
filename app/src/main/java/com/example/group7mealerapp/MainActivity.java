@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import UserJavaFiles.Client;
 import UserJavaFiles.UserPOJO;
-
+//TODO: MUST REMAIN THIS TO LOGIN NOT MAINACTIVITY MAINACTIVITY IS WELCOMEPAGE
 public class MainActivity extends AppCompatActivity {
 
 
@@ -29,58 +29,49 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Write a message to the database
+        //see comments in registration for explanation
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("UserInfo");
-        databaseReference.child(("UserInfo")).addValueEventListener(new ValueEventListener() {
-
-            //hover cntrl alt v and it will give proper object
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //get all children at this level
-                Iterable<DataSnapshot> children = snapshot.getChildren();
-
-                for (DataSnapshot child:children) {
-
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
     }
-
+    //navigate to registration page
     public void btnRegisterClick(View view)
     {
         Intent intent = new Intent(getApplicationContext(),Registration.class);
         startActivityForResult(intent,0);
 
     }
+    /**
+     * what is implemented now is just the grabbing of the user data and
+     * storing it into a user object,
+     * TODO: make sure to iterate and find the correct (if exists) email then check if password match
+     * TODO: once done store in appropriate object dependent on type and send to next screen
+     */
     public void btnLoginClick(View view){
         EditText email = (EditText) findViewById(R.id.loginEmail);
-        //replace the . as the database does not save the .
-        String emailRemoved = email.toString().replace('.', ' ');
-        emailRemoved = "ggf@gmail com";
+        //listens to the database in real time
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
+            //method called on start and whenever data is changed
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //calls an iterator on the children in the database IE all users stored
                 Iterable<DataSnapshot> children = snapshot.getChildren();
+                //going to iterate through the data and if email matches, login user and save it
+                //in userPOJO
                 UserPOJO user = new UserPOJO();
+                //this loop iterates through the DB under the userInfo block
                 for (DataSnapshot child: children){
+                    //no logic just stores the value onto user
                     user = child.getValue(UserPOJO.class);
 
                 }
-                Client currentUser = new Client(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getAddress(),null);
+                //call either convert to client or convert to cook here or convert to admin
+                Client currentUser = user.convertToClient();
+                //checks if it got the right data for debugging
                 System.out.println(currentUser.getEmail());
                 }
 
-
+            //no need for this function but must be overridden
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

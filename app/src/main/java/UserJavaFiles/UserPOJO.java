@@ -100,4 +100,39 @@ public class UserPOJO {
     public void setBlankCheque(Bitmap blankCheque) {
         this.blankCheque = blankCheque;
     }
+
+    //converts the POJO to an actual client class
+    public Client convertToClient(){
+        Client client;
+        try{
+            client = new Client(firstName,lastName,email,password,address,creditCardInfo);
+        }
+        catch (Exception e){
+            return null;
+        }
+        return client;
+    }
+    //converts the POJO to an actual cook class
+    public Cook convertToCook(){
+        Cook cook;
+        try{
+            //blank cheque not needed for now
+            cook = new Cook(firstName,lastName,email,password,address);
+        }
+        catch (Exception e){
+            return null;
+        }
+        return cook;
+    }
+    public Administrator convertToAdministrator(){
+        Administrator administrator;
+        try{
+            //blank cheque not needed for now
+            administrator = new Administrator(firstName,lastName,email,password,address);
+        }
+        catch (Exception e){
+            return null;
+        }
+        return administrator;
+    }
 }
