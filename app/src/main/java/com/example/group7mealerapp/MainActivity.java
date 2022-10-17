@@ -26,42 +26,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void onLogin (View view)
-    {
-        String line = "";
-        String splitter = ",";
-        boolean found = false;
-        int counter = 0;
-
-        try {
-            //Getting the path of the text file
-            URL url = getClass().getResource("registration.txt");
-            //Parsing the csv file using buffered reader
-            BufferedReader reader = new BufferedReader(new FileReader(url.getPath()));
-            while ((line = reader.readLine()) != null)
-            {
-                counter = 0;
-                String[] user = line.split(splitter);
-
-                //comparing entered username with usernames from the csv
-                if (user[0].equals(username.getText().toString()))
-                {
-                    counter++;
-                }
-
-                //comparing entered password with passwords from the csv
-                if (user[1].equals(password.getText().toString()))
-                {
-                    counter++;
-                }
-
-                //if both the username and password matched then the user is validated
-                if (counter == 2 ) found = true;
-            }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
+//    public void onLogin (View view)
+//    {
+//        String line = "";
+//        String splitter = ",";
+//        boolean found = false;
+//        int counter = 0;
+//
+//        try {
+//            //Getting the path of the text file
+//            URL url = getClass().getResource("registration.txt");
+//            //Parsing the csv file using buffered reader
+//            BufferedReader reader = new BufferedReader(new FileReader(url.getPath()));
+//            while ((line = reader.readLine()) != null)
+//            {
+//                counter = 0;
+//                String[] user = line.split(splitter);
+//
+//                //comparing entered username with usernames from the csv
+//                if (user[0].equals(username.getText().toString()))
+//                {
+//                    counter++;
+//                }
+//
+//                //comparing entered password with passwords from the csv
+//                if (user[1].equals(password.getText().toString()))
+//                {
+//                    counter++;
+//                }
+//
+//                //if both the username and password matched then the user is validated
+//                if (counter == 2 ) found = true;
+//            }
+//        } catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
+//
+//    }
 }
