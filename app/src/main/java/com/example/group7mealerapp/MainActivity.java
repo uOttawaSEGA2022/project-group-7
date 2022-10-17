@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void btnLoginClick(View view){
         EditText email = (EditText) findViewById(R.id.loginEmail);
+        EditText password = (EditText) findViewById(R.id.loginPassword);
         //listens to the database in real time
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

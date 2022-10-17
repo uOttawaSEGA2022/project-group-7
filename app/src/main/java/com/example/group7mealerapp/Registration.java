@@ -16,7 +16,7 @@ import android.os.Bundle;
 
 import java.util.Date;
 
-import UserJavaFiles.Client;
+
 import UserJavaFiles.CreditCard;
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
@@ -52,7 +52,8 @@ public class Registration extends AppCompatActivity
     /**
      * This method registers the user into the database.
      * To register, it is required to fill out a First name, Last name, Email, Password and Role
-     * TODO: add address field and make sure type is listened to!
+     * TODO: add address field and make sure type is listened to also hook up the radio buttons
+     * TODO: properly navigate user out of this page at the end
      * Validity of the field entries are also checked in this method
      */
     public void RegisterButtonClick(View view)
@@ -127,6 +128,7 @@ public class Registration extends AppCompatActivity
         databaseReference.push().setValue(user);
         //call either the convert to client OR the convert to cook depending on type
         currentUser = user.convertToClient();
+        System.out.println(currentUser.getAddress());
         //if there are no problems ie error catch if fields are blank,
         //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
     }
