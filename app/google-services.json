@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1073512194002",
+    "firebase_url": "https://mealerappdb-default-rtdb.firebaseio.com",
+    "project_id": "mealerappdb",
+    "storage_bucket": "mealerappdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073512194002:android:20d3e32b9701f34750b20b",
+        "android_client_info": {
+          "package_name": "com.example.group7mealerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073512194002-u5ju5qkd4cq2qc46cqpj0taijsem2v9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.group7mealerapp",
+            "certificate_hash": "215ae48b120d104c2c1609604a36db54dd2023cb"
+          }
+        },
+        {
+          "client_id": "1073512194002-4b8epk4ov5smuqa1l802vdplhs5gvjas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4n-Ho9S1_oYQNi13Pao5sBTkj4_dU3Hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073512194002-4b8epk4ov5smuqa1l802vdplhs5gvjas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
