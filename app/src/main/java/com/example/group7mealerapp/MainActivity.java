@@ -3,6 +3,16 @@ package com.example.group7mealerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.TextView;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.Buffer;
 import android.content.Intent;
 import android.view.View;
 
@@ -19,6 +29,11 @@ import UserJavaFiles.Client;
 import UserJavaFiles.UserPOJO;
 //TODO: MUST REMAIN THIS TO LOGIN NOT MAINACTIVITY MAINACTIVITY IS WELCOMEPAGE
 public class MainActivity extends AppCompatActivity {
+    //Global variables
+    EditText username = (EditText) findViewById(R.id.loginEmail);
+    EditText password = (EditText) findViewById(R.id.loginPassword);
+    TextView result;
+    Button buttonLogin = (Button) findViewById(R.id.login_button);
 
 
     //create an instance for firebase
@@ -60,11 +75,22 @@ public class MainActivity extends AppCompatActivity {
                 Iterable<DataSnapshot> children = snapshot.getChildren();
                 //going to iterate through the data and if email matches, login user and save it
                 //in userPOJO
+                UserPOJO temp = new UserPOJO();
                 UserPOJO user = new UserPOJO();
                 //this loop iterates through the DB under the userInfo block
                 for (DataSnapshot child: children){
                     //no logic just stores the value onto user
-                    user = child.getValue(UserPOJO.class);
+                    temp = child.getValue(UserPOJO.class);
+
+                    //comparing the email and password from the database with the inputted text fields
+//                    if (temp.getEmail().equals(email.getText().toString())
+//                            && temp.getPassword().equals(password.getText().toString()))
+//                    {
+//                        //since user and pass match the user logging in is this child from the database
+//                        user = temp;
+//                        email.setError("Correct credentials");
+//                        break;
+//                    }
 
                 }
                 //call either convert to client or convert to cook here or convert to admin
@@ -81,4 +107,43 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+//    public void onLogin (View view)
+//    {
+//        String line = "";
+//        String splitter = ",";
+//        boolean found = false;
+//        int counter = 0;
+//
+//        try {
+//            //Getting the path of the text file
+//            URL url = getClass().getResource("registration.txt");
+//            //Parsing the csv file using buffered reader
+//            BufferedReader reader = new BufferedReader(new FileReader(url.getPath()));
+//            while ((line = reader.readLine()) != null)
+//            {
+//                counter = 0;
+//                String[] user = line.split(splitter);
+//
+//                //comparing entered username with usernames from the csv
+//                if (user[0].equals(username.getText().toString()))
+//                {
+//                    counter++;
+//                }
+//
+//                //comparing entered password with passwords from the csv
+//                if (user[1].equals(password.getText().toString()))
+//                {
+//                    counter++;
+//                }
+//
+//                //if both the username and password matched then the user is validated
+//                if (counter == 2 ) found = true;
+//            }
+//        } catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
+//
+//    }
 }
