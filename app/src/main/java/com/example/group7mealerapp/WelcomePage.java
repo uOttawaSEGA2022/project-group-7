@@ -18,7 +18,6 @@ public class WelcomePage extends AppCompatActivity {
     Button button;
     TextView text;
     User user;
-    Administrator A = new Administrator("fkm", "lasst", "email", "pass", "ress");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +45,11 @@ public class WelcomePage extends AppCompatActivity {
             }
         });
 
-
     }
     //Method to take the user back to login page when they sign out
     public void openLogin(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        System.out.println(A.getClass());
-
     }
 
 }
