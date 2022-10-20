@@ -91,12 +91,12 @@
                 android:text="Register" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnLogin"
                 android:layout_width="356dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="btnLoginClick"
-                android:text="Button"
+                android:text="Login"
                 app:rippleColor="#E40505" />
         </LinearLayout>
 
