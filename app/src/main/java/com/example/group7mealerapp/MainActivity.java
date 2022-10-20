@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
+import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 //TODO: MUST REMAIN THIS TO LOGIN NOT MAINACTIVITY MAINACTIVITY IS WELCOMEPAGE
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
     DatabaseReference databaseReference;
+
+    // Variable for sending user
+    int type = 0;
+
+    //User variable to send
+    UserPOJO user = new UserPOJO();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,18 +65,7 @@ public class MainActivity extends AppCompatActivity {
         //text field variables
         EditText email =  findViewById(R.id.loginEmail);
         EditText password =  findViewById(R.id.loginPassword);
-//        Button login = findViewById(R.id.btnLogin);
 
-        //Ensuring both text fields are not blank
-        if(email.getText().toString().isEmpty())
-        {
-            email.setError("This field cannot be empty");
-        }
-
-        if(password.getText().toString().isEmpty())
-        {
-            password.setError("This field cannot be empty");
-        }
         //listens to the database in real time
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,13 +76,11 @@ public class MainActivity extends AppCompatActivity {
                 Context context = getApplicationContext();
                 String error = "Incorrect email or password";
                 int duration = Toast.LENGTH_LONG;
-                // Variable for sending the user
-                int type = 0;
                 //calls an iterator on the children in the database IE all users stored
                 Iterable<DataSnapshot> children = snapshot.getChildren();
                 //going to iterate through the data and if email matches, login user and save it
                 //in userPOJO
-                UserPOJO user = new UserPOJO();
+//                UserPOJO user = new UserPOJO();
                 UserPOJO temp = new UserPOJO();
                 //this loop iterates through the DB under the userInfo block
                 for (DataSnapshot child: children){
@@ -102,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
                         flag = true;
                         //Temporary code for debugging
                         email.setError("Correct credentials");
+
+                        //Setting type to whichever type is correct
                         if(user.getType().equals("Client"))
                         {
                             type = 1;//surround in try and catch block
@@ -121,7 +117,26 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                if(!flag && email.getText().toString().isEmpty() != true)
+                //Ensuring both text fields are not blank
+                if(email.getText().toString().isEmpty() && password.getText().toString().isEmpty())
+                {
+                    email.setError("This field cannot be empty");
+                    password.setError("This field cannot be empty");
+                }
+
+                // Ensuring just password is not blank
+                else if(password.getText().toString().isEmpty())
+                {
+                    password.setError("This field cannot be empty");
+                }
+                // Ensuring just email is not blank
+                else if(email.getText().toString().isEmpty())
+                {
+                    email.setError("This field cannot be empty");
+                }
+
+                // All these conditions are to check if email and password are valid
+                else if(!flag && email.getText().toString().isEmpty() != true)
                 {
                     email.setError("Incorrect email or password");
                     password.setError("Incorrect email or password");
@@ -133,21 +148,6 @@ public class MainActivity extends AppCompatActivity {
                     email.setError("Incorrect email or password");
                     password.setError("Incorrect email or password");
                     Toast.makeText(context, error, duration).show();
-                }
-                //call either convert to client or convert to cook here or convert to admin
-
-                if(type == 1)
-                {
-                    Client currentUser = user.convertToClient();//surround in try and catch block
-                }
-                else if(type == 2)
-                {
-                    Cook currentUser = user.convertToCook();
-                }
-
-                else if (type == 3)
-                {
-                    Administrator currentUser = user.convertToAdministrator();
                 }
 
 
@@ -164,4 +164,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    // Was going to be the function to send user to welcome page
+//    public void sendUser(View view)
+//    {
+//        Intent returnIntent = new Intent();
+//        call either convert to client or convert to cook here or convert to admin
+//
+//         //type 1 is for client so convert user into client
+//        if(type == 1)
+//        {
+//            Client currentUser = user.convertToClient();//surround in try and catch block
+//
+//            returnIntent.putExtra("User",currentUser);
+//        }
+
+    //    //Type 2 is cook so convert user into cook
+//        else if(type == 2)
+//        {
+//            Cook currentUser = user.convertToCook();
+//
+//        }
+//
+
+    //   //type 3 is admin
+//        else if (type == 3)
+//        {
+//            Administrator currentUser = user.convertToAdministrator();
+//        }
+//
+//
+//    }
 }
