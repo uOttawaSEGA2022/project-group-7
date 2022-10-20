@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * this class is SPECIFICALLY meant for firebase integration, a very generic POJO class that
  * Implements a skeleton of the user, this data will be sent to the database and retrieved
- * in this form and structure, later the data in this class will be distrubuited to the client
+ * in this form and structure, later the data in this class will be distributed to the client
  * cook or admin class depending on the type variable
  */
 public class UserPOJO {
@@ -15,7 +15,7 @@ public class UserPOJO {
      * things like credit card info and blank cheque can be null depending on what data the
      * pojo is given (client or cook or admin type)
      */
-    private String firstName, lastName, email, password, address,type,description;
+    private String firstName, lastName, email, password, address, type, description;
     private CreditCard creditCardInfo;
     private Bitmap blankCheque;
 
