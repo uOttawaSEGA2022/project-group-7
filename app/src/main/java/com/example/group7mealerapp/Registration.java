@@ -8,19 +8,23 @@ import android.widget.EditText;
 import com.google.firebase.database.FirebaseDatabase;
 import android.os.Bundle;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.Date;
+
 import UserJavaFiles.CreditCard;
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 /**
- * The registration page takes the basics as of now (first and last name, email, password, address)
- * and makes the other fields null ie credit card info and blank cheque which will later be
- * implemented
+ * The registration page initially takes the basic info of a User (First name, Last name, Email,
+ * Password, Address and Role.
+ * Upon selecting a role, role specific fields are shown and required as well (Client - Credit Card
+ * information / Cook - Description)
  */
 public class Registration extends AppCompatActivity
 {
+    //Global variables
+
     //current user is going to be passed to the welcome page same with login page
     User currentUser;
     //create an instance for firebase
@@ -29,6 +33,77 @@ public class Registration extends AppCompatActivity
     DatabaseReference databaseReference;
     //this POJO object will be used to store data within firebase in a digestible manner
     UserPOJO user;
+    //Text Field for first name
+    EditText Fname = (EditText) findViewById(R.id.FirstNameField);
+    //Get First Name of user
+    String strFname = Fname.getText().toString();
+    //Text field for last name
+    EditText Lname = (EditText) findViewById(R.id.LastNameField);
+    //Get Last Name of user
+    String strLname = Lname.getText().toString();
+    //Text field for email
+    EditText Email = (EditText) findViewById(R.id.EmailField);
+    //Get email of user
+    String strEmail = Email.getText().toString();
+    //Text field for password
+    EditText Password = (EditText) findViewById(R.id.PasswordField);
+    //Get password of user
+    String strPassword = Password.getText().toString();
+    //Text field for confirm password
+    EditText rePassword = (EditText) findViewById(R.id.ConfirmPasswordField);
+    //Get confirm password of user
+    String strrePassword = rePassword.getText().toString();
+    //TextField of Client and Cook Address
+    EditText Address = (EditText) findViewById(R.id.Address);
+    //Get address of client
+    String strAddress = Address.getText().toString();
+    //TextField of CookDescription
+    EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+    //Get description of cook
+    String strCookDescription = CookDescription.getText().toString();
+    //Radio button to store selection of client role
+    RadioButton btnClient = (RadioButton) findViewById(R.id.ClientButton);
+    //Radio button to store selection of cook role
+    RadioButton btnCook = (RadioButton) findViewById(R.id.CookButton);
+    //Stores user role
+    String type = "";
+    //TextField of credit card first name
+    EditText CCfirstname = (EditText) findViewById(R.id.CCfname);
+    //Get credit card first name
+    String strCCfirstname = CCfirstname.getText().toString();
+    //TextField of credit card last name
+    EditText CClastname = (EditText) findViewById(R.id.CClname);
+    //Get credit card last name
+    String strCClastname = CClastname.getText().toString();
+    //TextField of Client Credit Card Number
+    EditText CCnumber = (EditText) findViewById(R.id.ClientCC);
+    //Get Client Credit Card number
+    String strCCnumber = CCnumber.getText().toString();
+    //Store Credit card number as type Long
+    Long CreditCardnumber = Long.parseLong(strCCnumber);
+    //TextField of Client Credit Card Expiry Date
+    EditText expDate = (EditText) findViewById(R.id.expDate);
+    //Get client credit card expiry date as string for now
+    String strexpDate = expDate.getText().toString();
+    //TextField of Client Credit Card CVV
+    EditText CCcvv = (EditText) findViewById(R.id.ClientCVV);
+    //Get client credit card's cvv
+    String strCCcvv = CCcvv.getText().toString();
+    //Store Credit card cvv as type int
+    int CVV = Integer.parseInt(strCCcvv);
+    //TextField of expiration date
+    EditText ccdate = (EditText) findViewById(R.id.expDate);
+    //Store date as String
+    String strccdate = ccdate.getText().toString();
+    //Split date String by delimiter "/". Date String is now in a String array [month,year]
+    String[] datearr = strccdate.split("/");
+    //Store date as type date
+    int month = Integer.parseInt(datearr[0]);
+    int year = Integer.parseInt(datearr[1]);
+    //Store date
+    Date date = new Date(year,month,0);
+    //Store Credit Card information as instance of CreditCard class
+    CreditCard card = new CreditCard(strFname, strLname, strAddress,CreditCardnumber,CVV,date);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,92 +115,52 @@ public class Registration extends AppCompatActivity
         //make sure we write our info under UserInfo database
         databaseReference = firebaseDatabase.getReference("UserInfo");
 
-        //TextField of Client Address
-        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
-        //TextField of CookDescription
-        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+        //Credit card info is only required for a client so these fields launch hidden
+        CCfirstname.setVisibility(View.GONE);
+        CClastname.setVisibility(View.GONE);
+        CCnumber.setVisibility(View.GONE);
+        expDate.setVisibility(View.GONE);
+        CCcvv.setVisibility(View.GONE);
+        //Description info is only required for a client so the field launches hidden
+        CookDescription.setVisibility(View.GONE);
+    }
 
+    /**
+     * Opens the fields to enter Client's Credit Card if the Client role is selected in the registration screen
+     */
+    public void OpenClientFields(View view)
+    {
+        CCfirstname.setVisibility(View.VISIBLE);
+        CClastname.setVisibility(View.VISIBLE);
+        CCnumber.setVisibility(View.VISIBLE);
+        expDate.setVisibility(View.VISIBLE);
+        CCcvv.setVisibility(View.VISIBLE);
+
+        CookDescription.setVisibility(View.GONE);
+    }
+
+    /**
+     * Opens the field to enter Cook Description if the Cook role is selected in the registration screen
+     */
+    public void OpenCookFields(View view)
+    {
         //Since Address and Description are dependent on role, launch app with TextFields hidden
-        ClientAddress.setVisibility(View.GONE);
-        CookDescription.setVisibility(View.GONE);
-    }
 
-    /**
-     * Opens the field to enter Client Address and Credit Card if the client role is selected in the registration screen
-     * @param view
-     */
-    public void OpenClientAddress(View view)
-    {
-        //If Client Role is selected, bring up address text field
-        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
-        ClientAddress.setVisibility(View.VISIBLE);
+        CCnumber.setVisibility(View.GONE);
+        expDate.setVisibility(View.GONE);
+        CCcvv.setVisibility(View.GONE);
 
-        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
-        CookDescription.setVisibility(View.GONE);
-    }
-
-    /**
-     * Opens the field to enter Cook Description and Address if the Cook role is selected in the registration screen
-     */
-    public void OpenCookDescription(View view)
-    {
-        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
         CookDescription.setVisibility(View.VISIBLE);
-
-        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
-        ClientAddress.setVisibility(View.GONE);
     }
 
     /**
-     * Checks all the possible errors in the Registration process and displays the appropriate errors when they occur
+     * Checks all the possible errors in the Registration process and displays the appropriate error
+     * messages when they occur
      * @return true if registration fields are acceptable and false otherwise
      */
     public boolean RegistrationErrors()
     {
         boolean f = true;
-
-        EditText Fname = (EditText) findViewById(R.id.FirstNameField);
-        //Get First Name of user
-        String strFname = Fname.getText().toString();
-
-        EditText Lname = (EditText) findViewById(R.id.LastNameField);
-        //Get Last Name of user
-        String strLname = Lname.getText().toString();
-
-        EditText Email = (EditText) findViewById(R.id.EmailField);
-        //Get email of user
-        String strEmail = Email.getText().toString();
-
-        EditText Password = (EditText) findViewById(R.id.PasswordField);
-        //Get password of user
-        String strPassword = Password.getText().toString();
-
-        EditText rePassword = (EditText) findViewById(R.id.ConfirmPasswordField);
-        //Confirm password of user
-        String strrePassword = rePassword.getText().toString();
-
-        //TextField of Client Address
-        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
-        //Get address of client
-        String strAddress = ClientAddress.getText().toString();
-
-        //TextField of CookDescription
-        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
-        //Get description of cook
-        String strCookDescription = CookDescription.getText().toString();
-
-        //Initialize Radio buttons to allow picking user type:
-        //Radio button to store selection of client role
-        RadioButton btnClient;
-        //Connect variable to Client Radio Button
-        btnClient = (RadioButton) findViewById(R.id.ClientButton);
-        //Radio button to store selection of cook role
-        RadioButton btnCook;
-        //Connect variable to Cook Radio Button
-        btnCook = (RadioButton) findViewById(R.id.CookButton);
-
-        //Stores user role
-        String type = "";
 
         //Make sure first name field isn't empty
         if(TextUtils.isEmpty(strFname))
@@ -134,10 +169,15 @@ public class Registration extends AppCompatActivity
             f = false;
         }
         //Make sure last name field isn't empty
-
         if(TextUtils.isEmpty(strLname))
         {
             Lname.setError("This field cannot be empty");
+            f = false;
+        }
+        //Make sure Address field isn't empty
+        if(TextUtils.isEmpty(strAddress))
+        {
+            Address.setError("This field cannot be empty");
             f = false;
         }
         //Make sure email field isn't empty
@@ -170,18 +210,22 @@ public class Registration extends AppCompatActivity
         //If no role is selected
         if(!btnClient.isChecked() && !btnCook.isChecked())
         {
+            Toast.makeText(getApplicationContext(), "A Role must be selected", Toast.LENGTH_LONG).show();
             f = false;
         }
 
-        //If client is selected but address is not filed
-        if(btnClient.isChecked() && strAddress.isEmpty())
+        //If client is selected but credit card info is not filled
+        if(btnClient.isChecked() && (strCCcvv.isEmpty() || strCCnumber.isEmpty() || strexpDate.isEmpty()
+        || strCCfirstname.isEmpty() || strCClastname.isEmpty()))
         {
+            Toast.makeText(getApplicationContext(), "Credit Card Info must be filled", Toast.LENGTH_LONG).show();
             f = false;
         }
 
-        //If cook is selected but either or address or description is empty
-        if(btnCook.isChecked() && (strAddress.isEmpty() || strCookDescription.isEmpty()))
+        //If cook is selected but description is empty
+        if(btnCook.isChecked() && strCookDescription.isEmpty())
         {
+            CookDescription.setError("Field cannot be empty");
             f = false;
         }
 
@@ -197,47 +241,6 @@ public class Registration extends AppCompatActivity
     public void RegisterButtonClick(View view)
     {
         //Variables
-        currentUser = null;
-        EditText Fname = (EditText) findViewById(R.id.FirstNameField);
-        //Get First Name of user
-        String strFname = Fname.getText().toString();
-
-        EditText Lname = (EditText) findViewById(R.id.LastNameField);
-        //Get Last Name of user
-        String strLname = Lname.getText().toString();
-
-        EditText Email = (EditText) findViewById(R.id.EmailField);
-        //Get email of user
-        String strEmail = Email.getText().toString();
-
-        EditText Password = (EditText) findViewById(R.id.PasswordField);
-        //Get password of user
-        String strPassword = Password.getText().toString();
-
-        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
-        //Get address of client
-        String strAddress = ClientAddress.getText().toString();
-
-        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
-        //Get description of cook
-        String strCookDescription = CookDescription.getText().toString();
-
-        //Initialize Radio buttons to allow picking user type:
-        //Radio button to store selection of client role
-        RadioButton btnClient;
-        //Connect variable to Client Radio Button
-        btnClient = (RadioButton) findViewById(R.id.ClientButton);
-        //Radio button to store selection of cook role
-        RadioButton btnCook;
-        //Connect variable to Cook Radio Button
-        btnCook = (RadioButton) findViewById(R.id.CookButton);
-
-        //Stores user role
-        String type = "";
-        //dummy date to be added to credit card expr
-        Date date= new Date(6);
-        //dummy var for credit card when you make a client
-        CreditCard card = new CreditCard(strFname,strLname,strAddress,1234567,123,date);
         //dummy bitmap for the blank cheque pic
         //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
         Bitmap cheque = null;
