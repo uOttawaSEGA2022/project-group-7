@@ -48,7 +48,8 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/username"
+
+                android:id="@+id/loginEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
                 android:layout_weight="1"
@@ -66,7 +67,8 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/password"
+
+                android:id="@+id/loginPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="78dp"
                 android:layout_weight="1"
@@ -83,11 +85,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/login_button"
+
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="btnRegisterClick"
+                android:text="Register" />
+
+            <Button
+                android:id="@+id/button"
                 android:layout_width="356dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Login"
+                android:onClick="btnLoginClick"
+                android:text="Button"
                 app:rippleColor="#E40505" />
         </LinearLayout>
 
