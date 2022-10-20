@@ -51,8 +51,7 @@ public class Registration extends AppCompatActivity
     }
 
     /**
-     * This method opens the field to enter Client Address if the client role is selected in the
-     * registration screen
+     * Opens the field to enter Client Address and Credit Card if the client role is selected in the registration screen
      * @param view
      */
     public void OpenClientAddress(View view)
@@ -66,9 +65,7 @@ public class Registration extends AppCompatActivity
     }
 
     /**
-     * This method opens the field to enter Cook Description if the client role is selected in the
-     * registration screen
-     * @param view
+     * Opens the field to enter Cook Description and Address if the Cook role is selected in the registration screen
      */
     public void OpenCookDescription(View view)
     {
@@ -80,37 +77,12 @@ public class Registration extends AppCompatActivity
     }
 
     /**
-     * Helper Method
-     *
-     * Checks to see if any text field is empty and if it is, User will not be registered
-     * @param strFname
-     * @param strLname
-     * @param strEmail
-     * @param strPassword
-     * @param dummyAddress
-     * @param type
-     * @param dummyDescription
-     * @param card
-     * @return
+     * Checks all the possible errors in the Registration process and displays the appropriate errors when they occur
+     * @return true if registration fields are acceptable and false otherwise
      */
-    public boolean userValidity(String strFname, String strLname, String strEmail,
-                                String strPassword, String dummyAddress, String type,
-                                String dummyDescription, CreditCard card)
+    public boolean RegistrationErrors()
     {
-        return strFname.isEmpty() || strLname.isEmpty() || strEmail.isEmpty() || strPassword.isEmpty() ||
-                dummyAddress.isEmpty() || type.isEmpty() || dummyDescription.isEmpty() || card == null;
-    }
-
-    /**
-     * This method registers the user into the database.
-     * To register, it is required to fill out a First name, Last name, Email, Password and Role
-     * TODO: add address field and make sure type is listened to also hook up the radio buttons
-     * TODO: properly navigate user out of this page at the end
-     * Validity of the field entries are also checked in this method
-     */
-    public void RegisterButtonClick(View view)
-    {
-        //Variables
+        boolean f = true;
 
         EditText Fname = (EditText) findViewById(R.id.FirstNameField);
         //Get First Name of user
@@ -135,7 +107,7 @@ public class Registration extends AppCompatActivity
         //TextField of Client Address
         EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
         //Get address of client
-        String strClientAddress = ClientAddress.getText().toString();
+        String strAddress = ClientAddress.getText().toString();
 
         //TextField of CookDescription
         EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
@@ -155,41 +127,36 @@ public class Registration extends AppCompatActivity
         //Stores user role
         String type = "";
 
-        //dummy date to be added to credit card expr
-        Date date= new Date(6);
-        //dummy var for credit card when you make a client
-        CreditCard card = new CreditCard(strFname,strLname,strClientAddress,1234567,123,date);
-        //dummy bitmap for the blank cheque pic
-        //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
-        Bitmap cheque = null;
-
-
         //Make sure first name field isn't empty
         if(TextUtils.isEmpty(strFname))
         {
             Fname.setError("This field cannot be empty");
+            f = false;
         }
         //Make sure last name field isn't empty
 
         if(TextUtils.isEmpty(strLname))
         {
             Lname.setError("This field cannot be empty");
+            f = false;
         }
         //Make sure email field isn't empty
         if(TextUtils.isEmpty(strEmail))
         {
             Email.setError("This field cannot be empty");
+            f = false;
         }
         //Make sure password field isn't empty
         if(TextUtils.isEmpty(strPassword))
         {
             Password.setError("This field cannot be empty");
+            f = false;
         }
         //Make sure re-enter password field isn't empty
         if(TextUtils.isEmpty(strrePassword))
         {
             rePassword.setError("This field cannot be empty");
-            return;
+            f = false;
         }
 
         //Displays error message if Password and ConfirmPassword do no match
@@ -197,8 +164,83 @@ public class Registration extends AppCompatActivity
         {
             Password.setError("Passwords must match");
             rePassword.setError("Passwords must match");
-            return;
+            f = false;
         }
+
+        //If no role is selected
+        if(!btnClient.isChecked() && !btnCook.isChecked())
+        {
+            f = false;
+        }
+
+        //If client is selected but address is not filed
+        if(btnClient.isChecked() && strAddress.isEmpty())
+        {
+            f = false;
+        }
+
+        //If cook is selected but either or address or description is empty
+        if(btnCook.isChecked() && (strAddress.isEmpty() || strCookDescription.isEmpty()))
+        {
+            f = false;
+        }
+
+        return f;
+    }
+
+    /**
+     * This method registers the user into the database.
+     * To register, it is required to fill out a First name, Last name, Email, Password and Role
+     * Upon selecting a Role, addition Role specific fields are required - Address, Description and Credit Card
+     * TODO: properly navigate user out of this page at the end
+     */
+    public void RegisterButtonClick(View view)
+    {
+        //Variables
+        currentUser = null;
+        EditText Fname = (EditText) findViewById(R.id.FirstNameField);
+        //Get First Name of user
+        String strFname = Fname.getText().toString();
+
+        EditText Lname = (EditText) findViewById(R.id.LastNameField);
+        //Get Last Name of user
+        String strLname = Lname.getText().toString();
+
+        EditText Email = (EditText) findViewById(R.id.EmailField);
+        //Get email of user
+        String strEmail = Email.getText().toString();
+
+        EditText Password = (EditText) findViewById(R.id.PasswordField);
+        //Get password of user
+        String strPassword = Password.getText().toString();
+
+        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
+        //Get address of client
+        String strAddress = ClientAddress.getText().toString();
+
+        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+        //Get description of cook
+        String strCookDescription = CookDescription.getText().toString();
+
+        //Initialize Radio buttons to allow picking user type:
+        //Radio button to store selection of client role
+        RadioButton btnClient;
+        //Connect variable to Client Radio Button
+        btnClient = (RadioButton) findViewById(R.id.ClientButton);
+        //Radio button to store selection of cook role
+        RadioButton btnCook;
+        //Connect variable to Cook Radio Button
+        btnCook = (RadioButton) findViewById(R.id.CookButton);
+
+        //Stores user role
+        String type = "";
+        //dummy date to be added to credit card expr
+        Date date= new Date(6);
+        //dummy var for credit card when you make a client
+        CreditCard card = new CreditCard(strFname,strLname,strAddress,1234567,123,date);
+        //dummy bitmap for the blank cheque pic
+        //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
+        Bitmap cheque = null;
 
         /*
          * Set type of user based on which button is pressed
@@ -209,35 +251,33 @@ public class Registration extends AppCompatActivity
         {
             //Store user as Client
             type = "Client";
-
+            strCookDescription = "N/A";
         }
 
         if(btnCook.isChecked())
         {
             //Store user as Cook
             type = "Cook";
-
         }
 
-        //Uses helper method to determine if any fields have been left blank. If so, user will not be added to database
-//        if(!userValidity(strFname, strLname, strEmail, strPassword, dummyAddress, type,
-//                dummyDescription, card))
-//        {
-//            //creates a POJO user with a type, type will be used to specify what object to create
-//            user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress, type,
-//                    dummyDescription, card, cheque);
-//
-//        }
-
-        //creates a POJO user with a type, type will be used to specify what object to create
-        user = new UserPOJO(strFname, strLname, strEmail, strPassword, strClientAddress, type,
-                strCookDescription, card, cheque);
-        //we push onto the database under UserInfo all our information
-        databaseReference.push().setValue(user);
-        //call either the convert to client OR the convert to cook depending on type
-        currentUser = user.convertToClient();
-        System.out.println(currentUser.getAddress());
-        //if there are no problems ie error catch if fields are blank,
-        //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
+        if(RegistrationErrors())
+        {
+            //creates a POJO user with a type, type will be used to specify what object to create
+            user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
+                        strCookDescription, card, cheque);
+            //we push all our information onto the database under UserInfo
+            databaseReference.push().setValue(user);
+            //call either the convert to client OR the convert to cook depending on type
+            if(type.equals("Client"))
+            {
+                currentUser = user.convertToClient();
+            }
+            if(type.equals("Cook"))
+            {
+                currentUser = user.convertToCook();
+            }
+            //if there are no problems ie error catch if fields are blank,
+            //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
+        }
     }
 }
