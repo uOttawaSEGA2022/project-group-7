@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button loginButton = (Button) findViewById(R.id.btnLogin);
         //see comments in registration for explanation
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 Context context = getApplicationContext();
                 String error = "Incorrect email or password";
                 int duration = Toast.LENGTH_LONG;
+                // Variable for sending the user
+                int type = 0;
                 //calls an iterator on the children in the database IE all users stored
                 Iterable<DataSnapshot> children = snapshot.getChildren();
                 //going to iterate through the data and if email matches, login user and save it
@@ -98,33 +102,54 @@ public class MainActivity extends AppCompatActivity {
                         flag = true;
                         //Temporary code for debugging
                         email.setError("Correct credentials");
+                        if(user.getType().equals("Client"))
+                        {
+                            type = 1;//surround in try and catch block
+                        }
+                        else if(user.getType().equals("Cook"))
+                        {
+                            type = 2;
+                        }
+
+                        else if(user.getType().equals("Administrator"))
+                        {
+                            type = 3;
+                        }
                         break;
                     }
 
 
                 }
 
-                if(!flag)
+                if(!flag && email.getText().toString().isEmpty() != true)
                 {
-                    email.setError("incorrect");
-                    password.setError("incorrect");
+                    email.setError("Incorrect email or password");
+                    password.setError("Incorrect email or password");
                     Toast.makeText(context, error, duration).show();
 
                 }
+                else if(!flag && password.getText().toString().isEmpty() != true)
+                {
+                    email.setError("Incorrect email or password");
+                    password.setError("Incorrect email or password");
+                    Toast.makeText(context, error, duration).show();
+                }
                 //call either convert to client or convert to cook here or convert to admin
-                if(user.getType().equals("Client"))
+
+                if(type == 1)
                 {
                     Client currentUser = user.convertToClient();//surround in try and catch block
                 }
-                else if(user.getType().equals("Cook"))
+                else if(type == 2)
                 {
                     Cook currentUser = user.convertToCook();
                 }
 
-                else
+                else if (type == 3)
                 {
                     Administrator currentUser = user.convertToAdministrator();
                 }
+
 
 
                 //checks if it got the right data for debugging
