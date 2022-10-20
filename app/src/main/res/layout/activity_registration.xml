@@ -94,24 +94,40 @@
             android:layout_height="wrap_content"
             android:text="Account Role" />
 
-                <RadioGroup
-                    android:id="@+id/RoleButtons"
-                    android:layout_width="302dp"
-                    android:layout_height="123dp">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="201dp">
 
-                    <RadioButton
-                        android:id="@+id/ClientButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Client" />
+            <RadioButton
+                android:id="@+id/ClientButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Client"
+                android:onClick="OpenClientAddress" />
 
-                    <RadioButton
-                        android:id="@+id/CookButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Cook" />
+            <EditText
+                android:id="@+id/ClientAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter Address"
+                android:inputType="textPersonName" />
 
-                </RadioGroup>
+            <RadioButton
+                android:id="@+id/CookButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cook"
+                android:onClick="OpenCookDescription" />
+
+            <EditText
+                android:id="@+id/CookDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter Description"
+                android:inputType="textPersonName" />
+        </RadioGroup>
 
         <Button
             android:id="@+id/RegisterButton"

@@ -27,7 +27,7 @@ public class Registration extends AppCompatActivity
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
     DatabaseReference databaseReference;
-    //this POJO object will be used to store data within firebase in a digestable manner
+    //this POJO object will be used to store data within firebase in a digestible manner
     UserPOJO user;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,6 +38,34 @@ public class Registration extends AppCompatActivity
         firebaseDatabase = FirebaseDatabase.getInstance();
         //make sure we write our info under UserInfo database
         databaseReference = firebaseDatabase.getReference("UserInfo");
+
+        //TextField of Client Address
+        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
+        //TextField of CookDescription
+        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+
+        //Since Address and Description are dependent on role, launch app with TextFields hidden
+        ClientAddress.setVisibility(View.GONE);
+        CookDescription.setVisibility(View.GONE);
+    }
+
+    public void OpenClientAddress(View view)
+    {
+        //If Client Role is selected, bring up address text field
+        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
+        ClientAddress.setVisibility(View.VISIBLE);
+
+        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+        CookDescription.setVisibility(View.GONE);
+    }
+
+    public void OpenCookDescription(View view)
+    {
+        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+        CookDescription.setVisibility(View.VISIBLE);
+
+        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
+        ClientAddress.setVisibility(View.GONE);
     }
 
     /**
@@ -71,6 +99,8 @@ public class Registration extends AppCompatActivity
      */
     public void RegisterButtonClick(View view)
     {
+        //Variables
+
         EditText Fname = (EditText) findViewById(R.id.FirstNameField);
         //Get user entered String in FirstName text field
         String strFname = Fname.getText().toString();
@@ -91,17 +121,33 @@ public class Registration extends AppCompatActivity
         //Get user entered String in Confirm Password text field
         String strrePassword = rePassword.getText().toString();
 
-        //Make sure First Name field isn't empty
-//        if(TextUtils.isEmpty(strFname) || TextUtils.isEmpty(strLname) || TextUtils.isEmpty(strEmail)
-//            || TextUtils.isEmpty(strPassword) || TextUtils.isEmpty(strrePassword))
-//        {
-//            Fname.setError("This field cannot be empty");
-//            Lname.setError("This field cannot be empty");
-//            Email.setError("This field cannot be empty");
-//            Password.setError("This field cannot be empty");
-//            rePassword.setError("This field cannot be empty");
-//            return;
-//        }
+        //Initialize Radio buttons to allow picking user type:
+
+        //Radio button to store selection of client role
+        RadioButton btnClient;
+        //Connect variable to Client Radio Button
+        btnClient = (RadioButton) findViewById(R.id.ClientButton);
+        //Radio button to store selection of cook role
+        RadioButton btnCook;
+        //Connect variable to Cook Radio Button
+        btnCook = (RadioButton) findViewById(R.id.CookButton);
+
+        //Stores user role
+        String type = "test";
+
+        //Stores description of cook
+        String dummyDescription = "test";
+        //Stores address of client
+        String dummyAddress = "test";
+
+        //dummy date to be added to credit card expr
+        Date date= new Date(6);
+        //dummy var for credit card when you make a client
+        CreditCard card = new CreditCard(strFname,strLname,dummyAddress,1234567,123,date);
+        //dummy bitmap for the blank cheque pic
+        //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
+        Bitmap cheque = null;
+
 
         //Make sure first name field isn't empty
         if(TextUtils.isEmpty(strFname))
@@ -139,41 +185,22 @@ public class Registration extends AppCompatActivity
             return;
         }
 
-        //Initialize
-        RadioButton btnClient;
-        btnClient = (RadioButton) findViewById(R.id.ClientButton);
-
-        RadioButton btnCook;
-        btnCook = (RadioButton) findViewById(R.id.CookButton);
-
-        //make sure type is being listened to from the radio buttons!
-        String type = "test";
+        /*
+         * Set type of user based on which button is pressed
+         * Store user's Role from radio buttons as String
+         * Pop up a textField to ask Role specific data based on which Radio Button is pressed
+         */
         if(btnClient.isChecked())
         {
             type = "Client";
+
         }
 
         if(btnCook.isChecked())
         {
             type = "Cook";
+
         }
-        //Store user's Role from radio buttons as String
-
-        /*
-         * TODO: Implement Address, Description and Type
-         */
-        String dummyDescription = "test";
-        //temporary address var make sure to implement so this is not generic
-        String dummyAddress = "test";
-
-        //dummy date to be added to credit card expr
-        Date date= new Date(6);
-        //dummy var for credit card when you make a client
-        CreditCard card = new CreditCard(strFname,strLname,dummyAddress,1234567,123,date);
-//        card = null;
-        //dummy bitmap for the blank cheque pic
-        //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
-        Bitmap cheque = null;
 
         //Uses helper method to determine if any fields have been left blank. If so, user will not be added to database
 //        if(!userValidity(strFname, strLname, strEmail, strPassword, dummyAddress, type,
@@ -185,8 +212,8 @@ public class Registration extends AppCompatActivity
 //
 //        }
 
-        user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress, type,
-                dummyDescription, card, cheque);
+        //creates a POJO user with a type, type will be used to specify what object to create
+        user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress, type, dummyDescription, card, cheque);
         //we push onto the database under UserInfo all our information
         databaseReference.push().setValue(user);
         //call either the convert to client OR the convert to cook depending on type
