@@ -29,6 +29,7 @@ public class Registration extends AppCompatActivity
     DatabaseReference databaseReference;
     //this POJO object will be used to store data within firebase in a digestible manner
     UserPOJO user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,6 +50,11 @@ public class Registration extends AppCompatActivity
         CookDescription.setVisibility(View.GONE);
     }
 
+    /**
+     * This method opens the field to enter Client Address if the client role is selected in the
+     * registration screen
+     * @param view
+     */
     public void OpenClientAddress(View view)
     {
         //If Client Role is selected, bring up address text field
@@ -59,6 +65,11 @@ public class Registration extends AppCompatActivity
         CookDescription.setVisibility(View.GONE);
     }
 
+    /**
+     * This method opens the field to enter Cook Description if the client role is selected in the
+     * registration screen
+     * @param view
+     */
     public void OpenCookDescription(View view)
     {
         EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
@@ -102,27 +113,36 @@ public class Registration extends AppCompatActivity
         //Variables
 
         EditText Fname = (EditText) findViewById(R.id.FirstNameField);
-        //Get user entered String in FirstName text field
+        //Get First Name of user
         String strFname = Fname.getText().toString();
 
         EditText Lname = (EditText) findViewById(R.id.LastNameField);
-        //Get user entered String in LastName text field
+        //Get Last Name of user
         String strLname = Lname.getText().toString();
 
         EditText Email = (EditText) findViewById(R.id.EmailField);
-        //Get user entered String in Email text field
+        //Get email of user
         String strEmail = Email.getText().toString();
 
         EditText Password = (EditText) findViewById(R.id.PasswordField);
-        //Get user entered String in Password text field
+        //Get password of user
         String strPassword = Password.getText().toString();
 
         EditText rePassword = (EditText) findViewById(R.id.ConfirmPasswordField);
-        //Get user entered String in Confirm Password text field
+        //Confirm password of user
         String strrePassword = rePassword.getText().toString();
 
-        //Initialize Radio buttons to allow picking user type:
+        //TextField of Client Address
+        EditText ClientAddress = (EditText) findViewById(R.id.ClientAddress);
+        //Get address of client
+        String strClientAddress = ClientAddress.getText().toString();
 
+        //TextField of CookDescription
+        EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
+        //Get description of cook
+        String strCookDescription = CookDescription.getText().toString();
+
+        //Initialize Radio buttons to allow picking user type:
         //Radio button to store selection of client role
         RadioButton btnClient;
         //Connect variable to Client Radio Button
@@ -133,17 +153,12 @@ public class Registration extends AppCompatActivity
         btnCook = (RadioButton) findViewById(R.id.CookButton);
 
         //Stores user role
-        String type = "test";
-
-        //Stores description of cook
-        String dummyDescription = "test";
-        //Stores address of client
-        String dummyAddress = "test";
+        String type = "";
 
         //dummy date to be added to credit card expr
         Date date= new Date(6);
         //dummy var for credit card when you make a client
-        CreditCard card = new CreditCard(strFname,strLname,dummyAddress,1234567,123,date);
+        CreditCard card = new CreditCard(strFname,strLname,strClientAddress,1234567,123,date);
         //dummy bitmap for the blank cheque pic
         //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
         Bitmap cheque = null;
@@ -192,12 +207,14 @@ public class Registration extends AppCompatActivity
          */
         if(btnClient.isChecked())
         {
+            //Store user as Client
             type = "Client";
 
         }
 
         if(btnCook.isChecked())
         {
+            //Store user as Cook
             type = "Cook";
 
         }
@@ -213,7 +230,8 @@ public class Registration extends AppCompatActivity
 //        }
 
         //creates a POJO user with a type, type will be used to specify what object to create
-        user = new UserPOJO(strFname, strLname, strEmail, strPassword, dummyAddress, type, dummyDescription, card, cheque);
+        user = new UserPOJO(strFname, strLname, strEmail, strPassword, strClientAddress, type,
+                strCookDescription, card, cheque);
         //we push onto the database under UserInfo all our information
         databaseReference.push().setValue(user);
         //call either the convert to client OR the convert to cook depending on type
