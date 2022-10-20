@@ -30,8 +30,8 @@ import UserJavaFiles.UserPOJO;
 //TODO: MUST REMAIN THIS TO LOGIN NOT MAINACTIVITY MAINACTIVITY IS WELCOMEPAGE
 public class MainActivity extends AppCompatActivity {
     //Global variables
-    EditText username = (EditText) findViewById(R.id.username);
-    EditText password = (EditText) findViewById(R.id.password);
+    EditText username = (EditText) findViewById(R.id.loginEmail);
+    EditText password = (EditText) findViewById(R.id.loginPassword);
     TextView result;
     Button buttonLogin = (Button) findViewById(R.id.login_button);
 
@@ -75,11 +75,22 @@ public class MainActivity extends AppCompatActivity {
                 Iterable<DataSnapshot> children = snapshot.getChildren();
                 //going to iterate through the data and if email matches, login user and save it
                 //in userPOJO
+                UserPOJO temp = new UserPOJO();
                 UserPOJO user = new UserPOJO();
                 //this loop iterates through the DB under the userInfo block
                 for (DataSnapshot child: children){
                     //no logic just stores the value onto user
-                    user = child.getValue(UserPOJO.class);
+                    temp = child.getValue(UserPOJO.class);
+
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.getEmail().equals(email.getText().toString())
+                            && temp.getPassword().equals(password.getText().toString()))
+                    {
+                        //since user and pass match the user logging in is this child from the database
+                        user = temp;
+                        email.setError("Correct credentials");
+                        break;
+                    }
 
                 }
                 //call either convert to client or convert to cook here or convert to admin
