@@ -83,14 +83,14 @@ public class MainActivity extends AppCompatActivity {
                     temp = child.getValue(UserPOJO.class);
 
                     //comparing the email and password from the database with the inputted text fields
-                    if (temp.getEmail().equals(email.getText().toString())
-                            && temp.getPassword().equals(password.getText().toString()))
-                    {
-                        //since user and pass match the user logging in is this child from the database
-                        user = temp;
-                        email.setError("Correct credentials");
-                        break;
-                    }
+//                    if (temp.getEmail().equals(email.getText().toString())
+//                            && temp.getPassword().equals(password.getText().toString()))
+//                    {
+//                        //since user and pass match the user logging in is this child from the database
+//                        user = temp;
+//                        email.setError("Correct credentials");
+//                        break;
+//                    }
 
                 }
                 //call either convert to client or convert to cook here or convert to admin
