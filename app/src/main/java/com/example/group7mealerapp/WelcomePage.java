@@ -18,6 +18,7 @@ public class WelcomePage extends AppCompatActivity {
     Button button;
     TextView text;
     User user;
+    Administrator A = new Administrator("safdf","sdsd","djghfg","skdd","dfnj");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +36,11 @@ public class WelcomePage extends AppCompatActivity {
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are the administrator.");
         }
 
-
         button = (Button)findViewById(R.id.btnSO);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openLogin();
-
             }
         });
 
@@ -50,6 +49,7 @@ public class WelcomePage extends AppCompatActivity {
     public void openLogin(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        System.out.println(A.getClass());
     }
 
 }
