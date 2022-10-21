@@ -1,6 +1,8 @@
 package com.example.group7mealerapp;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
@@ -466,29 +468,26 @@ public class Registration extends AppCompatActivity
 
         if(RegistrationErrors())
         {
+            Intent switchPage = new Intent(Registration.this, WelcomePage.class);
             if(type.equals("Client"))
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
                         strCookDescription, card, cheque);
+                currentUser = user.convertToClient();
+                switchPage.putExtra("Client",currentUser);
             }
             if(type.equals("Cook"))
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
                         strCookDescription, null, cheque);
+                currentUser = user.convertToCook();
+                switchPage.putExtra("Cook",currentUser);
             }
             //we push all our information onto the database under UserInfo
             databaseReference.push().setValue(user);
-            //call either the convert to client OR the convert to cook depending on type
-            if(type.equals("Client"))
-            {
-                currentUser = user.convertToClient();
-            }
-            if(type.equals("Cook"))
-            {
-                currentUser = user.convertToCook();
-            }
+
             //Clear text fields and let user know registration was complete
             Toast.makeText(getApplicationContext(), "Registration Successful. Logging In", Toast.LENGTH_LONG).show();
             Fname.setText(null);
@@ -504,6 +503,8 @@ public class Registration extends AppCompatActivity
             expDate.setText(null);
             //Clear remaining fields
 
+            setResult(RESULT_OK, switchPage);
+            startActivity(switchPage);
             //if there are no problems ie error catch if fields are blank,
             //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
         }
