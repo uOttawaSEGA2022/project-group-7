@@ -41,6 +41,7 @@ public class WelcomePage extends AppCompatActivity {
                 }
             }
         }
+        System.out.println(user.getFirstName());
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
@@ -57,6 +58,7 @@ public class WelcomePage extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                user = null;
                 openLogin();
 
             }
@@ -66,6 +68,8 @@ public class WelcomePage extends AppCompatActivity {
     //Method to take the user back to login page when they sign out
     public void openLogin(){
         Intent intent = new Intent(this, Login.class);
+        //clear user
+        user = null;
         startActivity(intent);
     }
 

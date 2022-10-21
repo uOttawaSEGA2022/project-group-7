@@ -27,8 +27,6 @@ public class Registration extends AppCompatActivity
 {
     //Global variables
 
-    //current user is going to be passed to the welcome page same with login page
-    User currentUser;
     //create an instance for firebase
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
@@ -468,22 +466,23 @@ public class Registration extends AppCompatActivity
 
         if(RegistrationErrors())
         {
-            Intent switchPage = new Intent(Registration.this, WelcomePage.class);
+            Intent switchPage = new Intent(Registration.this, Login.class);
+
             if(type.equals("Client"))
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
                         strCookDescription, card, cheque);
-                currentUser = user.convertToClient();
-                switchPage.putExtra("Client",currentUser);
+
+
             }
             if(type.equals("Cook"))
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
                         strCookDescription, null, cheque);
-                currentUser = user.convertToCook();
-                switchPage.putExtra("Cook",currentUser);
+
+
             }
             //we push all our information onto the database under UserInfo
             databaseReference.push().setValue(user);
@@ -504,9 +503,10 @@ public class Registration extends AppCompatActivity
             //Clear remaining fields
 
             setResult(RESULT_OK, switchPage);
+            //go back to login
             startActivity(switchPage);
-            //if there are no problems ie error catch if fields are blank,
-            //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
+
+
         }
     }
 }
