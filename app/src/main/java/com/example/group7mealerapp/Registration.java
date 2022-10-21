@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.os.Bundle;
 import java.util.Date;
 
 
+import UserJavaFiles.Administrator;
+import UserJavaFiles.Client;
+import UserJavaFiles.Cook;
 import UserJavaFiles.CreditCard;
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
@@ -36,6 +40,7 @@ public class Registration extends AppCompatActivity
     DatabaseReference databaseReference;
     //this POJO object will be used to store data within firebase in a digestable manner
     UserPOJO user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -133,6 +138,5 @@ public class Registration extends AppCompatActivity
         //if there are no problems ie error catch if fields are blank,
         //then you can navigate to welcome screen WITH THE CURRENTUSER DATA IN TOW
     }
-
 
 }

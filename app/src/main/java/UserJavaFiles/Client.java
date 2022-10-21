@@ -1,6 +1,8 @@
 package UserJavaFiles;
 
-public class Client extends User{
+import java.io.Serializable;
+
+public class Client extends User implements Serializable {
     private CreditCard creditCardInfo;
 
     //Creates Client from Super Class User, adds creditCardInfo attribute (class is set up but can be null for now

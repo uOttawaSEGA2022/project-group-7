@@ -91,25 +91,32 @@ public class MainActivity extends AppCompatActivity {
                             && temp.getPassword().equals(password.getText().toString()))
                     {
                         //since user and pass match the user logging in is this child from the database
+
                         user = temp;
+
                         //setting flag to true meaning the account matches the input
                         flag = true;
                         //Temporary code for debugging
-                        email.setError("Correct credentials");
+
 
                         //Setting type to whichever type is correct
                         if(user.getType().equals("Client"))
                         {
-                            type = 1;//surround in try and catch block
+                            type = 1;
+                            sendUser(type);
+
                         }
                         else if(user.getType().equals("Cook"))
                         {
                             type = 2;
+                            sendUser(type);
                         }
 
-                        else if(user.getType().equals("Administrator"))
+                        else if(user.getType().equals("Admin"))
                         {
+
                             type = 3;
+                            sendUser(type);
                         }
                         break;
                     }
@@ -152,8 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                //checks if it got the right data for debugging
-//                System.out.println(currentUser.getEmail());
+
                 }
 
             //no need for this function but must be overridden
@@ -166,33 +172,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Was going to be the function to send user to welcome page
-//    public void sendUser(View view)
-//    {
-//        Intent returnIntent = new Intent();
-//        call either convert to client or convert to cook here or convert to admin
-//
-//         //type 1 is for client so convert user into client
-//        if(type == 1)
-//        {
-//            Client currentUser = user.convertToClient();//surround in try and catch block
-//
-//            returnIntent.putExtra("User",currentUser);
-//        }
+    public void sendUser(int type)
+    {
+       Intent switchPage = new Intent(MainActivity.this, Registration.class);
+        //call either convert to client or convert to cook here or convert to admin
 
-    //    //Type 2 is cook so convert user into cook
-//        else if(type == 2)
-//        {
-//            Cook currentUser = user.convertToCook();
-//
-//        }
-//
+         //type 1 is for client so convert user into client
+        if(type == 1)
+        {
+            Client currentUser = user.convertToClient();//surround in try and catch block
+           switchPage.putExtra("Client",currentUser);
+        }
 
-    //   //type 3 is admin
-//        else if (type == 3)
-//        {
-//            Administrator currentUser = user.convertToAdministrator();
-//        }
-//
-//
-//    }
+        //Type 2 is cook so convert user into cook
+        else if(type == 2)
+        {
+            Cook currentUser = user.convertToCook();//surround in try and catch block
+            switchPage.putExtra("Cook",currentUser);
+
+        }
+
+
+       //type 3 is admin
+        else if (type == 3)
+       {
+
+           Administrator currentUser = user.convertToAdministrator();
+
+           switchPage.putExtra("Admin",currentUser);
+       }
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
+
+    }
 }

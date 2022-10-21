@@ -1,8 +1,9 @@
 package UserJavaFiles;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CreditCard{
+public class CreditCard implements Serializable {
     private String firstName, lastName, address;
     private long number;
     private int pin;
