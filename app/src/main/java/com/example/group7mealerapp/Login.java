@@ -21,10 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
-import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 //TODO: MUST REMAIN THIS TO LOGIN NOT MAINACTIVITY MAINACTIVITY IS WELCOMEPAGE
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
 
     //create an instance for firebase
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         Button loginButton = (Button) findViewById(R.id.btnLogin);
         //see comments in registration for explanation
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     // Was going to be the function to send user to welcome page
     public void sendUser(int type)
     {
-       Intent switchPage = new Intent(MainActivity.this, WelcomePage.class);
+       Intent switchPage = new Intent(Login.this, WelcomePage.class);
         //call either convert to client or convert to cook here or convert to admin
 
          //type 1 is for client so convert user into client

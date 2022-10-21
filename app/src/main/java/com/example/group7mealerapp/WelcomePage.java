@@ -65,7 +65,7 @@ public class WelcomePage extends AppCompatActivity {
     }
     //Method to take the user back to login page when they sign out
     public void openLogin(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
 
