@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     // Was going to be the function to send user to welcome page
     public void sendUser(int type)
     {
-       Intent switchPage = new Intent(MainActivity.this, Registration.class);
+       Intent switchPage = new Intent(MainActivity.this, WelcomePage.class);
         //call either convert to client or convert to cook here or convert to admin
 
          //type 1 is for client so convert user into client

@@ -23,7 +23,24 @@ public class WelcomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
 
-        //button to sign out
+        try{
+            user = (Client) getIntent().getSerializableExtra("Client");
+            user.getFirstName();
+        }catch (Exception e){
+            System.out.println("error here1 " + e);
+            try{
+                user = (Cook) getIntent().getSerializableExtra("Cook");
+                user.getFirstName();
+            }catch (Exception g){
+                System.out.println("error here2 " + e);
+                try{
+                    user = (Administrator) getIntent().getSerializableExtra("Admin");
+                    user.getFirstName();
+                }catch (Exception h){
+                    System.out.println("error here3 " + e);
+                }
+            }
+        }
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
