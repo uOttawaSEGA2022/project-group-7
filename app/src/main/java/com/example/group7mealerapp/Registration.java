@@ -488,7 +488,7 @@ public class Registration extends AppCompatActivity
             databaseReference.push().setValue(user);
 
             //Clear text fields and let user know registration was complete
-            Toast.makeText(getApplicationContext(), "Registration Successful. Logging In", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Registration Successful. Log in now", Toast.LENGTH_LONG).show();
             Fname.setText(null);
             Lname.setText(null);
             Address.setText(null);
