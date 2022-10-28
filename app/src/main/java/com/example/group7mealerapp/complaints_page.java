@@ -1,0 +1,130 @@
+package com.example.group7mealerapp;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import UserJavaFiles.Complaint;
+import UserJavaFiles.ComplaintList;
+
+public class complaints_page extends AppCompatActivity {
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    ListView listViewComplaints;
+    List<Complaint> complaints;
+    Complaint complaint;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Complaints");
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_complaint_page);
+        listViewComplaints = (ListView) findViewById(R.id.listViewComplaints);
+
+        complaints = new ArrayList<>();
+        String id = databaseReference.push().getKey();
+        complaint = new Complaint("cook@gmail.com", "horrible food", id);
+        databaseReference.child(id).setValue(complaint);
+        databaseReference.push().setValue(complaint);
+        //remove between these comments once done with this temp
+
+        listViewComplaints.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Complaint complaint = complaints.get(i);
+                showResolveDialog(complaint.getId());
+                return true;
+            }
+        });
+    }
+    //populate the list with complaints from the DB
+    protected void onStart() {
+        super.onStart();
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                complaints.clear();
+                for(DataSnapshot postSnapshot : snapshot.getChildren()){
+                    Complaint product = postSnapshot.getValue(Complaint.class);
+                    complaints.add(product);
+                }
+                ComplaintList complaintsAdapter = new ComplaintList(complaints_page.this, complaints);
+                listViewComplaints.setAdapter(complaintsAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void showResolveDialog(final String complaintId) {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.activity_resolve_dialoge, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextCook);
+        final EditText editTextPrice  = (EditText) dialogView.findViewById(R.id.editTextLengthToSuspend);
+        final Button buttonBan = (Button) dialogView.findViewById(R.id.buttonBan);
+        final Button buttonResolve = (Button) dialogView.findViewById(R.id.buttonResolve);
+        final Button buttonSuspend = (Button) dialogView.findViewById(R.id.buttonSuspend);
+
+        dialogBuilder.setTitle(complaintId);
+        final AlertDialog b = dialogBuilder.create();
+        b.show();
+
+        buttonBan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getBaseContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        buttonResolve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteComplaint(complaintId);
+                b.dismiss();
+            }
+        });
+
+        buttonSuspend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getBaseContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+    private Boolean deleteComplaint(String id) {
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Complaints").child(id);
+        dR.removeValue();
+        Toast.makeText(getApplicationContext(), "Complaint Deleted", Toast.LENGTH_LONG).show();
+        return true;
+    }
+}

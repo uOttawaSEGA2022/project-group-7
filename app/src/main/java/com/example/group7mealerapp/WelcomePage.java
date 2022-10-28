@@ -16,6 +16,7 @@ import UserJavaFiles.User;
 public class WelcomePage extends AppCompatActivity {
     //sign out button
     Button button;
+    Button complaintBtn;
     TextView text;
     User user;
     @Override
@@ -63,6 +64,19 @@ public class WelcomePage extends AppCompatActivity {
 
             }
         });
+        complaintBtn = findViewById((R.id.btnComplaint));
+        complaintBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                btnComplaintClick();
+            }
+        });
+    }
+    public void btnComplaintClick()
+    {
+        Intent intent = new Intent(this, complaints_page.class);
+        //clear user
+        user = null;
+        startActivity(intent);
 
     }
     //Method to take the user back to login page when they sign out
@@ -72,5 +86,6 @@ public class WelcomePage extends AppCompatActivity {
         user = null;
         startActivity(intent);
     }
+
 
 }
