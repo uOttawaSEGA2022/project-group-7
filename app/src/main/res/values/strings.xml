@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Group7MealerApp</string>
     <string name="button_SO">Sign out</string>
+    <string name="button_CO">Complaint</string>
 </resources>

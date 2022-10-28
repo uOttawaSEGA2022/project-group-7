@@ -33,6 +33,14 @@
                     android:layout_gravity="right"
                     android:text="@string/button_SO" />
 
+                <Button
+                    android:id="@+id/btnCO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="@string/button_CO"
+                    android:visibility="invisible"/>
+
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"

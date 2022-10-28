@@ -2,6 +2,7 @@ package com.example.group7mealerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +16,12 @@ import UserJavaFiles.User;
 
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button button;
+    Button buttonSignOut;
+    Button buttonComplaint;
     TextView text;
     User user;
-    Administrator A = new Administrator("safdf","sdsd","djghfg","skdd","dfnj");
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,20 +39,48 @@ public class WelcomePage extends AppCompatActivity {
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are the administrator.");
         }
 
-        button = (Button)findViewById(R.id.btnSO);
-        button.setOnClickListener(new View.OnClickListener() {
+
+
+        if (user.getClass() == Administrator.class ){
+            buttonComplaint.setVisibility(View.VISIBLE);
+        }
+        if (user.getClass() == Cook.class){
+            buttonComplaint.setVisibility(View.VISIBLE);
+        }
+        buttonComplaint = (Button)findViewById(R.id.btnCO);
+        buttonComplaint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openComplaint();
+            }
+        });
+
+        buttonSignOut = (Button)findViewById(R.id.btnSO);
+        buttonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openLogin();
             }
         });
 
+
     }
     //Method to take the user back to login page when they sign out
     public void openLogin(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        System.out.println(A.getClass());
+
+    }
+    public void openComplaint(){
+        if (user.getClass() == Administrator.class ){
+            Intent intent = new Intent(this, ComplaintPage2.class);
+            startActivity(intent);
+        } else if (user.getClass()==Cook.class){
+            //make a activity specifically for cook.
+
+        }
+
+
     }
 
 }
