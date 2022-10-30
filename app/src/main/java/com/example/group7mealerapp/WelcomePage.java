@@ -62,21 +62,11 @@ public class WelcomePage extends AppCompatActivity {
 
 
         if (user.getClass() == Administrator.class ){
-            buttonComplaint.setVisibility(View.VISIBLE);
+            complaintBtn.setVisibility(View.VISIBLE);
         }
         if (user.getClass() == Cook.class){
-            buttonComplaint.setVisibility(View.VISIBLE);
+            complaintBtn.setVisibility(View.VISIBLE);
         }
-        /*
-        buttonComplaint = (Button)findViewById(R.id.btnCO);
-        buttonComplaint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //openComplaint();
-            }
-        });
-
-         */
 
         buttonSignOut = (Button)findViewById(R.id.btnSO);
         buttonSignOut.setOnClickListener(new View.OnClickListener() {
@@ -110,20 +100,5 @@ public class WelcomePage extends AppCompatActivity {
         startActivity(intent);
 
     }
-    /*
-    public void openComplaint()
-        if (user.getClass() == Administrator.class ){
-            Intent intent = new Intent(this, ComplaintPage2.class);
-            startActivity(intent);
-        } else if (user.getClass()==Cook.class){
-            //make a activity specifically for cook.
-
-        }
-
-
-    }
-
-     */
-
 
 }
