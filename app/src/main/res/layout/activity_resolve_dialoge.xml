@@ -5,14 +5,6 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/editTextCook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Cook Email"
-        android:inputType="textPersonName" />
-
-    <EditText
         android:id="@+id/editTextLengthToSuspend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
