@@ -1,8 +1,9 @@
-package OtherJavaFiles;
+package UserJavaFiles;
 
-import java.io.IOException;
 
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
     private String firstName, lastName, email, password, address;
 
     //constructor for User, includes attributes firstName, lastName, email, password, address and checks if the input is correct.
@@ -12,10 +13,12 @@ public abstract class User {
             this.lastName = lastName;
             this.email = email;
             this.password = password;
+            this.address = address;
         }else{
             throw new IllegalArgumentException("Invalid parameter input");
         }
     }
+
 
     //getter and setter methods
     public String getFirstName(){
