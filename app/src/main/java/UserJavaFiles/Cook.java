@@ -4,10 +4,12 @@ import android.graphics.Bitmap;
 public class Cook extends User{
     private Bitmap blankCheque;
     private String description;
+    private Suspension status;
     public Cook(String firstName,String lastName,String email,String password,String address, String description){
         super(firstName,lastName,email,password,address);
         this.description = description;
         this.blankCheque = null;
+        this.status = null;
     }
 
     //getters and setters
