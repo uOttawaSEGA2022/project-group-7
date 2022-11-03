@@ -47,7 +47,7 @@ public class WelcomePage extends AppCompatActivity {
                 }
             }
         }
-        System.out.println(user.getFirstName());
+
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
@@ -85,10 +85,14 @@ public class WelcomePage extends AppCompatActivity {
     }
     public void btnComplaintClick()
     {
-        Intent intent = new Intent(this, complaints_page.class);
-        //clear user
-        user = null;
-        startActivity(intent);
+        Intent switchPage = new Intent(this, complaints_page.class);
+        if(user.getClass() == Cook.class)
+            switchPage.putExtra("Cook",user);
+        else if(user.getClass() == Administrator.class)
+            switchPage.putExtra("Admin",user);
+        System.out.println(user.getFirstName());
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
 
 
     }
