@@ -21,4 +21,5 @@ public class Cook extends User{
         this.blankCheque = blankCheque;
     }
     public void setDescription(String description) {this.description = description;}
+    public void setSuspension(Suspension suspend){this.status = suspend;}
 }
