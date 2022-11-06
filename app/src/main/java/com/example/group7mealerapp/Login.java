@@ -20,9 +20,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
+import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
 import UserJavaFiles.UserPOJO;
-//TODO: MUST REMAIN THIS TO LOGIN NOT MAINACTIVITY MAINACTIVITY IS WELCOMEPAGE
+
 public class Login extends AppCompatActivity {
 
 
@@ -30,6 +31,7 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
     DatabaseReference databaseReference;
+
 
     // Variable for sending user
     int type = 0;
@@ -46,6 +48,7 @@ public class Login extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("UserInfo");
+
     }
     //navigate to registration page
     public void btnRegisterClick(View view)
@@ -57,8 +60,6 @@ public class Login extends AppCompatActivity {
     /**
      * what is implemented now is just the grabbing of the user data and
      * storing it into a user object,
-     * TODO: make sure to iterate and find the correct (if exists) email then check if password match
-     * TODO: once done store in appropriate object dependent on type and send to next screen
      */
     public void btnLoginClick(View view){
         //text field variables

@@ -16,6 +16,7 @@ import UserJavaFiles.User;
 public class WelcomePage extends AppCompatActivity {
     //sign out button
     Button button;
+    Button complaintBtn;
     TextView text;
     User user;
     @Override
@@ -41,7 +42,7 @@ public class WelcomePage extends AppCompatActivity {
                 }
             }
         }
-        System.out.println(user.getFirstName());
+
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
@@ -63,6 +64,23 @@ public class WelcomePage extends AppCompatActivity {
 
             }
         });
+        complaintBtn = findViewById((R.id.btnComplaint));
+        complaintBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                btnComplaintClick();
+            }
+        });
+    }
+    public void btnComplaintClick()
+    {
+        Intent switchPage = new Intent(this, complaints_page.class);
+        if(user.getClass() == Cook.class)
+            switchPage.putExtra("Cook",user);
+        else if(user.getClass() == Administrator.class)
+            switchPage.putExtra("Admin",user);
+        System.out.println(user.getFirstName());
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
 
     }
     //Method to take the user back to login page when they sign out
@@ -72,5 +90,6 @@ public class WelcomePage extends AppCompatActivity {
         user = null;
         startActivity(intent);
     }
+
 
 }
