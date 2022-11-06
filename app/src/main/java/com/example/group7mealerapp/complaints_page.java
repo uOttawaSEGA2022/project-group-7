@@ -209,10 +209,10 @@ public class complaints_page extends AppCompatActivity {
     private void suspendOrBanUser(String id, Suspension suspension) {
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Complaints").child(id);
         dR.removeValue();
-        HashMap<String,Object> map = new HashMap<String,Object>();
-        map.put("suspension",suspension);
-        //updates the specific cooks database ref so they are now suspended
-        cookDatabaseReference.updateChildren(map);
+        //only can ban if admin is logged so switch user to admin should
+        //not throw error as only accessable by admin
+        Administrator admin = (Administrator) user;
+        admin.suspendCook(suspension,cookDatabaseReference);
         if(suspension.getPerma()){
             Toast.makeText(getApplicationContext(), "Cook banned", Toast.LENGTH_LONG).show();
         }
