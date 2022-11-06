@@ -28,7 +28,7 @@ public class WelcomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
-
+        complaintBtn = findViewById((R.id.btnComplaint));
         try{
             user = (Client) getIntent().getSerializableExtra("Client");
             user.getFirstName();
@@ -50,6 +50,7 @@ public class WelcomePage extends AppCompatActivity {
 
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class){
+
             Cook cook = (Cook) user;
             try{
                 System.out.println(cook.getSuspension() + "this is the suspension");
@@ -67,6 +68,8 @@ public class WelcomePage extends AppCompatActivity {
 
         }
         if (user.getClass() == Client.class ){
+            //if Client logs on then the complaint button is invisible
+            complaintBtn.setVisibility(View.GONE);
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
         }
         if (user.getClass() == Administrator.class ){
@@ -90,7 +93,7 @@ public class WelcomePage extends AppCompatActivity {
                 openLogin();
             }
         });
-        complaintBtn = findViewById((R.id.btnComplaint));
+
         complaintBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -104,7 +107,7 @@ public class WelcomePage extends AppCompatActivity {
         if(user.getClass() == Cook.class){
 
             Cook cook = (Cook) user;
-            System.out.println("transfer bitch" + cook.getEmail());
+
             cook.setSuspension(null);
             switchPage.putExtra("Cook",cook);
         }
