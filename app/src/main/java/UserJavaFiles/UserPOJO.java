@@ -18,8 +18,9 @@ public class UserPOJO {
     private String firstName, lastName, email, password, address, type, description;
     private CreditCard creditCardInfo;
     private Bitmap blankCheque;
+    private Suspension suspension;
 
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, Bitmap blankCheque){
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, Bitmap blankCheque, Suspension suspension){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -29,12 +30,17 @@ public class UserPOJO {
         this.creditCardInfo = creditCardInfo;
         this.blankCheque = blankCheque;
         this.description = description;
+        this.suspension = suspension;
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
 
 
     //getters
+
+    public Suspension getSuspension() {
+        return suspension;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -71,6 +77,10 @@ public class UserPOJO {
     public String getDescription() {return description;}
 
     //setters
+
+    public void setSuspension(Suspension suspension) {
+        this.suspension = suspension;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -120,7 +130,7 @@ public class UserPOJO {
         Cook cook;
         try{
             //blank cheque not needed for now
-            cook = new Cook(firstName,lastName,email,password,address,description);
+            cook = new Cook(firstName,lastName,email,password,address,description,suspension);
         }
         catch (Exception e){
             return null;

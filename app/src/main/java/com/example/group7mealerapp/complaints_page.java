@@ -23,26 +23,61 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Complaint;
 import UserJavaFiles.ComplaintList;
 import UserJavaFiles.Cook;
+import UserJavaFiles.Suspension;
 import UserJavaFiles.User;
+import UserJavaFiles.UserPOJO;
 
 public class complaints_page extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference, cookDatabaseReference;
     ListView listViewComplaints;
     List<Complaint> complaints;
     Complaint complaint;
     User user;
-    @Override
+    //simply find the cook by their email in the user database and set the reference to them
+    private void findCookEmail(String email){
+        cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
+        cookDatabaseReference.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Context context = getApplicationContext();
+                //calls an iterator on the children in the database IE all users stored
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                UserPOJO temp = new UserPOJO();
+                //this loop iterates through the DB under the userInfo block
+                for (DataSnapshot child: children){
+                    //no logic just stores the value onto user
+                    temp = child.getValue(UserPOJO.class);
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.getEmail().equals(email)){
+                        String id = child.getKey();
+                        System.out.println(id + "this is the proper id");
+                        cookDatabaseReference = firebaseDatabase.getReference("UserInfo").child(id);
+                        System.out.println("this is the email" + temp.getEmail());
+                        break;
+                    }
+                    temp = null;
+                }
+            }
+            //no need for this function but must be overridden
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+}
     protected void onCreate(Bundle savedInstanceState) {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Complaints");
+        cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complaint_page);
         listViewComplaints = (ListView) findViewById(R.id.listViewComplaints);
@@ -50,9 +85,9 @@ public class complaints_page extends AppCompatActivity {
         complaints = new ArrayList<>();
         String id = databaseReference.push().getKey();
         //creates a complaint since we dont have any atm
-        complaint = new Complaint("everyone@gmail.com", "got food poisning lol", id);
+        /*complaint = new Complaint("nocturne@gmail.com", "he parry striked me", id);
         databaseReference.child(id).setValue(complaint);
-
+        */
         //remove between these comments once done with this temp
         //catching user information and loading it to page
         try{
@@ -71,9 +106,13 @@ public class complaints_page extends AppCompatActivity {
         listViewComplaints.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Complaint complaint = complaints.get(i);
-                showResolveDialog(complaint.getId(),complaint.getEmail());
-                return true;
+                //only able to administer if you are an admin
+                if(user.getClass() == Administrator.class){
+                    Complaint complaint = complaints.get(i);
+                    showResolveDialog(complaint.getId(),complaint.getEmail());
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -109,14 +148,14 @@ public class complaints_page extends AppCompatActivity {
     }
 
     private void showResolveDialog(final String complaintId, final String email) {
-
+        findCookEmail(email);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_resolve_dialoge, null);
         dialogBuilder.setView(dialogView);
 
 
-        final EditText editTextPrice  = (EditText) dialogView.findViewById(R.id.editTextLengthToSuspend);
+        final EditText editTextLengthToBan  = (EditText) dialogView.findViewById(R.id.editTextLengthToSuspend);
         final Button buttonBan = (Button) dialogView.findViewById(R.id.buttonBan);
         final Button buttonResolve = (Button) dialogView.findViewById(R.id.buttonResolve);
         final Button buttonSuspend = (Button) dialogView.findViewById(R.id.buttonSuspend);
@@ -128,7 +167,11 @@ public class complaints_page extends AppCompatActivity {
         buttonBan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+
+                Suspension suspension = new Suspension(true,(Date) null);
+                suspendOrBanUser(complaintId,suspension);
+                finish();
+                b.dismiss();
             }
         });
 
@@ -136,6 +179,7 @@ public class complaints_page extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 deleteComplaint(complaintId);
+                finish();
                 b.dismiss();
             }
         });
@@ -143,7 +187,15 @@ public class complaints_page extends AppCompatActivity {
         buttonSuspend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+                int length =Integer.parseInt(editTextLengthToBan.getText().toString());
+                Calendar c = Calendar.getInstance(); // starts with today's date and time
+                c.add(Calendar.DAY_OF_YEAR, length);  // advances day by 2
+                Date date = c.getTime(); // gets modified time
+                System.out.println(date);
+                Suspension suspension = new Suspension(false,date);
+                suspendOrBanUser(complaintId,suspension);
+                finish();
+                b.dismiss();
             }
         });
 
@@ -154,4 +206,21 @@ public class complaints_page extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Complaint Deleted", Toast.LENGTH_LONG).show();
         return true;
     }
+    private void suspendOrBanUser(String id, Suspension suspension) {
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Complaints").child(id);
+        dR.removeValue();
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("suspension",suspension);
+        //updates the specific cooks database ref so they are now suspended
+        cookDatabaseReference.updateChildren(map);
+        if(suspension.getPerma()){
+            Toast.makeText(getApplicationContext(), "Cook banned", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Cook suspended", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
 }

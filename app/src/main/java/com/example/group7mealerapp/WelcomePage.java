@@ -44,8 +44,22 @@ public class WelcomePage extends AppCompatActivity {
         }
 
         text = (TextView)findViewById(R.id.textView6);
-        if (user.getClass() == Cook.class ){
-            text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
+        if (user.getClass() == Cook.class){
+            Cook cook = (Cook) user;
+            try{
+                System.out.println(cook.getSuspension() + "this is the suspension");
+                if (cook.getSuspension().getPerma() == true)
+                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently banned until further notice!");
+                else if (!cook.getSuspension().getBannedUntil().equals("OKAY") )
+                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
+                else
+                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
+            }catch(Exception e){
+                text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
+            }
+
+
+
         }
         if (user.getClass() == Client.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
@@ -66,6 +80,7 @@ public class WelcomePage extends AppCompatActivity {
         });
         complaintBtn = findViewById((R.id.btnComplaint));
         complaintBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
             public void onClick(View view) {
                 btnComplaintClick();
             }
@@ -74,10 +89,17 @@ public class WelcomePage extends AppCompatActivity {
     public void btnComplaintClick()
     {
         Intent switchPage = new Intent(this, complaints_page.class);
-        if(user.getClass() == Cook.class)
-            switchPage.putExtra("Cook",user);
+        if(user.getClass() == Cook.class){
+
+            Cook cook = (Cook) user;
+            System.out.println("transfer bitch" + cook.getEmail());
+            cook.setSuspension(null);
+            switchPage.putExtra("Cook",cook);
+        }
+
         else if(user.getClass() == Administrator.class)
             switchPage.putExtra("Admin",user);
+
         System.out.println(user.getFirstName());
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
