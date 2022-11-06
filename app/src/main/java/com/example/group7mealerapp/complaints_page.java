@@ -45,35 +45,7 @@ public class complaints_page extends AppCompatActivity {
     List<Complaint> complaints;
     Complaint complaint;
     User user;
-    //simply find the cook by their email in the user database and set the reference to them
-    private void findCookEmail(String email){
-        cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
-        cookDatabaseReference.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Context context = getApplicationContext();
-                //calls an iterator on the children in the database IE all users stored
-                Iterable<DataSnapshot> children = snapshot.getChildren();
-                UserPOJO temp = new UserPOJO();
-                //this loop iterates through the DB under the userInfo block
-                for (DataSnapshot child: children){
-                    //no logic just stores the value onto user
-                    temp = child.getValue(UserPOJO.class);
-                    //comparing the email and password from the database with the inputted text fields
-                    if (temp.getEmail().equals(email)){
-                        String id = child.getKey();
-                        System.out.println(id + "this is the proper id");
-                        cookDatabaseReference = firebaseDatabase.getReference("UserInfo").child(id);
-                        System.out.println("this is the email" + temp.getEmail());
-                        break;
-                    }
-                    temp = null;
-                }
-            }
-            //no need for this function but must be overridden
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-}
+
     protected void onCreate(Bundle savedInstanceState) {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Complaints");
@@ -147,14 +119,57 @@ public class complaints_page extends AppCompatActivity {
         });
     }
 
+    /**
+     * more or less a helper method that searches for the cook by email and
+     * gets a database reference to the specific cook being actioned against,
+     * used to locate cooks to either suspend or ban them from the DB
+     * @param email email of the cook
+     */
+    private void findCookEmail(String email){
+        cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
+        cookDatabaseReference.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Context context = getApplicationContext();
+                //calls an iterator on the children in the database IE all users stored
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                UserPOJO temp = new UserPOJO();
+                //this loop iterates through the DB under the userInfo block
+                for (DataSnapshot child: children){
+                    //no logic just stores the value onto user
+                    temp = child.getValue(UserPOJO.class);
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.getEmail().equals(email)){
+                        String id = child.getKey();
+                        System.out.println(id + "this is the proper id");
+                        cookDatabaseReference = firebaseDatabase.getReference("UserInfo").child(id);
+                        System.out.println("this is the email" + temp.getEmail());
+                        break;
+                    }
+                    temp = null;
+                }
+            }
+            //no need for this function but must be overridden
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+    /**
+     * This method shows the resolution diolog when long clicked on a complaint (only useable if admin
+     * allows the admin to take action against a user by either banning them, suspending them or simply resolving
+     * the complaint if it is of no issue
+     * @param complaintId complaint id in the database
+     * @param email email of the cook being actioned against
+     */
     private void showResolveDialog(final String complaintId, final String email) {
+        //find cook of email related to complaint before we start
         findCookEmail(email);
+        //build the diologue
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_resolve_dialoge, null);
         dialogBuilder.setView(dialogView);
 
-
+        //SETTING UP THE TEXT FIELDS AND BUTTONS
         final EditText editTextLengthToBan  = (EditText) dialogView.findViewById(R.id.editTextLengthToSuspend);
         final Button buttonBan = (Button) dialogView.findViewById(R.id.buttonBan);
         final Button buttonResolve = (Button) dialogView.findViewById(R.id.buttonResolve);
@@ -200,12 +215,26 @@ public class complaints_page extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * simply deletes a complaint more so used for resolving complaints with no action to ban or
+     * suspend
+     * @param id the complaint being resolved in the DB
+     * @return
+     */
     private Boolean deleteComplaint(String id) {
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Complaints").child(id);
         dR.removeValue();
         Toast.makeText(getApplicationContext(), "Complaint Deleted", Toast.LENGTH_LONG).show();
         return true;
     }
+
+    /**
+     * simply bans or suspends the user depending on the suspension variable, only useable if user on page is admin
+     * and can call the admin command suspendCook
+     * @param id the id position of the complaint in the database that is being viewed
+     * @param suspension the type of suspension they will get either permanent or for a period
+     */
     private void suspendOrBanUser(String id, Suspension suspension) {
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Complaints").child(id);
         dR.removeValue();
