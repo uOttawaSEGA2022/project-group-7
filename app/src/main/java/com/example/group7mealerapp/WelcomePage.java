@@ -2,6 +2,7 @@ package com.example.group7mealerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +16,14 @@ import UserJavaFiles.User;
 
 public class WelcomePage extends AppCompatActivity {
     //sign out button
+    Button buttonSignOut;
+    Button buttonComplaint;
     Button button;
     Button complaintBtn;
     TextView text;
     User user;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,13 +74,20 @@ public class WelcomePage extends AppCompatActivity {
         }
 
 
-        button = (Button)findViewById(R.id.btnSO);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        if (user.getClass() == Administrator.class ){
+            complaintBtn.setVisibility(View.VISIBLE);
+        }
+        if (user.getClass() == Cook.class){
+            complaintBtn.setVisibility(View.VISIBLE);
+        }
+
+        buttonSignOut = (Button)findViewById(R.id.btnSO);
+        buttonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 user = null;
                 openLogin();
-
             }
         });
         complaintBtn = findViewById((R.id.btnComplaint));
@@ -104,6 +116,7 @@ public class WelcomePage extends AppCompatActivity {
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
 
+
     }
     //Method to take the user back to login page when they sign out
     public void openLogin(){
@@ -111,7 +124,7 @@ public class WelcomePage extends AppCompatActivity {
         //clear user
         user = null;
         startActivity(intent);
-    }
 
+    }
 
 }
