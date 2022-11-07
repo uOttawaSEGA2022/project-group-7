@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,9 +60,9 @@ public class complaints_page extends AppCompatActivity {
         complaints = new ArrayList<>();
         String id = databaseReference.push().getKey();
         //creates a complaint since we dont have any atm
-        /*complaint = new Complaint("nocturne@gmail.com", "he parry striked me", id);
-        databaseReference.child(id).setValue(complaint);
-        */
+        /*complaint = new Complaint("cook@gmail.com", "there was rat in my soup!", id);
+        databaseReference.child(id).setValue(complaint);*/
+
         //remove between these comments once done with this temp
         //catching user information and loading it to page
         try{
@@ -202,15 +205,33 @@ public class complaints_page extends AppCompatActivity {
         buttonSuspend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int length =Integer.parseInt(editTextLengthToBan.getText().toString());
-                Calendar c = Calendar.getInstance(); // starts with today's date and time
-                c.add(Calendar.DAY_OF_YEAR, length);  // advances day by 2
-                Date date = c.getTime(); // gets modified time
-                System.out.println(date);
-                Suspension suspension = new Suspension(false,date);
-                suspendOrBanUser(complaintId,suspension);
-                finish();
-                b.dismiss();
+                Suspension suspension = null;
+                Boolean flag = true;
+                Context context = getApplicationContext();
+                String error = "Incorrect date format";
+                int duration = Toast.LENGTH_LONG;
+                String day =editTextLengthToBan.getText().toString();
+
+                try{
+                    suspension = new Suspension(false,day);
+                    System.out.println(suspension.getBannedUntil() + " you are banned until");
+                }catch(ParseException e){
+                    flag = false;
+                    editTextLengthToBan.setError("incorrect date format");
+                    Toast.makeText(context, error, duration).show();
+                } catch (Exception e) {
+                    flag = false;
+                    editTextLengthToBan.setError("date you chose is before current date");
+                    Toast.makeText(context, error, duration).show();
+                }
+                if(flag){
+                    System.out.println(day);
+                    suspendOrBanUser(complaintId,suspension);
+                    finish();
+                    b.dismiss();
+                }
+
+
             }
         });
 
