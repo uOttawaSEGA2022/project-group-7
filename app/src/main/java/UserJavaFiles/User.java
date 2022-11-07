@@ -50,7 +50,7 @@ public abstract class User implements Serializable {
     }
 
     public void setLastName(String input){
-        if(checkLastName(input) == true){
+        if(checkLastName(input) == false){
             throw new IllegalArgumentException("lastName is invalid");
         }
         lastName = input;
@@ -58,7 +58,7 @@ public abstract class User implements Serializable {
     }
 
     public void setEmail(String input){
-        if(checkEmail(input) == true){
+        if(checkEmail(input) == false){
             throw new IllegalArgumentException("email is invalid");
         }    
         email = input;
@@ -66,14 +66,14 @@ public abstract class User implements Serializable {
     }
 
     public void setPassword(String input){
-        if(checkPassword(input) == true){
+        if(checkPassword(input) == false){
             throw new IllegalArgumentException("password is invalid");
         }
         password = input;
     }
 
     public void setAddress(String input){
-        if(checkAddress(input) == true){
+        if(checkAddress(input) == false){
             throw new IllegalArgumentException("address is invalid");
         }
         address = input;

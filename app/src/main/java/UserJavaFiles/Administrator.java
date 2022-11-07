@@ -26,4 +26,9 @@ public class Administrator extends User {
         cook.updateChildren(map);
 
     }
+
+    public boolean equalsTo(Administrator admin){
+        return this.getAddress() == admin.getAddress() && this.getFirstName() == admin.getFirstName() && this.getLastName() == admin.getLastName()
+                && this.getEmail() == admin.getEmail() && this.getPassword() == admin.getPassword();
+    }
 }

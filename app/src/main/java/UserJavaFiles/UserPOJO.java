@@ -148,4 +148,11 @@ public class UserPOJO {
         }
         return administrator;
     }
+
+    public boolean equalsTo(UserPOJO user){
+        return this.address == user.getAddress() && this.firstName == user.getFirstName() && this.lastName == user.getLastName()
+                && this.email == user.getEmail() && this.password == user.getPassword() && this.type == user.getType()
+                && this.blankCheque == user.blankCheque && this.description == user.getDescription() && this.suspension.equalsTo(user.getSuspension())
+                && this.creditCardInfo.equalsTo(user.getCreditCardInfo());
+    }
 }

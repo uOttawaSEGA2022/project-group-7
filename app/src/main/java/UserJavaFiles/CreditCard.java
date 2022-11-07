@@ -10,7 +10,7 @@ public class CreditCard implements Serializable {
     private Date expirationDate;
 
     public CreditCard(String firstName,String lastName,String address, long number, int pin, Date expirationDate) throws IllegalArgumentException{
-        /*if(firstName == null || firstName.isEmpty()){
+        if(firstName == null || firstName.isEmpty()){
             throw new IllegalArgumentException("First name is invalid");
         }else if(lastName == null || lastName.isEmpty()){
             throw new IllegalArgumentException("Last name is invalid");
@@ -20,7 +20,7 @@ public class CreditCard implements Serializable {
             throw new IllegalArgumentException("Credit card number is either too long or too short");
         }else if(String.valueOf(pin).length() != 3){
             throw new IllegalArgumentException("PIN is invalid");
-        }*/
+        }
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -38,9 +38,9 @@ public class CreditCard implements Serializable {
     }
 
     public void setFirstName(String firstName) {
-        /*if(firstName == null || firstName.isEmpty()){
+        if(firstName == null || firstName.isEmpty()){
             throw new IllegalArgumentException("First name is invalid");
-        }*/
+        }
         this.firstName = firstName;
     }
 
@@ -49,9 +49,9 @@ public class CreditCard implements Serializable {
     }
 
     public void setLastName(String lastName) {
-        /*if(lastName == null || lastName.isEmpty()){
+        if(lastName == null || lastName.isEmpty()){
             throw new IllegalArgumentException("Last name is invalid");
-        }*/
+        }
         this.lastName = lastName;
     }
 
@@ -60,9 +60,9 @@ public class CreditCard implements Serializable {
     }
 
     public void setAddress(String address) {
-        /*if(address == null || address.isEmpty()){
+        if(address == null || address.isEmpty()){
             throw new IllegalArgumentException("Address is invalid");
-        }*/
+        }
         this.address = address;
     }
 
@@ -71,9 +71,9 @@ public class CreditCard implements Serializable {
     }
 
     public void setNumber(long number) {
-        /*if(String.valueOf(number).length()>19 || String.valueOf(number).length()<8){
+        if(String.valueOf(number).length()>19 || String.valueOf(number).length()<8){
             throw new IllegalArgumentException("Credit card number is either too long or too short");
-        }*/
+        }
         this.number = number;
     }
 
@@ -82,9 +82,9 @@ public class CreditCard implements Serializable {
     }
 
     public void setPin(int pin) {
-        /*if(String.valueOf(pin).length() != 3){
+        if(String.valueOf(pin).length() != 3){
             throw new IllegalArgumentException("PIN is invalid");
-        }*/
+        }
         this.pin = pin;
     }
 
@@ -94,5 +94,10 @@ public class CreditCard implements Serializable {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public boolean equalsTo(CreditCard cc){
+        return this.firstName == cc.getFirstName() && this.lastName == cc.getLastName() && this.address  == cc.getAddress()
+                && this.number == cc.getNumber() && this.pin == cc.getPin() && this.expirationDate == cc.getExpirationDate();
     }
 }

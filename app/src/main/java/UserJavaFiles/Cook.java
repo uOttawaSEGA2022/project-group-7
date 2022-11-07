@@ -23,4 +23,10 @@ public class Cook extends User{
     }
     public void setDescription(String description) {this.description = description;}
     public void setSuspension(Suspension suspend){this.status = suspend;}
+
+    public boolean equalsTo(Cook cook){
+        return this.getAddress() == cook.getAddress() && this.getFirstName() == cook.getFirstName() && this.getLastName() == cook.getLastName()
+                && this.getEmail() == cook.getEmail() && this.getPassword() == cook.getPassword() && this.getDescription() == cook.getDescription()
+                && this.getSuspension().equalsTo(cook.getSuspension());
+    }
 }
