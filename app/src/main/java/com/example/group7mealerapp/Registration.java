@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.Date;
 
 import UserJavaFiles.CreditCard;
+import UserJavaFiles.Suspension;
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 /**
@@ -472,7 +473,7 @@ public class Registration extends AppCompatActivity
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
-                        strCookDescription, card, cheque);
+                        strCookDescription, card, cheque,null);
 
 
             }
@@ -480,7 +481,7 @@ public class Registration extends AppCompatActivity
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
-                        strCookDescription, null, cheque);
+                        strCookDescription, null, cheque,new Suspension(false, (Date) null));
 
 
             }
