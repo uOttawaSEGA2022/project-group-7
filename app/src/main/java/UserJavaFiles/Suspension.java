@@ -43,10 +43,15 @@ public class Suspension implements Serializable {
     }
     public Suspension(){}
 
+    /**
+     * helper method for constructor to check the validity of the suspension date
+     * @param bannedUntil when the user is banned until
+     * @throws Exception throws this exception if it cannot parse properly or if date is older
+     * than current date
+     */
     private void checkSuspension( String bannedUntil) throws Exception{
         Date currentDate = new Date();
         Date suspensionDate = (ISO_8601_FORMAT.parse(bannedUntil));
-        System.out.println("please");
         if(currentDate.after(suspensionDate)){
 
             throw new Exception();
