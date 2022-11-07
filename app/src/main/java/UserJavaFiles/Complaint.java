@@ -32,6 +32,7 @@ public class Complaint {
     public void setComplaint(String complaint) {
         this.complaint = complaint;
     }
+
     public String getId() {
         return id;
     }

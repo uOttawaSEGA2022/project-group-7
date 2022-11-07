@@ -95,4 +95,9 @@ public class CreditCard implements Serializable {
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    public boolean equalsTo(CreditCard cc){
+        return this.firstName == cc.getFirstName() && this.lastName == cc.getLastName() && this.address  == cc.getAddress()
+                && this.number == cc.getNumber() && this.pin == cc.getPin() && this.expirationDate == cc.getExpirationDate();
+    }
 }

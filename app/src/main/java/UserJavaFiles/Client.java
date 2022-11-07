@@ -18,4 +18,9 @@ public class Client extends User {
     public void setCreditCardInfo(CreditCard creditCardInfo) {
         this.creditCardInfo = creditCardInfo;
     }
+
+    public boolean equalsTo(Client client){
+        return this.getAddress() == client.getAddress() && this.getFirstName() == client.getFirstName() && this.getLastName() == client.getLastName()
+                && this.getEmail() == client.getEmail() && this.getPassword() == client.getPassword() && this.creditCardInfo.equalsTo(client.getCreditCardInfo());
+    }
 }

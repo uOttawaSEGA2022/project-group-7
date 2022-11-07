@@ -55,9 +55,6 @@ public class Suspension implements Serializable {
     public String getBannedUntil() {
         return this.bannedUntil;
     }
-
-
-
     public  Boolean getPerma(){
         return perma;
     }
@@ -66,5 +63,12 @@ public class Suspension implements Serializable {
     }
     public void setBannedUntil(String bannedUntil) {
         this.bannedUntil = bannedUntil;
+    }
+    public Date getBan(){return this.ban;}
+    public void setBan(Date ban){this.ban = ban;}
+
+    public boolean equalsTo(Suspension status){
+        return (this.getPerma() == status.getPerma() && this.getBannedUntil() == status.getBannedUntil())
+                || (this.getPerma() == status.getPerma() && this.getBan() == status.getBan());
     }
 }
