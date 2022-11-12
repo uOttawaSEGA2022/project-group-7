@@ -7,12 +7,9 @@ import android.app.Activity;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Date;
 
-import UserJavaFiles.Client;
 import UserJavaFiles.Complaint;
-import UserJavaFiles.ComplaintList;
-import UserJavaFiles.CreditCard;
+import listViewFiles.ComplaintList;
 
 class ComplaintListTest {
     @Test

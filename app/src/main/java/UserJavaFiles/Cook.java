@@ -36,7 +36,7 @@ public class Cook extends User{
     }
 
     //adding a meal to the arraylist called menu
-    public void addMeal(String name, String description, double price)
+    public void addMeal(String name, String mealType, String cusineType, double price)
     {
         //calling the exists method to check if the meal is already in the menu if it is
         // then nothing is added to menu
@@ -46,7 +46,7 @@ public class Cook extends User{
         if (flag == -1)
         {
             //add the meal to the list
-            menu.add(new Meal(name,description,price));
+            menu.add(new Meal(name,mealType,cusineType,price));
         }
     }
 

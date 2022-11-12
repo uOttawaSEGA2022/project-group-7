@@ -2,7 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <TextView android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/textViewName" android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" android:text=""/>
     <TextView android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/textViewMealType" android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" android:text=""/>
+
+    <TextView
+        android:id="@+id/textViewCusineType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textViewPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
 

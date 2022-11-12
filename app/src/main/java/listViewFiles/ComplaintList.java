@@ -1,4 +1,4 @@
-package UserJavaFiles;
+package listViewFiles;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -12,7 +12,9 @@ import com.example.group7mealerapp.R;
 
 import java.util.List;
 
+import UserJavaFiles.Complaint;
 
+//class that sets up the complaint list
 public class ComplaintList extends ArrayAdapter<Complaint> {
     private Activity context;
     List<Complaint> complaints;
@@ -28,12 +30,12 @@ public class ComplaintList extends ArrayAdapter<Complaint> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_complaint_list, null, true);
 
-        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewEmail);
-        TextView textViewPrice = (TextView) listViewItem.findViewById(R.id.textViewComplaint);
+        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
+        TextView textViewDescription = (TextView) listViewItem.findViewById(R.id.textViewMealType);
 
         Complaint complaint = complaints.get(position);
         textViewName.setText(complaint.getEmail());
-        textViewPrice.setText(String.valueOf(complaint.getComplaint()));
+        textViewDescription.setText(String.valueOf(complaint.getComplaint()));
         return listViewItem;
     }
 }

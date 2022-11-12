@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,19 +22,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import UserJavaFiles.Administrator;
-import UserJavaFiles.Client;
 import UserJavaFiles.Complaint;
-import UserJavaFiles.ComplaintList;
+import listViewFiles.ComplaintList;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Suspension;
 import UserJavaFiles.User;
@@ -55,7 +48,7 @@ public class complaints_page extends AppCompatActivity {
         cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complaint_page);
-        listViewComplaints = (ListView) findViewById(R.id.listViewComplaints);
+        listViewComplaints = (ListView) findViewById(R.id.listViewMeals);
 
         complaints = new ArrayList<>();
         String id = databaseReference.push().getKey();
