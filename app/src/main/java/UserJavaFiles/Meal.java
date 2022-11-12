@@ -18,6 +18,7 @@ public class Meal {
         offered = false;
     }
 
+    //getters
     public String getName()
     {
         return name;
@@ -33,11 +34,12 @@ public class Meal {
         return price;
     }
 
-    // sets the meal to offered therefore clients can see and purchase
-    public void setOffered()
+    // if cook wishes to offer the meal pass true, if the cook no longer wishes to offer the meal pass false
+    public void setOffered(boolean choice)
     {
-        offered = true;
+        offered = choice;
     }
+
 }
 
 

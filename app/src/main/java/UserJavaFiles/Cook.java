@@ -8,12 +8,13 @@ public class Cook extends User{
     private Bitmap blankCheque;
     private String description;
     private Suspension status;
-    private ArrayList<Meal> menu = new ArrayList<Meal>();
+    private ArrayList<Meal> menu;
     public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status){
         super(firstName,lastName,email,password,address);
         this.description = description;
         this.blankCheque = null;
         this.status = status;
+        menu = new ArrayList<Meal>();
     }
 
     //getters and setters
@@ -41,16 +42,15 @@ public class Cook extends User{
         // then nothing is added to menu
         int flag = exists(name);
 
-        // if flag is not -1 then it does not exist in the menu
-        if (flag != -1)
+        // if flag is -1 then it does not exist in the menu
+        if (flag == -1)
         {
-
-        }
-        else {
+            //add the meal to the list
             menu.add(new Meal(name,description,price));
         }
     }
 
+    //method to delete a meal from the cooks menu
     public void deleteMeal(String name)
     {
         // if exists returns -1 then the meal the cook is trying to delete was never added to the
@@ -78,4 +78,5 @@ public class Cook extends User{
         //returns an index if the name was found in the menu and -1 if it was not
         return index;
     }
+
 }
