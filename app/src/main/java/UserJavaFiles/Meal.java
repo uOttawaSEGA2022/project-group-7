@@ -15,18 +15,20 @@ import listViewFiles.MealList;
 
 public class Meal implements Serializable {
     //Instance variables
-    private String name, mealType, cusineType;
+    private String name, mealType, cusineType,description,email;
 
     private double price;
 
     private boolean offered;
 
-    public Meal(String name, String mealType,String cusineType, double price)
+    public Meal(String name, String mealType,String cusineType, String description,String email, double price)
     {
         this.name = name;
         this.price = price;
         this.mealType = mealType;
         this.cusineType = cusineType;
+        this.description = description;
+        this.email = email;
         //auto set meals to not offered and then when they wish to be offered make the on click call
         // method setOffered
         offered = false;
@@ -50,6 +52,8 @@ public class Meal implements Serializable {
     {
         return price;
     }
+
+    public String getDescription() {return description;}
 
     // if cook wishes to offer the meal pass true, if the cook no longer wishes to offer the meal pass false
     public void setOffered(boolean choice, Meal meal) {

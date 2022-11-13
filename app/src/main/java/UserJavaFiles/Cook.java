@@ -46,7 +46,7 @@ public class Cook extends User{
         if (flag == -1)
         {
             //add the meal to the list
-            menu.add(new Meal(name,mealType,cusineType,price));
+            menu.add(new Meal(name,mealType,cusineType,description,this.getEmail(),price));
         }
     }
 

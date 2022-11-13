@@ -1,14 +1,20 @@
 package com.example.group7mealerapp;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,15 +23,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Meal;
+import UserJavaFiles.Suspension;
 import UserJavaFiles.User;
+import UserJavaFiles.UserPOJO;
 import listViewFiles.MealList;
 
 public class Search extends AppCompatActivity {
@@ -39,9 +50,11 @@ public class Search extends AppCompatActivity {
     User user;
 
     protected void onCreate(Bundle savedInstanceState) {
-        //REMOVE THBETWEEN THESE COMMENTS ONLY FOR TESTING!!
-        Meal meal = new Meal("Yakisoba", "Dinner", "Japanese", 5.25);
-        meal = new Meal("Pad Thai", "Lunch", "Thai", 5.49);
+        //REMOVE In BETWEEN THESE COMMENTS ONLY FOR TESTING!!
+        Meal meal = new Meal("Yakisoba", "Dinner", "Japanese", "japanese stirfry using buckwheat noodles and a slew of vegetables","cook@gmail.com", 5.25);
+        //meal.setOffered(true,meal);
+        meal = new Meal("Pad Thai", "Lunch", "Thai","spicy stirfry with thai spices and thick noodles","nocturne@gmail.com", 5.49);
+        //meal.setOffered(true,meal);
         //REMOVE UP TO HERE INCLUDING THIS LINE
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("ActiveMeals");
@@ -56,11 +69,68 @@ public class Search extends AppCompatActivity {
         listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Meal meal = meals.get(i);
 
+                showInfoDialog("cook@gmail.com",meal.getName(),meal.getDescription());
             }
         });
     }
-    public void searchMeal(){
+    private void showInfoDialog(String email, String mealName, String description) {
+
+        //build the diologue
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.activity_meal_information_dialoge, null);
+        dialogBuilder.setView(dialogView);
+
+        //SETTING UP THE TEXT FIELDS AND BUTTONS
+        TextView editTextViewName  = dialogView.findViewById(R.id.textViewMealName);
+        TextView editTextViewRating  = dialogView.findViewById(R.id.textViewCookRating);
+        TextView editTextViewMealName  = dialogView.findViewById(R.id.textViewMealName);
+        TextView editTextViewMealDescription  = dialogView.findViewById(R.id.textViewMealDescription);
+        Button buttonPurchase = (Button) dialogView.findViewById(R.id.buttonPurchase);
+        //set them
+        //COOK CREDENTIALS
+        DatabaseReference cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
+        cookDatabaseReference.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //calls an iterator on the children in the database IE all users stored
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                UserPOJO temp = new UserPOJO();
+                //this loop iterates through the DB under the userInfo block
+                for (DataSnapshot child: children){
+                    //no logic just stores the value onto user
+                    temp = child.getValue(UserPOJO.class);
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.getEmail().equals(email)){
+                        UserPOJO tempUser = child.getValue(UserPOJO.class);
+
+                        Cook currentCook = tempUser.convertToCook();
+                        System.out.println(currentCook.getFirstName());
+                        dialogBuilder.setTitle(email);
+                        editTextViewName.setText(currentCook.getFirstName());
+                        editTextViewRating.setText("5");//needs to go in cook finder
+                        editTextViewMealName.setText(mealName);
+                        editTextViewMealDescription.setText(description);
+                        final AlertDialog b = dialogBuilder.create();
+                        b.show();
+
+                        break;
+                    }
+                    temp = null;
+                }
+
+            }
+
+            //no need for this function but must be overridden
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
+
+
+    }
+    private void searchMeal(){
         SearchView searchBar = findViewById(R.id.search);
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -98,6 +168,7 @@ public class Search extends AppCompatActivity {
         });
 
     }
+
 
 
 }

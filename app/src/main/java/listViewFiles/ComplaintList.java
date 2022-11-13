@@ -36,6 +36,7 @@ public class ComplaintList extends ArrayAdapter<Complaint> {
         Complaint complaint = complaints.get(position);
         textViewName.setText(complaint.getEmail());
         textViewDescription.setText(String.valueOf(complaint.getComplaint()));
+
         return listViewItem;
     }
 }
