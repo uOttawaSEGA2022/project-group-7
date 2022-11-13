@@ -1,17 +1,17 @@
 package com.example.group7mealerapp;
 
-import android.content.Context;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
+
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -23,20 +23,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
+
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
-import java.util.Locale;
 
 
-import UserJavaFiles.Administrator;
-import UserJavaFiles.Complaint;
+
 import UserJavaFiles.Cook;
 import UserJavaFiles.Meal;
-import UserJavaFiles.Suspension;
+
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
+import codeModules.Modules;
 import listViewFiles.MealList;
 
 public class Search extends AppCompatActivity {
@@ -51,11 +50,16 @@ public class Search extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         //REMOVE In BETWEEN THESE COMMENTS ONLY FOR TESTING!!
-        Meal meal = new Meal("Yakisoba", "Dinner", "Japanese", "japanese stirfry using buckwheat noodles and a slew of vegetables","cook@gmail.com", 5.25);
+        //Meal meal = new Meal("Yakisoba", "Dinner", "Japanese", "japanese stirfry using buckwheat noodles and a slew of vegetables","cook@gmail.com", 5.25);
         //meal.setOffered(true,meal);
-        meal = new Meal("Pad Thai", "Lunch", "Thai","spicy stirfry with thai spices and thick noodles","nocturne@gmail.com", 5.49);
+        //meal = new Meal("Pad Thai", "Lunch", "Thai","spicy stirfry with thai spices and thick noodles","nocturne@gmail.com", 5.49);
         //meal.setOffered(true,meal);
         //REMOVE UP TO HERE INCLUDING THIS LINE
+
+        //get the user from login
+        Modules modules = new Modules();
+        user = modules.catchUser(getIntent());
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("ActiveMeals");
         super.onCreate(savedInstanceState);
@@ -64,8 +68,7 @@ public class Search extends AppCompatActivity {
         listViewMeals = (ListView) findViewById(R.id.listViewMeals);
         meals = new ArrayList<>();
         searchMeal();
-
-        //THIS METHOD IS FOR FUTURE USE IF WE EVER NEED TO SET ONCLICK!
+        //sets the onclick for the list
         listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -74,6 +77,7 @@ public class Search extends AppCompatActivity {
                 showInfoDialog("cook@gmail.com",meal.getName(),meal.getDescription());
             }
         });
+
     }
     private void showInfoDialog(String email, String mealName, String description) {
 
@@ -84,10 +88,11 @@ public class Search extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
 
         //SETTING UP THE TEXT FIELDS AND BUTTONS
-        TextView editTextViewName  = dialogView.findViewById(R.id.textViewMealName);
+        TextView editTextViewName  = dialogView.findViewById(R.id.textViewCookName);
         TextView editTextViewRating  = dialogView.findViewById(R.id.textViewCookRating);
         TextView editTextViewMealName  = dialogView.findViewById(R.id.textViewMealName);
         TextView editTextViewMealDescription  = dialogView.findViewById(R.id.textViewMealDescription);
+        TextView editTextCookDescription = dialogView.findViewById((R.id.textViewCookDescription));
         Button buttonPurchase = (Button) dialogView.findViewById(R.id.buttonPurchase);
         //set them
         //COOK CREDENTIALS
@@ -104,14 +109,14 @@ public class Search extends AppCompatActivity {
                     //comparing the email and password from the database with the inputted text fields
                     if (temp.getEmail().equals(email)){
                         UserPOJO tempUser = child.getValue(UserPOJO.class);
-
                         Cook currentCook = tempUser.convertToCook();
                         System.out.println(currentCook.getFirstName());
                         dialogBuilder.setTitle(email);
-                        editTextViewName.setText(currentCook.getFirstName());
-                        editTextViewRating.setText("5");//needs to go in cook finder
-                        editTextViewMealName.setText(mealName);
-                        editTextViewMealDescription.setText(description);
+                        editTextViewName.setText("Name: " + currentCook.getFirstName());
+                        editTextCookDescription.setText("Cook Desc: " + currentCook.getDescription());
+                        editTextViewRating.setText("Rating: " + "5");//needs to go in cook finder
+                        editTextViewMealName.setText("Meal: " + mealName);
+                        editTextViewMealDescription.setText("Meal Desc: " +description);
                         final AlertDialog b = dialogBuilder.create();
                         b.show();
 
@@ -121,13 +126,10 @@ public class Search extends AppCompatActivity {
                 }
 
             }
-
             //no need for this function but must be overridden
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-
-
 
     }
     private void searchMeal(){

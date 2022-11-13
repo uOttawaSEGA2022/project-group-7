@@ -28,6 +28,7 @@ import java.util.List;
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Complaint;
+import codeModules.Modules;
 import listViewFiles.ComplaintList;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Suspension;
@@ -58,19 +59,9 @@ public class complaints_page extends AppCompatActivity {
 
         //remove between these comments once done with this temp
         //catching user information and loading it to page
-        try{
-            user = (Cook) getIntent().getSerializableExtra("Cook");
-            user.getFirstName();
-        }catch (Exception e){
-            System.out.println("error here1 " + e);
-            try{
-                user = (Administrator) getIntent().getSerializableExtra("Admin");
-                user.getFirstName();
-            }catch (Exception g){
-                System.out.println("error here2 " + e);
+        Modules modules = new Modules();
+        user = modules.catchUser(getIntent());
 
-            }
-        }
         listViewComplaints.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -5,29 +5,45 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textViewCookRating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
         android:id="@+id/textViewCookName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="name:"
+        android:textAllCaps="false"
+        android:textSize="34sp" />
 
     <TextView
-        android:id="@+id/textViewCookEmail"
+        android:id="@+id/textViewCookRating"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="rating:"
+        android:textSize="34sp" />
+
+    <TextView
+        android:id="@+id/textViewCookDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Cook Desc:"
+        android:textSize="34sp" />
 
     <TextView
         android:id="@+id/textViewMealName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Meal:"
+        android:textSize="34sp" />
 
     <TextView
         android:id="@+id/textViewMealDescription"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Desc:"
+        android:textSize="34sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

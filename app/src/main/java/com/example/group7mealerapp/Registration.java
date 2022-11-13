@@ -473,7 +473,7 @@ public class Registration extends AppCompatActivity
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
-                        strCookDescription, card, cheque,null);
+                        strCookDescription, card, null,null);
 
 
             }
@@ -481,7 +481,7 @@ public class Registration extends AppCompatActivity
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
-                        strCookDescription, null, cheque,new Suspension(false, (Date) null));
+                        strCookDescription, null, null,new Suspension(false, (Date) null));
 
 
             }

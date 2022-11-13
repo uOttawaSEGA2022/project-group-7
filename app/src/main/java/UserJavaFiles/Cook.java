@@ -1,11 +1,10 @@
 package UserJavaFiles;
-import android.graphics.Bitmap;
+
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class Cook extends User{
-    private Bitmap blankCheque;
+    private String blankCheque;
     private String description;
     private Suspension status;
     private ArrayList<Meal> menu;
@@ -18,12 +17,12 @@ public class Cook extends User{
     }
 
     //getters and setters
-    public Bitmap getBlankCheque() {
+    public String getBlankCheque() {
         return this.blankCheque;
     }
     public String getDescription() {return description;}
     public Suspension getSuspension() {return status;}
-    public void setBlankCheque(Bitmap blankCheque) {
+    public void setBlankCheque(String blankCheque) {
         this.blankCheque = blankCheque;
     }
     public void setDescription(String description) {this.description = description;}
