@@ -53,7 +53,6 @@ public class Suspension implements Serializable {
         Date currentDate = new Date();
         Date suspensionDate = (ISO_8601_FORMAT.parse(bannedUntil));
         if(currentDate.after(suspensionDate)){
-
             throw new Exception();
         }
     }

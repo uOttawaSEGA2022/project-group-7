@@ -18,7 +18,7 @@ import codeModules.Modules;
 
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut, complaintBtn, searchBtn;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu;
     TextView text;
     User user;
 
@@ -33,6 +33,9 @@ public class WelcomePage extends AppCompatActivity {
         searchBtn = findViewById((R.id.btnSearch));
         searchBtn.setVisibility((View.GONE));
         buttonSignOut = (Button)findViewById(R.id.btnSO);
+        buttonMenu = (Button)findViewById(R.id.btnEditMenu);
+        buttonMenu.setVisibility((View.GONE));
+
 
         //get the user from login
         Modules modules = new Modules();
@@ -42,13 +45,18 @@ public class WelcomePage extends AppCompatActivity {
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class){
             complaintBtn.setVisibility(View.VISIBLE);
+            buttonMenu.setVisibility(View.VISIBLE);
             Cook cook = (Cook) user;
             //for now cooks cant search and purchase meals for themselves
             try{
-                if (cook.getSuspension().getPerma() == true)
+                if (cook.getSuspension().getPerma() == true){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently banned until further notice!");
-                else if (!cook.getSuspension().getBannedUntil().equals("OKAY") )
+                    buttonMenu.setVisibility((View.GONE));
+                }
+                else if (!cook.getSuspension().getBannedUntil().equals("OKAY") ){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
+                    buttonMenu.setVisibility((View.GONE));
+                }
                 else
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
             }catch(Exception e){
@@ -85,6 +93,10 @@ public class WelcomePage extends AppCompatActivity {
         searchBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {btnSearchClick();}
+        });
+        buttonMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {btnMenuClick();}
         });
     }
     public void btnComplaintClick()
@@ -128,6 +140,14 @@ public class WelcomePage extends AppCompatActivity {
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
 
+    }
+    public void btnMenuClick(){
+        Intent switchPage = new Intent(this, Search.class);
+        Cook cook = (Cook) user;
+        cook.setSuspension(null);
+        switchPage.putExtra("Cook",cook);
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
     }
 
 }

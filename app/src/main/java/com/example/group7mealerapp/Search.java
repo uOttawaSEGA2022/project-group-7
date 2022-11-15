@@ -29,15 +29,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+import UserJavaFiles.Administrator;
+import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Meal;
 
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 import codeModules.Modules;
+import listViewFiles.ComplaintList;
 import listViewFiles.MealList;
 
+/**
+ * this class is essentially two parts. To reduce on the reusage of code this meal list
+ * is used to display the search for users and admin and it is also used to display
+ * the cooks current menu. This stops us from making another adapter and another layout
+ */
 public class Search extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -47,6 +54,8 @@ public class Search extends AppCompatActivity {
     Meal meal;
     //to be transferred to this page
     User user;
+    Boolean isCook;
+    Button buttonAddMeal;
 
     protected void onCreate(Bundle savedInstanceState) {
         //REMOVE In BETWEEN THESE COMMENTS ONLY FOR TESTING!!
@@ -59,6 +68,8 @@ public class Search extends AppCompatActivity {
         //get the user from login
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
+
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("ActiveMeals");
@@ -77,8 +88,30 @@ public class Search extends AppCompatActivity {
                 showInfoDialog("cook@gmail.com",meal.getName(),meal.getDescription());
             }
         });
+        buttonAddMeal = (Button)findViewById(R.id.btnAddMeal);
+
+
+        if (user.getClass() == Cook.class){
+            isCook = true;
+            SearchView searchBar = findViewById(R.id.search);
+            searchBar.setVisibility(View.GONE);
+        }
+        else{
+            isCook = false;
+            buttonAddMeal.setVisibility((View.GONE));
+
+        }
+
 
     }
+    protected void onStart() {
+        super.onStart();
+        //add in code to populate list!
+        if(isCook){
+
+        }
+    }
+
     private void showInfoDialog(String email, String mealName, String description) {
 
         //build the diologue
@@ -119,7 +152,6 @@ public class Search extends AppCompatActivity {
                         editTextViewMealDescription.setText("Meal Desc: " +description);
                         final AlertDialog b = dialogBuilder.create();
                         b.show();
-
                         break;
                     }
                     temp = null;
@@ -159,7 +191,7 @@ public class Search extends AppCompatActivity {
                             }
                         }
                         //set the adapter and the rest
-                        MealList mealListAdapter = new MealList(Search.this, meals);
+                        MealList mealListAdapter = new MealList(Search.this, meals,user);
                         listViewMeals.setAdapter(mealListAdapter);
                     }
                     @Override

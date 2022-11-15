@@ -2,6 +2,7 @@ package com.example.group7mealerapp;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import UserJavaFiles.CreditCard;
@@ -319,9 +321,30 @@ public class Registration extends AppCompatActivity
         if(btnClient.isChecked() && (strCCcvv.isEmpty() || strCCnumber.isEmpty() || strexpDate.isEmpty()
         || strCCfirstname.isEmpty() || strCClastname.isEmpty()))
         {
-//            Toast.makeText(getApplicationContext(), "Credit Card Info must be filled", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Credit Card Info must be filled", Toast.LENGTH_LONG).show();
             btnClient.setError("All fields must be filled");
             f = false;
+        }
+        if(btnClient.isChecked())
+        {
+            CreditCard creditCard = null;
+            try{
+                creditCard = new CreditCard(strCCfirstname,strCClastname,strAddress,Integer.parseInt(strCCnumber),Integer.parseInt(strCCcvv),strexpDate);
+            }catch(ParseException e){
+                f = false;
+                btnClient.setError("incorrect date format");
+                Toast.makeText(getApplicationContext(), "exp date format wrong", Toast.LENGTH_LONG).show();
+            }catch(IllegalArgumentException e) {
+                f = false;
+                if(e.getMessage().equals("Credit card number is either too long or too short"))
+                    Toast.makeText(getApplicationContext(), "credit card number is invalid", Toast.LENGTH_LONG).show();
+                else if(e.getMessage().equals("credit card pin is invalid"))
+                    Toast.makeText(getApplicationContext(), "credit card pin is invalid", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                f = false;
+                btnClient.setError("credit card is expired!");
+                Toast.makeText(getApplicationContext(), "credit card expired " + e, Toast.LENGTH_LONG).show();
+            }
         }
 
 
@@ -397,10 +420,6 @@ public class Registration extends AppCompatActivity
         long CreditCardnumber = 0;
         //Store Credit card cvv as type int
         int CVV = 0;
-        //Store credit card expiry month as type int
-        int month = 0;
-        //Store credit card expiry year as type int
-        int year = 0;
 
         //Error handling
         try
@@ -421,28 +440,13 @@ public class Registration extends AppCompatActivity
         {
             System.out.println(e + "e");
         }
-        //Split date String by delimiter "/". Date String is now in a String array [month,year]
-        String[] datearr = strexpDate.split("/");
-        try {
-            //Convert month to type int
-            month = Integer.parseInt(datearr[0]);
-        }
-        catch(Exception e)
-        {
-            System.out.println(e + "e");
-        }
-        try {
-            //Convert year to type int
-            year = Integer.parseInt(datearr[1]);
-        }
-        catch(Exception e)
-        {
-            System.out.println(e + "e");
-        }
+        CreditCard card = null;
+        try{
+            card = new CreditCard(strCCfirstname, strCClastname, strAddress, CreditCardnumber, CVV, strexpDate);
+        }catch(Exception e){}
 
-        Date date = new Date(year,month,0);
-        //Store Credit Card information as instance of CreditCard class
-        CreditCard card = new CreditCard(strCCfirstname, strCClastname, strAddress, CreditCardnumber, CVV, date);
+
+
         //dummy bitmap for the blank cheque pic
         //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
         Bitmap cheque = null;
@@ -474,7 +478,6 @@ public class Registration extends AppCompatActivity
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
                         strCookDescription, card, null,null);
-
 
             }
             if(type.equals("Cook"))

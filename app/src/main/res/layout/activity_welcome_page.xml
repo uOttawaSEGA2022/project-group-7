@@ -72,11 +72,24 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search for meals" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnEditMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Menu" />
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search for meals" />
+        </LinearLayout>
 
 
     </LinearLayout>

@@ -62,16 +62,16 @@ public class complaints_page extends AppCompatActivity {
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
 
-        listViewComplaints.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listViewComplaints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //only able to administer if you are an admin
                 if(user.getClass() == Administrator.class){
                     Complaint complaint = complaints.get(i);
                     showResolveDialog(complaint.getId(),complaint.getEmail());
-                    return true;
+
                 }
-                return false;
+
             }
         });
 
