@@ -1,6 +1,5 @@
 package UserJavaFiles;
 
-import android.graphics.Bitmap;
 
 /**
  * this class is SPECIFICALLY meant for firebase integration, a very generic POJO class that
@@ -17,10 +16,10 @@ public class UserPOJO {
      */
     private String firstName, lastName, email, password, address, type, description;
     private CreditCard creditCardInfo;
-    private Bitmap blankCheque;
+    private String blankCheque;
     private Suspension suspension;
 
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, Bitmap blankCheque, Suspension suspension){
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -70,7 +69,7 @@ public class UserPOJO {
         return creditCardInfo;
     }
 
-    public Bitmap getBlankCheque() {
+    public String getBlankCheque() {
         return blankCheque;
     }
 
@@ -108,7 +107,7 @@ public class UserPOJO {
 
     public void setCreditCardInfo(CreditCard creditCardInfo) {this.creditCardInfo = creditCardInfo;}
 
-    public void setBlankCheque(Bitmap blankCheque) {
+    public void setBlankCheque(String blankCheque) {
         this.blankCheque = blankCheque;
     }
 

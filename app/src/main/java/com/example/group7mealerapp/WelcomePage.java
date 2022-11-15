@@ -3,6 +3,7 @@ package com.example.group7mealerapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -13,13 +14,11 @@ import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
 import UserJavaFiles.User;
+import codeModules.Modules;
 
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut;
-    Button buttonComplaint;
-    Button button;
-    Button complaintBtn;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu;
     TextView text;
     User user;
 
@@ -28,64 +27,54 @@ public class WelcomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
+        //set up the visibilities and buttons
         complaintBtn = findViewById((R.id.btnComplaint));
-        try{
-            user = (Client) getIntent().getSerializableExtra("Client");
-            user.getFirstName();
-        }catch (Exception e){
-            System.out.println("error here1 " + e);
-            try{
-                user = (Cook) getIntent().getSerializableExtra("Cook");
-                user.getFirstName();
-            }catch (Exception g){
-                System.out.println("error here2 " + e);
-                try{
-                    user = (Administrator) getIntent().getSerializableExtra("Admin");
-                    user.getFirstName();
-                }catch (Exception h){
-                    System.out.println("error here3 " + e);
-                }
-            }
-        }
+        complaintBtn.setVisibility(View.GONE);
+        searchBtn = findViewById((R.id.btnSearch));
+        searchBtn.setVisibility((View.GONE));
+        buttonSignOut = (Button)findViewById(R.id.btnSO);
+        buttonMenu = (Button)findViewById(R.id.btnEditMenu);
+        buttonMenu.setVisibility((View.GONE));
 
+
+        //get the user from login
+        Modules modules = new Modules();
+        user = modules.catchUser(getIntent());
+
+        //setting specifics based on type of user
         text = (TextView)findViewById(R.id.textView6);
         if (user.getClass() == Cook.class){
-
+            complaintBtn.setVisibility(View.VISIBLE);
+            buttonMenu.setVisibility(View.VISIBLE);
             Cook cook = (Cook) user;
+            //for now cooks cant search and purchase meals for themselves
             try{
-                System.out.println(cook.getSuspension() + "this is the suspension");
-                if (cook.getSuspension().getPerma() == true)
+                if (cook.getSuspension().getPerma() == true){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently banned until further notice!");
-                else if (!cook.getSuspension().getBannedUntil().equals("OKAY") )
+                    buttonMenu.setVisibility((View.GONE));
+                }
+                else if (!cook.getSuspension().getBannedUntil().equals("OKAY") ){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
+                    buttonMenu.setVisibility((View.GONE));
+                }
                 else
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
             }catch(Exception e){
                 text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
             }
-
-
-
         }
         if (user.getClass() == Client.class ){
+            searchBtn.setVisibility(View.VISIBLE);
             //if Client logs on then the complaint button is invisible
-            complaintBtn.setVisibility(View.GONE);
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
         }
         if (user.getClass() == Administrator.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are the administrator.");
-        }
-
-
-
-        if (user.getClass() == Administrator.class ){
             complaintBtn.setVisibility(View.VISIBLE);
-        }
-        if (user.getClass() == Cook.class){
-            complaintBtn.setVisibility(View.VISIBLE);
+            searchBtn.setVisibility(View.VISIBLE);
         }
 
-        buttonSignOut = (Button)findViewById(R.id.btnSO);
+        //setting up buttons
         buttonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +88,15 @@ public class WelcomePage extends AppCompatActivity {
             public void onClick(View view) {
                 btnComplaintClick();
             }
+        });
+
+        searchBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {btnSearchClick();}
+        });
+        buttonMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {btnMenuClick();}
         });
     }
     public void btnComplaintClick()
@@ -128,6 +126,28 @@ public class WelcomePage extends AppCompatActivity {
         user = null;
         startActivity(intent);
 
+    }
+    public void btnSearchClick(){
+        Intent switchPage = new Intent(this, Search.class);
+
+
+        if(user.getClass() == Administrator.class)
+            switchPage.putExtra("Admin",user);
+        else if(user.getClass() == Client.class)
+            switchPage.putExtra("Client", user);
+
+        System.out.println(user.getFirstName());
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
+
+    }
+    public void btnMenuClick(){
+        Intent switchPage = new Intent(this, Search.class);
+        Cook cook = (Cook) user;
+        cook.setSuspension(null);
+        switchPage.putExtra("Cook",cook);
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
     }
 
 }

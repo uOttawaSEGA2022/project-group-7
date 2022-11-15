@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="welcome">
+    tools:context=".WelcomePage">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        android:gravity="center"
         android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +44,7 @@
                     android:text="complaints" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textViewTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -67,6 +70,25 @@
                 android:text="Name and Role here" />
 
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnEditMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Menu" />
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search for meals" />
         </LinearLayout>
 
 

@@ -1,15 +1,19 @@
 package UserJavaFiles;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CreditCard implements Serializable {
     private String firstName, lastName, address;
     private long number;
     private int pin;
-    private Date expirationDate;
+    private String expirationDate;
+    //This is a way to change the date variable into string for firebase implementation
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yy");
 
-    public CreditCard(String firstName,String lastName,String address, long number, int pin, Date expirationDate) throws IllegalArgumentException{
+    public CreditCard(String firstName,String lastName,String address, long number, int pin, String expirationDate) throws ParseException,Exception {
         if(firstName == null || firstName.isEmpty()){
             throw new IllegalArgumentException("First name is invalid");
         }else if(lastName == null || lastName.isEmpty()){
@@ -26,13 +30,30 @@ public class CreditCard implements Serializable {
         this.address = address;
         this.number = number;
         this.pin = pin;
-        this.expirationDate = expirationDate;
+        checkExpDate(expirationDate);
+        this.expirationDate = String.valueOf(dateFormat.parse(expirationDate));
+
         
     }
     //empty constructor for firebase
-    public CreditCard(){
-
+    public CreditCard(){}
+    /**
+     * helper method for constructor to check the validity of the suspension date
+     * @param expirationDate when the user is banned until
+     * @throws Exception throws this exception if it cannot parse properly or if date is older
+     * than current date
+     */
+    private void checkExpDate( String expirationDate) throws Exception{
+        Date currentDate = new Date();
+        System.out.println("tried");
+        Date expire = (dateFormat.parse(expirationDate));
+        System.out.println(expire + "win");
+        //check if already expired
+        if(currentDate.after(expire)){
+            throw new Exception();
+        }
     }
+
     public String getFirstName() {
         return this.firstName;
     }
@@ -88,11 +109,11 @@ public class CreditCard implements Serializable {
         this.pin = pin;
     }
 
-    public Date getExpirationDate() {
+    public String getExpirationDate() {
         return this.expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
