@@ -8,12 +8,14 @@ public class Cook extends User{
     private String description;
     private Suspension status;
     private ArrayList<Meal> menu;
-    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status){
+    private int rating;
+    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status, int rating, ArrayList<Meal> menu){
         super(firstName,lastName,email,password,address);
         this.description = description;
         this.blankCheque = null;
         this.status = status;
         menu = new ArrayList<Meal>();
+        this.rating = 5;
     }
 
     //getters and setters
@@ -35,7 +37,7 @@ public class Cook extends User{
     }
 
     //adding a meal to the arraylist called menu
-    public void addMeal(String name, String mealType, String cusineType, double price)
+    public void addMeal(String name, String mealType, String cuisineType, double price)
     {
         //calling the exists method to check if the meal is already in the menu if it is
         // then nothing is added to menu
@@ -45,7 +47,7 @@ public class Cook extends User{
         if (flag == -1)
         {
             //add the meal to the list
-            menu.add(new Meal(name,mealType,cusineType,description,this.getEmail(),price));
+            menu.add(new Meal(name,mealType,cuisineType,description,this.getEmail(),price));
         }
     }
 

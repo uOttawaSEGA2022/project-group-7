@@ -1,6 +1,8 @@
 package UserJavaFiles;
 
 
+import java.util.ArrayList;
+
 /**
  * this class is SPECIFICALLY meant for firebase integration, a very generic POJO class that
  * Implements a skeleton of the user, this data will be sent to the database and retrieved
@@ -18,8 +20,10 @@ public class UserPOJO {
     private CreditCard creditCardInfo;
     private String blankCheque;
     private Suspension suspension;
+    private int rating;
+    private ArrayList<Meal> menu;
 
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension){
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, int rating, ArrayList<Meal> menu){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -30,6 +34,8 @@ public class UserPOJO {
         this.blankCheque = blankCheque;
         this.description = description;
         this.suspension = suspension;
+        this.rating = rating;
+        this.menu = menu;
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
@@ -75,6 +81,10 @@ public class UserPOJO {
 
     public String getDescription() {return description;}
 
+    public int getRating() {return rating;}
+
+    public ArrayList<Meal> getMenu() {return menu;}
+
     //setters
 
     public void setSuspension(Suspension suspension) {
@@ -113,6 +123,10 @@ public class UserPOJO {
 
     public void setDescription(String description) {this.description = description;}
 
+    public void setRating(int rating) {this.rating = rating;}
+
+    public void setMenu(ArrayList<Meal> menu) {this.menu = menu;}
+
     //converts the POJO to an actual client class
     public Client convertToClient(){
         Client client;
@@ -129,7 +143,7 @@ public class UserPOJO {
         Cook cook;
         try{
             //blank cheque not needed for now
-            cook = new Cook(firstName,lastName,email,password,address,description,suspension);
+            cook = new Cook(firstName,lastName,email,password,address,description,suspension, rating, menu);
         }
         catch (Exception e){
             return null;
