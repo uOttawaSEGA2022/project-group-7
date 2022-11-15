@@ -36,78 +36,6 @@ public class Registration extends AppCompatActivity
     DatabaseReference databaseReference;
     //this POJO object will be used to store data within firebase in a digestible manner
     UserPOJO user;
-//    //Text Field for first name
-//    EditText Fname = (EditText) findViewById(R.id.FirstNameField);
-//    //Get First Name of user
-//    String strFname = Fname.getText().toString();
-//    //Text field for last name
-//    EditText Lname = (EditText) findViewById(R.id.LastNameField);
-//    //Get Last Name of user
-//    String strLname = Lname.getText().toString();
-//    //Text field for email
-//    EditText Email = (EditText) findViewById(R.id.EmailField);
-//    //Get email of user
-//    String strEmail = Email.getText().toString();
-//    //Text field for password
-//    EditText Password = (EditText) findViewById(R.id.PasswordField);
-//    //Get password of user
-//    String strPassword = Password.getText().toString();
-//    //Text field for confirm password
-//    EditText rePassword = (EditText) findViewById(R.id.ConfirmPasswordField);
-//    //Get confirm password of user
-//    String strrePassword = rePassword.getText().toString();
-//    //TextField of Client and Cook Address
-//    EditText Address = (EditText) findViewById(R.id.Address);
-//    //Get address of client
-//    String strAddress = Address.getText().toString();
-//    //TextField of CookDescription
-//    EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
-//    //Get description of cook
-//    String strCookDescription = CookDescription.getText().toString();
-//    //Radio button to store selection of client role
-//    RadioButton btnClient = (RadioButton) findViewById(R.id.ClientButton);
-//    //Radio button to store selection of cook role
-//    RadioButton btnCook = (RadioButton) findViewById(R.id.CookButton);
-//    //Stores user role
-//    String type = "";
-//    //TextField of credit card first name
-//    EditText CCfirstname = (EditText) findViewById(R.id.CCfname);
-//    //Get credit card first name
-//    String strCCfirstname = CCfirstname.getText().toString();
-//    //TextField of credit card last name
-//    EditText CClastname = (EditText) findViewById(R.id.CClname);
-//    //Get credit card last name
-//    String strCClastname = CClastname.getText().toString();
-//    //TextField of Client Credit Card Number
-//    EditText CCnumber = (EditText) findViewById(R.id.ClientCC);
-//    //Get Client Credit Card number
-//    String strCCnumber = CCnumber.getText().toString();
-//    //Store Credit card number as type Long
-//    Long CreditCardnumber = Long.parseLong(strCCnumber);
-//    //TextField of Client Credit Card Expiry Date
-//    EditText expDate = (EditText) findViewById(R.id.expDate);
-//    //Get client credit card expiry date as string for now
-//    String strexpDate = expDate.getText().toString();
-//    //TextField of Client Credit Card CVV
-//    EditText CCcvv = (EditText) findViewById(R.id.ClientCVV);
-//    //Get client credit card's cvv
-//    String strCCcvv = CCcvv.getText().toString();
-//    //Store Credit card cvv as type int
-//    int CVV = Integer.parseInt(strCCcvv);
-//    //TextField of expiration date
-//    EditText ccdate = (EditText) findViewById(R.id.expDate);
-//    //Store date as String
-//    String strccdate = ccdate.getText().toString();
-//    //Split date String by delimiter "/". Date String is now in a String array [month,year]
-//    String[] datearr = strccdate.split("/");
-//    //Store date as type date
-//    int month = Integer.parseInt(datearr[0]);
-//    int year = Integer.parseInt(datearr[1]);
-//    //Store date
-//    Date date = new Date(year,month,0);
-//    //Store Credit Card information as instance of CreditCard class
-//    CreditCard card = new CreditCard(strFname, strLname, strAddress,CreditCardnumber,CVV,date);
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -471,7 +399,7 @@ public class Registration extends AppCompatActivity
 
         if(RegistrationErrors())
         {
-            Intent switchPage = new Intent(Registration.this, Login.class);
+            Intent switchPage = new Intent(this, Login.class);
 
             if(type.equals("Client"))
             {
@@ -504,9 +432,6 @@ public class Registration extends AppCompatActivity
             CCnumber.setText(null);
             CCcvv.setText(null);
             expDate.setText(null);
-            //Clear remaining fields
-
-            setResult(RESULT_OK, switchPage);
             //go back to login
             startActivity(switchPage);
 
