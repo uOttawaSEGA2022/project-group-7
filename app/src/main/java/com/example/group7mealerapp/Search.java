@@ -1,6 +1,7 @@
 package com.example.group7mealerapp;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.util.List;
 
 
 import UserJavaFiles.Administrator;
+import UserJavaFiles.Client;
 import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Meal;
@@ -92,6 +94,7 @@ public class Search extends AppCompatActivity {
         buttonAddMeal = (Button)findViewById(R.id.btnAddMeal);
 
 
+
         if (user.getClass() == Cook.class){
             isCook = true;
             SearchView searchBar = findViewById(R.id.search);
@@ -103,8 +106,18 @@ public class Search extends AppCompatActivity {
 
         }
 
-
     }
+
+    public void btnAddMealClick(){
+        Intent switchPage = new Intent(this, AddMeal.class);
+
+        Cook cook = (Cook) user;
+        switchPage.putExtra("Cook",cook);
+
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
+    }
+
     protected void onStart() {
         super.onStart();
         //add in code to populate list!
