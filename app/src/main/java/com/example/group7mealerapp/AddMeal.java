@@ -35,8 +35,8 @@ public class AddMeal extends AppCompatActivity {
     //Meal will be stored in the database
     Meal meal;
     //Get the cook object passed from previous activity
-    Modules module = new Modules();
-    Cook cook = (Cook)module.catchUser(getIntent());
+    User user;
+    Cook cook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,103 +48,22 @@ public class AddMeal extends AppCompatActivity {
         //make sure we write our info under UserInfo database
         cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
 
-        //EditText for the name
-        EditText name = findViewById(R.id.editTextName);
-        //Get name from EditText
-        String strName = name.getText().toString();
-        //EditText for the price
-        EditText price = findViewById(R.id.editTextPrice);
-        //Get name from EditText
-        String strPrice = price.getText().toString();
-        //EditText for the cuisine type
-        EditText cuisineType =  findViewById(R.id.editTextCuisineType);
-        //Get name from EditText
-        String strCuisineType = cuisineType.getText().toString();
-        //EditText for the description
-        EditText description = findViewById(R.id.editTextDescription);
-        //Get name from EditText
-        String strDescription = name.getText().toString();
-        //Radio button for breakfast
-        RadioButton btnBreakfast = findViewById(R.id.BreakfastButton);
-        //Radio button for lunch
-        RadioButton btnLunch = findViewById(R.id.LunchButton);
-        //Radio button for dinner
-        RadioButton btnDinner = findViewById(R.id.DinnerButton);
-        //Radio button for choosing yes on offer option
-        RadioButton btnYes = findViewById(R.id.OfferYesButton);
-        //Radio button for choosing no on offer option
-        RadioButton btnNo = findViewById(R.id.OfferNoButton);
+        Modules modules = new Modules();
+        user = modules.catchUser(getIntent());
+        cook = (Cook)user;
+
+
+
         //Button for adding meal to database
         Button addMealBtn = (Button)findViewById(R.id.AddMealButton);
 
         //This onClickListener is incomplete, must be finished when a way is found to add or delete meals from Firebase
         addMealBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //String for meal type
-                String mealType;
-                //double for storing price
-                double dblPrice;
-                if (registrationErrors(strName, strPrice, strCuisineType, strDescription)) {
-                    if (btnBreakfast.isChecked()) {
-                        mealType = "Breakfast";
-                    } else if (btnLunch.isChecked()) {
-                        mealType = "Lunch";
-                    } else {
-                        mealType = "Dinner";
-                    }
-                    try {
-                        dblPrice = Double.valueOf(strPrice);
-                        try {
-                            meal = new Meal(strName, mealType, strCuisineType, strDescription, cook.getEmail(), dblPrice);
-                            cook.addMeal(meal);
-                            //listens to the database in real time
-                            cookDatabaseReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                //method called on start and whenever data is changed
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    //Variables for toast display
-                                    boolean successful = false;
-                                    Context context = getApplicationContext();
-                                    String error = "Error when adding meal to database";
-                                    int duration = Toast.LENGTH_LONG;
-                                    //calls an iterator on the children in the database IE all users stored
-                                    Iterable<DataSnapshot> children = snapshot.getChildren();
-                                    //going to iterate through the data and if email matches, login user and save it
-                                    //in userPOJO
-                                    UserPOJO temp;
-                                    //this loop iterates through the DB under the userInfo block
-                                    for (DataSnapshot child : children) {
-                                        //stores the value onto user
-                                        temp = child.getValue(UserPOJO.class);
-                                        //comparing the email from the database with the email of cook
-                                        if (temp.getEmail().equals(cook.getEmail())){
-                                            cookDatabaseReference.child(child.getKey()).child("menu").push(meal);
-                                            successful = true;
-                                        }
-                                    }
-                                }
-                                //no need for this function but must be overridden
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (btnYes.isChecked()) {
-                        meal.setOffered(true, meal);
-                    }
-                }
+                addMeal();
             }
         });
     }
-
     /* Checks if all the inputs are valid, returns true if they are and false if otherwise.
     * @param strName    The input of name converted to String
     * @param strPrice    The input of price converted to String
@@ -213,5 +132,62 @@ public class AddMeal extends AppCompatActivity {
         }
 
         return noErrors;
+    }
+    private void addMeal(){
+        //EditText for the name
+        EditText name = findViewById(R.id.editTextName);
+        //Get name from EditText
+        String strName = name.getText().toString();
+        //EditText for the price
+        EditText price = findViewById(R.id.editTextPrice);
+        //Get name from EditText
+        String strPrice = price.getText().toString();
+        EditText cuisineType =  findViewById(R.id.editTextCuisineType);
+        //EditText for the cuisine type
+        //Get name from EditText
+        String strCuisineType = cuisineType.getText().toString();
+        //EditText for the description
+        EditText description = findViewById(R.id.editTextDescription);
+        //Get name from EditText
+        String strDescription = name.getText().toString();
+        //Radio button for breakfast
+        RadioButton btnBreakfast = findViewById(R.id.BreakfastButton);
+        //Radio button for lunch
+        RadioButton btnLunch = findViewById(R.id.LunchButton);
+        //Radio button for dinner
+        RadioButton btnDinner = findViewById(R.id.DinnerButton);
+        //Radio button for choosing yes on offer option
+        RadioButton btnYes = findViewById(R.id.OfferYesButton);
+        //Radio button for choosing no on offer option
+        RadioButton btnNo = findViewById(R.id.OfferNoButton);
+        System.out.println(strDescription + " " + strPrice);
+        //String for meal type
+        String mealType;
+        //double for storing price
+        double dblPrice;
+            if (btnBreakfast.isChecked()) {
+                mealType = "Breakfast";
+            } else if (btnLunch.isChecked()) {
+                mealType = "Lunch";
+            } else {
+                mealType = "Dinner";
+            }
+            try {
+                dblPrice = Double.valueOf(strPrice);
+                try {
+                    if (btnYes.isChecked()) {
+                        cook.addMeal(strName,mealType,strCuisineType,strDescription,dblPrice,true);
+                    }
+                    cook.addMeal(strName,mealType,strCuisineType,strDescription,dblPrice,false);
+                    //add meal to the database
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
     }
 }

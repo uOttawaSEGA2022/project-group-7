@@ -21,6 +21,7 @@ public class UserPOJO {
     private String blankCheque;
     private Suspension suspension;
     private Meal[] menu;
+    private ArrayList<Meal> inputMenu;
 
     public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension){
         this.firstName = firstName;
@@ -33,7 +34,6 @@ public class UserPOJO {
         this.blankCheque = blankCheque;
         this.description = description;
         this.suspension = suspension;
-        this.menu = new Meal[0];
     }
 
     //constructor for UserPOJO with menu included. Might not be needed, depends on implementation
@@ -132,6 +132,12 @@ public class UserPOJO {
     }
 
     public void setDescription(String description) {this.description = description;}
+
+    public void setMenu(Meal meal){
+        inputMenu.add(meal);
+    }
+
+    public Meal[] getMenu() {return menu;}
 
     //converts the POJO to an actual client class
     public Client convertToClient(){

@@ -21,7 +21,7 @@ public class Meal implements Serializable {
 
     private boolean offered;
 
-    public Meal(String name, String mealType,String cusineType, String description,String email, double price)
+    public Meal(String name, String mealType,String cusineType, String description,String email, double price,Boolean offered)
     {
         this.name = name;
         this.price = price;
@@ -57,39 +57,8 @@ public class Meal implements Serializable {
 
     // if cook wishes to offer the meal pass true, if the cook no longer wishes to offer the meal pass false
     public void setOffered(boolean choice, Meal meal) {
-        //take the current meal and set it to the active meals databse for user searching
-
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("ActiveMeals");
-        //if active add to db if not remove from db
-        if(choice){
-            databaseReference.push().setValue(this);
-        }
-        else{
-
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    //we want to find the meal that should exist in the db and remove it
-                    for(DataSnapshot postSnapshot : snapshot.getChildren()){
-                        Meal temp = postSnapshot.getValue(Meal.class);
-
-                        //if the meal matches meal in the database and set to inactive REMOVE IT
-                        if(temp.equals(meal)){
-
-                            databaseReference.child(postSnapshot.getKey()).removeValue();
-                            System.out.println(postSnapshot.getKey());
-                            break;
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
-            });
-        }
-        offered = choice;
     }
+
 
     //check if meal type, cusine type name and price match
     public Boolean equals(Meal mealtoCompare){

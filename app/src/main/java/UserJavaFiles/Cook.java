@@ -1,6 +1,14 @@
 package UserJavaFiles;
 
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class Cook extends User{
@@ -37,18 +45,25 @@ public class Cook extends User{
     }
 
     //adding a meal to the arraylist called menu
-    public void addMeal(String name, String mealType, String cusineType, String description, double price)
+    public void addMeal(String name, String mealType, String cusineType, String description, double price, boolean isActive)
     {
         //calling the exists method to check if the meal is already in the menu if it is
         // then nothing is added to menu
         int flag = exists(name);
-
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
         // if flag is -1 then it does not exist in the menu
         if (flag == -1)
         {
+            Meal meal = new Meal(name,mealType,cusineType,description,this.getEmail(),price,isActive);
             //add the meal to the list
-            menu.add(new Meal(name,mealType,cusineType,description,this.getEmail(),price));
+            menu.add(meal);
+            //ADD TO THE DATABASE
+
+            databaseReference.push().setValue(meal);
         }
+
+
     }
 
     //adding meal directly with Meal object

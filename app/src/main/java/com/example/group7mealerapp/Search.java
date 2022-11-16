@@ -75,7 +75,7 @@ public class Search extends AppCompatActivity {
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("ActiveMeals");
+        databaseReference = firebaseDatabase.getReference("Meals");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         //grab the listview so we can populate
@@ -99,6 +99,12 @@ public class Search extends AppCompatActivity {
             isCook = true;
             SearchView searchBar = findViewById(R.id.search);
             searchBar.setVisibility(View.GONE);
+            buttonAddMeal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnAddMealClick(view);
+                }
+            });
         }
         else{
             isCook = false;
@@ -108,7 +114,7 @@ public class Search extends AppCompatActivity {
 
     }
 
-    public void btnAddMealClick(){
+    public void btnAddMealClick(View view){
         Intent switchPage = new Intent(this, AddMeal.class);
 
         Cook cook = (Cook) user;
