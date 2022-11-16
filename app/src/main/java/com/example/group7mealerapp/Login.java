@@ -199,7 +199,7 @@ public class Login extends AppCompatActivity {
         if(type == 1)
         {
             Client currentUser = user.convertToClient();//surround in try and catch block
-           switchPage.putExtra("Client",currentUser);
+            switchPage.putExtra("Client",currentUser);
         }
 
         //Type 2 is cook so convert user into cook
@@ -219,7 +219,7 @@ public class Login extends AppCompatActivity {
 
            switchPage.putExtra("Admin",currentUser);
        }
-        System.out.println("SEND USER ENTERED");
+
 
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);

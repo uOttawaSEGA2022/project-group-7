@@ -11,7 +11,7 @@ public class CreditCard implements Serializable {
     private int pin;
     private String expirationDate;
     //This is a way to change the date variable into string for firebase implementation
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yy");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yy");
 
     public CreditCard(String firstName,String lastName,String address, long number, int pin, String expirationDate) throws ParseException,Exception {
         if(firstName == null || firstName.isEmpty()){

@@ -65,9 +65,10 @@ public class Search extends AppCompatActivity {
         //meal.setOffered(true,meal);
         //REMOVE UP TO HERE INCLUDING THIS LINE
 
-        //get the user from login
+        //get the user from welcome
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
+
 
 
 

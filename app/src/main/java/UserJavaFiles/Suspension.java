@@ -9,7 +9,7 @@ public class Suspension implements Serializable {
     private Date ban;
     private String bannedUntil;
     //This is a way to change the date variable into string for firebase implementation
-    private SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     public Suspension(boolean perma, Date ban)
     {
