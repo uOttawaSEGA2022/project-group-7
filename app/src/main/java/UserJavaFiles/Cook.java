@@ -7,6 +7,7 @@ public class Cook extends User{
     private String blankCheque;
     private String description;
     private Suspension status;
+    // might not be needed, depends on implementation
     private ArrayList<Meal> menu;
     public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status){
         super(firstName,lastName,email,password,address);
@@ -22,6 +23,7 @@ public class Cook extends User{
     }
     public String getDescription() {return description;}
     public Suspension getSuspension() {return status;}
+    public ArrayList<Meal> getMenu(){return menu;}
     public void setBlankCheque(String blankCheque) {
         this.blankCheque = blankCheque;
     }
@@ -35,7 +37,7 @@ public class Cook extends User{
     }
 
     //adding a meal to the arraylist called menu
-    public void addMeal(String name, String mealType, String cusineType, double price)
+    public void addMeal(String name, String mealType, String cusineType, String description, double price)
     {
         //calling the exists method to check if the meal is already in the menu if it is
         // then nothing is added to menu
@@ -46,6 +48,21 @@ public class Cook extends User{
         {
             //add the meal to the list
             menu.add(new Meal(name,mealType,cusineType,description,this.getEmail(),price));
+        }
+    }
+
+    //adding meal directly with Meal object
+    public void addMeal(Meal meal)
+    {
+        //calling the exists method to check if the meal is already in the menu if it is
+        // then nothing is added to menu
+        int flag = exists(meal.getName());
+
+        // if flag is -1 then it does not exist in the menu
+        if (flag == -1)
+        {
+            //add the meal to the list
+            menu.add(meal);
         }
     }
 

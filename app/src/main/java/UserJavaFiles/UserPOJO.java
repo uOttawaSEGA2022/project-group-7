@@ -1,6 +1,8 @@
 package UserJavaFiles;
 
 
+import java.util.ArrayList;
+
 /**
  * this class is SPECIFICALLY meant for firebase integration, a very generic POJO class that
  * Implements a skeleton of the user, this data will be sent to the database and retrieved
@@ -18,6 +20,7 @@ public class UserPOJO {
     private CreditCard creditCardInfo;
     private String blankCheque;
     private Suspension suspension;
+    private Meal[] menu;
 
     public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension){
         this.firstName = firstName;
@@ -30,6 +33,23 @@ public class UserPOJO {
         this.blankCheque = blankCheque;
         this.description = description;
         this.suspension = suspension;
+        this.menu = new Meal[0];
+    }
+
+    //constructor for UserPOJO with menu included. Might not be needed, depends on implementation
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, ArrayList<Meal> inputMenu){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.type = type;
+        this.creditCardInfo = creditCardInfo;
+        this.blankCheque = blankCheque;
+        this.description = description;
+        this.suspension = suspension;
+        this.menu = new Meal[inputMenu.size()];
+        this.menu = inputMenu.toArray(this.menu);
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
