@@ -28,7 +28,7 @@ public class MealTest {
     void getDescription() {
         try {
             Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5);
-            assertEquals("verygoood",testMeal.getDescription());
+            assertEquals("verygood",testMeal.getDescription());
         }catch(Exception e) {
             e.printStackTrace();
             fail(e.toString());
