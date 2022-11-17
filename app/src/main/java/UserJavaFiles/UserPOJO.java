@@ -20,10 +20,10 @@ public class UserPOJO {
     private CreditCard creditCardInfo;
     private String blankCheque;
     private Suspension suspension;
-    private int rating;
-    private ArrayList<Meal> menu;
+    private Meal[] menu;
+    private ArrayList<Meal> inputMenu;
 
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, int rating, ArrayList<Meal> menu){
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -34,8 +34,22 @@ public class UserPOJO {
         this.blankCheque = blankCheque;
         this.description = description;
         this.suspension = suspension;
-        this.rating = rating;
-        this.menu = menu;
+    }
+
+    //constructor for UserPOJO with menu included. Might not be needed, depends on implementation
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, ArrayList<Meal> inputMenu){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.type = type;
+        this.creditCardInfo = creditCardInfo;
+        this.blankCheque = blankCheque;
+        this.description = description;
+        this.suspension = suspension;
+        this.menu = new Meal[inputMenu.size()];
+        this.menu = inputMenu.toArray(this.menu);
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
@@ -81,10 +95,6 @@ public class UserPOJO {
 
     public String getDescription() {return description;}
 
-    public int getRating() {return rating;}
-
-    public ArrayList<Meal> getMenu() {return menu;}
-
     //setters
 
     public void setSuspension(Suspension suspension) {
@@ -123,9 +133,11 @@ public class UserPOJO {
 
     public void setDescription(String description) {this.description = description;}
 
-    public void setRating(int rating) {this.rating = rating;}
+    public void setMenu(Meal meal){
+        inputMenu.add(meal);
+    }
 
-    public void setMenu(ArrayList<Meal> menu) {this.menu = menu;}
+    public Meal[] getMenu() {return menu;}
 
     //converts the POJO to an actual client class
     public Client convertToClient(){
@@ -143,7 +155,7 @@ public class UserPOJO {
         Cook cook;
         try{
             //blank cheque not needed for now
-            cook = new Cook(firstName,lastName,email,password,address,description,suspension, rating, menu);
+            cook = new Cook(firstName,lastName,email,password,address,description,suspension);
         }
         catch (Exception e){
             return null;

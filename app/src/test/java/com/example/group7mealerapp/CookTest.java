@@ -22,7 +22,7 @@ class CookTest {
         try {
             ArrayList menu = new ArrayList<Meal>();
             Suspension status = new Suspension(false, "2022-12-01");
-            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status,2,menu);
+            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             assertNotNull(testCook);
         }catch(AssertionError e){
             e.printStackTrace();
@@ -38,7 +38,7 @@ class CookTest {
         try {
             ArrayList menu = new ArrayList<Meal>();
             Suspension status = new Suspension(false, "2022-12-01");
-            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status,4,menu);
+            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             assertEquals("Best poutine chef in Ottawa",testCook.getDescription());
         }catch(Exception e) {
             e.printStackTrace();
@@ -51,7 +51,7 @@ class CookTest {
         try {
             ArrayList menu = new ArrayList<Meal>();
             Suspension status = new Suspension(false, "2022-12-01");
-            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status,5,menu);
+            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             testCook.setDescription("Overworked Uottawa dining hall cook");
             assertEquals("Overworked Uottawa dining hall cook",testCook.getDescription());
         }catch(Exception e) {
@@ -66,7 +66,7 @@ class CookTest {
             ArrayList menu = new ArrayList<Meal>();
 
             Suspension status = new Suspension(false, "2022-12-01");
-            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status,4,menu);
+            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             if(!status.equalsTo(testCook.getSuspension())){
                 fail("Failed getSuspension");
             }
@@ -82,7 +82,7 @@ class CookTest {
             ArrayList menu = new ArrayList<Meal>();
 
             Suspension status = new Suspension(false, "2022-12-01");
-            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status,3,menu);
+            Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             status = new Suspension(true, "2077-12-01");
             testCook.setSuspension(status);
             if(!status.equalsTo(testCook.getSuspension())){

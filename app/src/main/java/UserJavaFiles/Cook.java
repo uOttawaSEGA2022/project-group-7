@@ -1,21 +1,28 @@
 package UserJavaFiles;
 
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class Cook extends User{
     private String blankCheque;
     private String description;
     private Suspension status;
+    // might not be needed, depends on implementation
     private ArrayList<Meal> menu;
-    private int rating;
-    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status, int rating, ArrayList<Meal> menu){
+    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status){
         super(firstName,lastName,email,password,address);
         this.description = description;
         this.blankCheque = null;
         this.status = status;
         menu = new ArrayList<Meal>();
-        this.rating = 5;
     }
 
     //getters and setters
@@ -24,6 +31,7 @@ public class Cook extends User{
     }
     public String getDescription() {return description;}
     public Suspension getSuspension() {return status;}
+    public ArrayList<Meal> getMenu(){return menu;}
     public void setBlankCheque(String blankCheque) {
         this.blankCheque = blankCheque;
     }
@@ -37,17 +45,39 @@ public class Cook extends User{
     }
 
     //adding a meal to the arraylist called menu
-    public void addMeal(String name, String mealType, String cuisineType, double price)
+    public void addMeal(String name, String mealType, String cusineType, String description, double price, boolean isActive)
     {
         //calling the exists method to check if the meal is already in the menu if it is
         // then nothing is added to menu
         int flag = exists(name);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
+        // if flag is -1 then it does not exist in the menu
+        if (flag == -1)
+        {
+            Meal meal = new Meal(name,mealType,cusineType,description,this.getEmail(),price,isActive);
+            //add the meal to the list
+            menu.add(meal);
+            //ADD TO THE DATABASE
+
+            databaseReference.push().setValue(meal);
+        }
+
+
+    }
+
+    //adding meal directly with Meal object
+    public void addMeal(Meal meal)
+    {
+        //calling the exists method to check if the meal is already in the menu if it is
+        // then nothing is added to menu
+        int flag = exists(meal.getName());
 
         // if flag is -1 then it does not exist in the menu
         if (flag == -1)
         {
             //add the meal to the list
-            menu.add(new Meal(name,mealType,cuisineType,description,this.getEmail(),price));
+            menu.add(meal);
         }
     }
 

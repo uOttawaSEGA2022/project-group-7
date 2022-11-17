@@ -22,7 +22,6 @@ public class WelcomePage extends AppCompatActivity {
     TextView text;
     User user;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +105,6 @@ public class WelcomePage extends AppCompatActivity {
 
             Cook cook = (Cook) user;
 
-            cook.setSuspension(null);
             switchPage.putExtra("Cook",cook);
         }
 
@@ -133,10 +131,16 @@ public class WelcomePage extends AppCompatActivity {
 
         if(user.getClass() == Administrator.class)
             switchPage.putExtra("Admin",user);
-        else if(user.getClass() == Client.class)
-            switchPage.putExtra("Client", user);
+        else if(user.getClass() == Client.class){
+            Client client = (Client) user;
+            client.getCreditCardInfo().setExpirationDate(null);
+            switchPage.putExtra("Client", client);
+            System.out.println(client.getCreditCardInfo());
+        }
 
-        System.out.println(user.getFirstName());
+
+
+
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
 
@@ -144,7 +148,7 @@ public class WelcomePage extends AppCompatActivity {
     public void btnMenuClick(){
         Intent switchPage = new Intent(this, Search.class);
         Cook cook = (Cook) user;
-        cook.setSuspension(null);
+
         switchPage.putExtra("Cook",cook);
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
