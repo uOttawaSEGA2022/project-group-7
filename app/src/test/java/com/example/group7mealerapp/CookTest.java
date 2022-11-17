@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
 import UserJavaFiles.CreditCard;
+import UserJavaFiles.Meal;
 import UserJavaFiles.Suspension;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 class CookTest {
@@ -18,6 +20,7 @@ class CookTest {
     @Test
     public void testCreateCook(){
         try {
+            ArrayList menu = new ArrayList<Meal>();
             Suspension status = new Suspension(false, "2022-12-01");
             Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             assertNotNull(testCook);
@@ -33,6 +36,7 @@ class CookTest {
     @Test
     void getDescription() {
         try {
+            ArrayList menu = new ArrayList<Meal>();
             Suspension status = new Suspension(false, "2022-12-01");
             Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             assertEquals("Best poutine chef in Ottawa",testCook.getDescription());
@@ -45,6 +49,7 @@ class CookTest {
     @Test
     void setDescription() {
         try {
+            ArrayList menu = new ArrayList<Meal>();
             Suspension status = new Suspension(false, "2022-12-01");
             Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             testCook.setDescription("Overworked Uottawa dining hall cook");
@@ -58,6 +63,8 @@ class CookTest {
     @Test
     void getSuspension() {
         try {
+            ArrayList menu = new ArrayList<Meal>();
+
             Suspension status = new Suspension(false, "2022-12-01");
             Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             if(!status.equalsTo(testCook.getSuspension())){
@@ -72,6 +79,8 @@ class CookTest {
     @Test
     void setSuspension() {
         try {
+            ArrayList menu = new ArrayList<Meal>();
+
             Suspension status = new Suspension(false, "2022-12-01");
             Cook testCook = new Cook("Jane", "Doe", "something@mail.com", "114514", "114 514 Drive", "Best poutine chef in Ottawa", status);
             status = new Suspension(true, "2077-12-01");
