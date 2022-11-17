@@ -178,8 +178,15 @@ public class Search extends AppCompatActivity {
         Button buttonDelete = (Button) dialogView.findViewById(R.id.buttonDelete);
         if (isCook){
             final AlertDialog b = dialogBuilder.create();
+
             buttonPurchase.setVisibility(View.GONE);
+            editTextCookDescription.setVisibility(View.GONE);
+            editTextViewName.setVisibility(View.GONE);
+            editTextViewRating.setVisibility(View.GONE);
+
             buttonSetActive.setVisibility(View.VISIBLE);
+            editTextViewMealName.setText(meal.getName());
+            editTextViewMealDescription.setText(meal.getDescription());
             if(!meal.isOffered())
                 buttonSetActive.setText("Set Active");
             else

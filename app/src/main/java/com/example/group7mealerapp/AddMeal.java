@@ -38,6 +38,9 @@ public class AddMeal extends AppCompatActivity {
     //Get the cook object passed from previous activity
     User user;
     Cook cook;
+    RadioButton btnYes, btnNo, btnBreakfast, btnLunch, btnDinner;
+    //Radio button for choosing no on offer option
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,23 @@ public class AddMeal extends AppCompatActivity {
         user = modules.catchUser(getIntent());
         cook = (Cook)user;
 
-
-
+        RadioButton btnYes = findViewById(R.id.OfferYesButton);
+        RadioButton btnNo = findViewById(R.id.OfferNoButton);
+        RadioButton btnBreakfast = findViewById(R.id.BreakfastButton);
+        RadioButton btnLunch = findViewById(R.id.LunchButton);
+        RadioButton btnDinner = findViewById(R.id.DinnerButton);
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnNo.setChecked(false);
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnYes.setChecked(false);
+            }
+        });
         //Button for adding meal to database
         Button addMealBtn = (Button)findViewById(R.id.AddMealButton);
 
@@ -150,7 +168,7 @@ public class AddMeal extends AppCompatActivity {
         //EditText for the description
         EditText description = findViewById(R.id.editTextDescription);
         //Get name from EditText
-        String strDescription = name.getText().toString();
+        String strDescription = description.getText().toString();
         //Radio button for breakfast
         RadioButton btnBreakfast = findViewById(R.id.BreakfastButton);
         //Radio button for lunch
@@ -163,32 +181,35 @@ public class AddMeal extends AppCompatActivity {
         RadioButton btnNo = findViewById(R.id.OfferNoButton);
 
         //String for meal type
-        String mealType;
+        String mealType = "";
         //double for storing price
         double dblPrice;
             if (btnBreakfast.isChecked()) {
-                mealType = "Breakfast";
-            } else if (btnLunch.isChecked()) {
-                mealType = "Lunch";
-            } else {
-                mealType = "Dinner";
+                mealType = mealType + "Breakfast ";
+            }if (btnLunch.isChecked()) {
+                mealType = mealType + "Lunch ";
+            }if (btnDinner.isChecked()) {
+                mealType = mealType + "Dinner ";
             }
-            try {
-                dblPrice = Double.valueOf(strPrice);
-                try {
-                    if (btnYes.isChecked()) {
-                        cook.addMeal(strName,mealType,strCuisineType,strDescription,dblPrice,true);
-                    }
-                    cook.addMeal(strName,mealType,strCuisineType,strDescription,dblPrice,false);
-                    finish();
 
+            if(registrationErrors(strName,strPrice,strCuisineType,strDescription)) {
+                try {
+                    dblPrice = Double.valueOf(strPrice);
+                    try {
+                        if (btnYes.isChecked()) {
+
+                            cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, true);
+                        }
+                        cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, false);
+                        finish();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
             }
-
-
     }
 }
