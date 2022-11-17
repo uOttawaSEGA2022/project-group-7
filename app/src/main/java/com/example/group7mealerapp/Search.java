@@ -78,23 +78,12 @@ public class Search extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference("Meals");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        //grab the listview so we can populate
-        listViewMeals = (ListView) findViewById(R.id.listViewMeals);
-        meals = new ArrayList<>();
-        searchMeal();
-        //sets the onclick for the list
-        listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Meal meal = meals.get(i);
 
-                showInfoDialog("cook@gmail.com",meal.getName(),meal.getDescription());
-            }
-        });
         buttonAddMeal = (Button)findViewById(R.id.btnAddMeal);
 
 
-
+        listViewMeals = (ListView) findViewById(R.id.listViewMeals);
+        meals = new ArrayList<>();
         if (user.getClass() == Cook.class){
             isCook = true;
             SearchView searchBar = findViewById(R.id.search);
@@ -109,6 +98,17 @@ public class Search extends AppCompatActivity {
         else{
             isCook = false;
             buttonAddMeal.setVisibility((View.GONE));
+
+            searchMeal();
+            //sets the onclick for the list
+            listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Meal meal = meals.get(i);
+
+                    showInfoDialog("cook@gmail.com",meal.getName(),meal.getDescription());
+                }
+            });
 
         }
 
@@ -127,8 +127,37 @@ public class Search extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //add in code to populate list!
-        if(isCook){
 
+        if(isCook){
+            System.out.println("inside the iscook");
+            Cook cook = (Cook) user;
+
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    meals.clear();
+                    //calls an iterator on the children in the database IE all users stored
+                    Iterable<DataSnapshot> children = snapshot.getChildren();
+                    Meal temp = new Meal();
+                    //this loop iterates through the DB under the userInfo block
+                    for (DataSnapshot child: children){
+                        //no logic just stores the value onto user
+                        temp = child.getValue(Meal.class);
+                        System.out.println(temp.getEmail() + " " + cook.getEmail());
+                        //comparing the email and password from the database with the inputted text fields
+                        if (temp.getEmail().equals(cook.getEmail())){
+                            meals.add(temp);
+                        }
+                        temp = null;
+                    }
+
+                    MealList mealListAdapter = new MealList(Search.this, meals,user);
+                    listViewMeals.setAdapter(mealListAdapter);
+                }
+                //no need for this function but must be overridden
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
         }
     }
 
@@ -202,11 +231,13 @@ public class Search extends AppCompatActivity {
                             Meal meal = postSnapshot.getValue(Meal.class);
                             //check if the male name, cusine type or meal type equal then search is complete
                             //also make sure that the length is above 3 chars before we start quering
-                            if(s.length() >= 3){
-                                if(meal.getName().toLowerCase().contains(s.toLowerCase())
-                                        || meal.getCusineType().toLowerCase().contains(s.toLowerCase())
-                                        || meal.getMealType().toLowerCase().contains(s.toLowerCase())){
-                                    meals.add(meal);
+                            if( s.length() >= 3) {
+                                if (meal.isOffered()) {
+                                    if (meal.getName().toLowerCase().contains(s.toLowerCase())
+                                            || meal.getCusineType().toLowerCase().contains(s.toLowerCase())
+                                            || meal.getMealType().toLowerCase().contains(s.toLowerCase())) {
+                                        meals.add(meal);
+                                    }
                                 }
                             }
                         }
