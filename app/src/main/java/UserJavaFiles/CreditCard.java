@@ -45,9 +45,9 @@ public class CreditCard implements Serializable {
      */
     private void checkExpDate( String expirationDate) throws Exception{
         Date currentDate = new Date();
-        System.out.println("tried");
+
         Date expire = (dateFormat.parse(expirationDate));
-        System.out.println(expire + "win");
+
         //check if already expired
         if(currentDate.after(expire)){
             throw new Exception();

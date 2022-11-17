@@ -1,8 +1,10 @@
-package com.example.group7mealerapp;
+package Dialoges;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.group7mealerapp.R;
 
 public class resolve_dialoge extends AppCompatActivity {
 

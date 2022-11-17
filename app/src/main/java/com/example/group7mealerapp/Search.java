@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -71,18 +72,14 @@ public class Search extends AppCompatActivity {
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
 
-
-
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Meals");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
         buttonAddMeal = (Button)findViewById(R.id.btnAddMeal);
-
-
         listViewMeals = (ListView) findViewById(R.id.listViewMeals);
+
         meals = new ArrayList<>();
         if (user.getClass() == Cook.class){
             isCook = true;
@@ -98,20 +95,17 @@ public class Search extends AppCompatActivity {
         else{
             isCook = false;
             buttonAddMeal.setVisibility((View.GONE));
-
             searchMeal();
             //sets the onclick for the list
-            listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Meal meal = meals.get(i);
-
-                    showInfoDialog("cook@gmail.com",meal.getName(),meal.getDescription());
-                }
-            });
-
         }
+        listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Meal meal = meals.get(i);
 
+                showInfoDialog(meal);
+            }
+        });
     }
 
     public void btnAddMealClick(View view){
@@ -129,10 +123,7 @@ public class Search extends AppCompatActivity {
         //add in code to populate list!
 
         if(isCook){
-            System.out.println("inside the iscook");
             Cook cook = (Cook) user;
-
-
             databaseReference.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     meals.clear();
@@ -143,7 +134,7 @@ public class Search extends AppCompatActivity {
                     for (DataSnapshot child: children){
                         //no logic just stores the value onto user
                         temp = child.getValue(Meal.class);
-                        System.out.println(temp.getEmail() + " " + cook.getEmail());
+
                         //comparing the email and password from the database with the inputted text fields
                         if (temp.getEmail().equals(cook.getEmail())){
                             meals.add(temp);
@@ -161,9 +152,15 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    private void showInfoDialog(String email, String mealName, String description) {
+    /**
+     * opens up the meals info. Client and Admin get the cooks info and the meal info plus
+     * the option to purchase food
+     * see the meals info plus the set active button
+     * @param meal
+     */
+    private void showInfoDialog(Meal meal) {
 
-        //build the diologue
+        //build the dialogue
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_meal_information_dialoge, null);
@@ -175,44 +172,88 @@ public class Search extends AppCompatActivity {
         TextView editTextViewMealName  = dialogView.findViewById(R.id.textViewMealName);
         TextView editTextViewMealDescription  = dialogView.findViewById(R.id.textViewMealDescription);
         TextView editTextCookDescription = dialogView.findViewById((R.id.textViewCookDescription));
+        //if iscook then purchase is invis and setactive is visible and vice versa
         Button buttonPurchase = (Button) dialogView.findViewById(R.id.buttonPurchase);
+        Button buttonSetActive = (Button) dialogView.findViewById(R.id.buttonSetActive);
+        Button buttonDelete = (Button) dialogView.findViewById(R.id.buttonDelete);
+        if (isCook){
+            final AlertDialog b = dialogBuilder.create();
+            buttonPurchase.setVisibility(View.GONE);
+            buttonSetActive.setVisibility(View.VISIBLE);
+            if(!meal.isOffered())
+                buttonSetActive.setText("Set Active");
+            else
+                buttonSetActive.setText("set Inactive");
+
+            b.show();
+            buttonSetActive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    meal.setOfferedDB(meal);
+                    Toast.makeText(getApplicationContext(), "Meal activity set" , Toast.LENGTH_LONG).show();
+                    b.dismiss();
+
+                }
+            });
+            buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    meal.mealDeleteDB(meal);
+                    Toast.makeText(getApplicationContext(), "Meal removed from menu", Toast.LENGTH_LONG).show();
+                    b.dismiss();
+
+                }
+            });
+        }
+        else{
+            buttonPurchase.setVisibility(View.VISIBLE);
+            buttonSetActive.setVisibility(View.GONE);
+            buttonDelete.setVisibility(View.GONE);
+        }
         //set them
         //COOK CREDENTIALS
-        DatabaseReference cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
-        cookDatabaseReference.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //calls an iterator on the children in the database IE all users stored
-                Iterable<DataSnapshot> children = snapshot.getChildren();
-                UserPOJO temp = new UserPOJO();
-                //this loop iterates through the DB under the userInfo block
-                for (DataSnapshot child: children){
-                    //no logic just stores the value onto user
-                    temp = child.getValue(UserPOJO.class);
-                    //comparing the email and password from the database with the inputted text fields
-                    if (temp.getEmail().equals(email)){
-                        UserPOJO tempUser = child.getValue(UserPOJO.class);
-                        Cook currentCook = tempUser.convertToCook();
-                        System.out.println(currentCook.getFirstName());
-                        dialogBuilder.setTitle(email);
-                        editTextViewName.setText("Name: " + currentCook.getFirstName());
-                        editTextCookDescription.setText("Cook Desc: " + currentCook.getDescription());
-                        editTextViewRating.setText("Rating: " + "5");//needs to go in cook finder
-                        editTextViewMealName.setText("Meal: " + mealName);
-                        editTextViewMealDescription.setText("Meal Desc: " +description);
-                        final AlertDialog b = dialogBuilder.create();
-                        b.show();
-                        break;
+        if(!isCook) {
+            DatabaseReference cookDatabaseReference = firebaseDatabase.getReference("UserInfo");
+            cookDatabaseReference.addValueEventListener(new ValueEventListener() {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    //calls an iterator on the children in the database IE all users stored
+                    Iterable<DataSnapshot> children = snapshot.getChildren();
+                    UserPOJO temp = new UserPOJO();
+                    //this loop iterates through the DB under the userInfo block
+                    for (DataSnapshot child : children) {
+                        //no logic just stores the value onto user
+                        temp = child.getValue(UserPOJO.class);
+                        //comparing the email and password from the database with the inputted text fields
+                        if (temp.getEmail().equals(meal.getEmail())) {
+                            UserPOJO tempUser = child.getValue(UserPOJO.class);
+                            Cook currentCook = tempUser.convertToCook();
+
+                            dialogBuilder.setTitle(meal.getEmail());
+                            editTextViewName.setText("Name: " + currentCook.getFirstName());
+                            editTextCookDescription.setText("Cook Desc: " + currentCook.getDescription());
+                            editTextViewRating.setText("Rating: " + "5");//needs to go in cook finder
+                            editTextViewMealName.setText("Meal: " + meal.getName());
+                            editTextViewMealDescription.setText("Meal Desc: " + meal.getDescription());
+                            final AlertDialog b = dialogBuilder.create();
+                            b.show();
+                            break;
+                        }
+                        temp = null;
                     }
-                    temp = null;
+
                 }
 
-            }
-            //no need for this function but must be overridden
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-
+                //no need for this function but must be overridden
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
     }
+
+    /**
+     * method that searches for the meal ONLY USED BY CLIENT AND ADMIN!
+     */
     private void searchMeal(){
         SearchView searchBar = findViewById(R.id.search);
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -241,6 +282,7 @@ public class Search extends AppCompatActivity {
                                 }
                             }
                         }
+
                         //set the adapter and the rest
                         MealList mealListAdapter = new MealList(Search.this, meals,user);
                         listViewMeals.setAdapter(mealListAdapter);
@@ -253,6 +295,7 @@ public class Search extends AppCompatActivity {
         });
 
     }
+
 
 
 

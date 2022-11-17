@@ -3,6 +3,7 @@ package com.example.group7mealerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -160,7 +161,7 @@ public class AddMeal extends AppCompatActivity {
         RadioButton btnYes = findViewById(R.id.OfferYesButton);
         //Radio button for choosing no on offer option
         RadioButton btnNo = findViewById(R.id.OfferNoButton);
-        System.out.println(strDescription + " " + strPrice);
+
         //String for meal type
         String mealType;
         //double for storing price
@@ -179,7 +180,7 @@ public class AddMeal extends AppCompatActivity {
                         cook.addMeal(strName,mealType,strCuisineType,strDescription,dblPrice,true);
                     }
                     cook.addMeal(strName,mealType,strCuisineType,strDescription,dblPrice,false);
-                    //add meal to the database
+                    finish();
 
                 } catch (Exception e) {
                     e.printStackTrace();

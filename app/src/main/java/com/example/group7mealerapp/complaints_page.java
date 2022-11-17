@@ -161,7 +161,7 @@ public class complaints_page extends AppCompatActivity {
 
                 try{
                     suspension = new Suspension(false,day);
-                    System.out.println(suspension.getBannedUntil() + " you are banned until");
+
                 }catch(ParseException e){
                     flag = false;
                     editTextLengthToBan.setError("incorrect date format");
@@ -172,7 +172,7 @@ public class complaints_page extends AppCompatActivity {
                     Toast.makeText(context, error, duration).show();
                 }
                 if(flag){
-                    System.out.println(day);
+
                     suspendOrBanUser(complaintId,suspension,email);
                     finish();
                     b.dismiss();

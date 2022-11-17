@@ -47,9 +47,9 @@ public class Administrator extends User {
                     //comparing the email and password from the database with the inputted text fields
                     if (temp.getEmail().equals(email)){
                         String id = child.getKey();
-                        System.out.println(id + "this is the proper id");
-                        Task<Void> cookDatabaseReference = firebaseDatabase.getReference("UserInfo").child(id).updateChildren(map);
-                        System.out.println("this is the email" + temp.getEmail());
+
+                        firebaseDatabase.getReference("UserInfo").child(id).updateChildren(map);
+
                         break;
                     }
                     temp = null;

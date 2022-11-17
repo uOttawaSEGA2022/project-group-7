@@ -111,7 +111,8 @@ public class WelcomePage extends AppCompatActivity {
         else if(user.getClass() == Administrator.class)
             switchPage.putExtra("Admin",user);
 
-        System.out.println(user.getFirstName());
+
+
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
 
@@ -135,7 +136,7 @@ public class WelcomePage extends AppCompatActivity {
             Client client = (Client) user;
             client.getCreditCardInfo().setExpirationDate(null);
             switchPage.putExtra("Client", client);
-            System.out.println(client.getCreditCardInfo());
+
         }
 
 

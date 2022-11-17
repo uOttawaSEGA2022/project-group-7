@@ -1,8 +1,10 @@
-package com.example.group7mealerapp;
+package Dialoges;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.group7mealerapp.R;
 
 public class meal_info_dialoge extends AppCompatActivity {
 

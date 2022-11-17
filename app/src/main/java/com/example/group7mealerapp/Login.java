@@ -23,6 +23,7 @@ import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
+import UserJavaFiles.Meal;
 import UserJavaFiles.UserPOJO;
 
 public class Login extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
 
         //see comments in registration for explanation
@@ -80,7 +82,7 @@ public class Login extends AppCompatActivity {
             @Override
             //method called on start and whenever data is changed
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("ENTERED BTN LOGIN CLICKED");
+
                 //Variables for toast display
                 boolean flag = false;
                 Context context = getApplicationContext();

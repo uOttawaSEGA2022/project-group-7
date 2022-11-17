@@ -3,6 +3,7 @@ package UserJavaFiles;
 import androidx.annotation.NonNull;
 
 import com.example.group7mealerapp.Search;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,16 +11,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 import listViewFiles.MealList;
 
 public class Meal implements Serializable {
     //Instance variables
-    private String name, mealType, cusineType,description,email;
+    private String name,mealType,cusineType,description,email;
 
     private double price;
 
     private boolean offered;
+
 
     public Meal(String name, String mealType,String cusineType, String description,String email, double price,boolean offered)
     {
@@ -55,6 +58,7 @@ public class Meal implements Serializable {
 
     public String getEmail() {
         return email;
+
     }
 
     public void setName(String name) {
@@ -75,6 +79,7 @@ public class Meal implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+
     }
 
     public void setPrice(double price) {
@@ -83,9 +88,92 @@ public class Meal implements Serializable {
 
     public void setOffered(boolean offered) {
         this.offered = offered;
+    }
+
+    public void setOfferedDB(Meal meal){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+
+        if(meal.offered == true){
+            this.offered = false;
+            map.put("offered",false);
+        }
+        else {
+            this.offered = true;
+            map.put("offered", true);
+        }
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //calls an iterator on the children in the database IE all users stored
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                Meal temp = new Meal();
+                //this loop iterates through the DB under the userInfo block
+                for (DataSnapshot child: children){
+
+                    //no logic just stores the value onto user
+                    temp = child.getValue(Meal.class);
+
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.equals(meal)){
+
+                        String id = child.getKey();
+
+                        firebaseDatabase.getReference("Meals").child(id).updateChildren(map);
+
+                        databaseReference.removeEventListener(this);
+                        break;
+
+                    }
+
+                    temp = null;
+                }
+            }
+
+            //no need for this function but must be overridden
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
 
     }
-    //check if meal type, cusine type name and price match
+    public void mealDeleteDB(Meal meal){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //calls an iterator on the children in the database IE all users stored
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                Meal temp = new Meal();
+                //this loop iterates through the DB under the userInfo block
+                for (DataSnapshot child: children){
+
+                    //no logic just stores the value onto user
+                    temp = child.getValue(Meal.class);
+
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.equals(meal)){
+
+                        String id = child.getKey();
+
+                        firebaseDatabase.getReference("Meals").child(id).removeValue();
+                        databaseReference.removeEventListener(this);
+
+                        break;
+
+                    }
+
+                    temp = null;
+                }
+            }
+
+            //no need for this function but must be overridden
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    //check if meal type, cuisine type name and price match
     public Boolean equals(Meal mealtoCompare){
         Boolean flag = true;
         if(!mealType.equals(mealtoCompare.mealType))
