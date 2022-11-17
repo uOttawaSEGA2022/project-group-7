@@ -110,8 +110,9 @@ public class Search extends AppCompatActivity {
 
     public void btnAddMealClick(View view){
         Intent switchPage = new Intent(this, AddMeal.class);
-
-        Cook cook = (Cook) user;
+        Cook cook = null;
+        if(isCook)
+            cook = (Cook) user;
         switchPage.putExtra("Cook",cook);
 
         setResult(RESULT_OK, switchPage);
