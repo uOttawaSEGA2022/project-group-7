@@ -51,7 +51,7 @@ public class MealList extends ArrayAdapter<Meal> {
         textViewPrice.setText(String.valueOf(meal.getPrice()));
         //IF THE USER IS A COOK THEN YOU CAN SHOW THIS IF NOT DO NOT
         if (meal.isOffered())
-            textViewActive.setText("ACTIVE");
+            textViewActive.setText("OFFERED");
         else
             textViewActive.setText("INACTIVE");
         if(user.getClass() != Cook.class)
