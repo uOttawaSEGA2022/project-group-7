@@ -13,6 +13,8 @@ import android.widget.TextView;
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
+import UserJavaFiles.Meal;
+import UserJavaFiles.Order;
 import UserJavaFiles.User;
 import codeModules.Modules;
 
@@ -66,6 +68,8 @@ public class WelcomePage extends AppCompatActivity {
             searchBtn.setVisibility(View.VISIBLE);
             //if Client logs on then the complaint button is invisible
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
+
+
         }
         if (user.getClass() == Administrator.class ){
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are the administrator.");
