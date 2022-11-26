@@ -206,10 +206,14 @@ public class Search extends AppCompatActivity {
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    meal.mealDeleteDB(meal);
-                    Toast.makeText(getApplicationContext(), "Meal removed from menu", Toast.LENGTH_LONG).show();
-                    b.dismiss();
-
+                    if(!meal.isOffered()) {
+                        meal.mealDeleteDB(meal);
+                        Toast.makeText(getApplicationContext(), "Meal removed from menu", Toast.LENGTH_LONG).show();
+                        b.dismiss();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Cannot remove meal from menu, set to inactive first", Toast.LENGTH_LONG).show();
+                        b.dismiss();
+                    }
                 }
             });
         }

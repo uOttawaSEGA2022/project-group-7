@@ -54,6 +54,7 @@
             android:text="Meal Type" />
 
         <RadioGroup
+            android:id="@+id/RadioGroupMealType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -79,6 +80,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:hint="Dinner" />
+
+                <RadioButton
+                    android:id="@+id/ClearButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="N/A" />
+
 
             </LinearLayout>
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class AddMeal extends AppCompatActivity {
         RadioButton btnBreakfast = findViewById(R.id.BreakfastButton);
         RadioButton btnLunch = findViewById(R.id.LunchButton);
         RadioButton btnDinner = findViewById(R.id.DinnerButton);
+        RadioButton btnClear = findViewById(R.id.ClearButton);
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +74,26 @@ public class AddMeal extends AppCompatActivity {
             public void onClick(View view) {
                 btnYes.setChecked(false);
             }
+        });
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnDinner.setChecked(false);
+                btnBreakfast.setChecked(false);
+                btnLunch.setChecked(false);
+            }
+        });
+        btnBreakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {btnClear.setChecked(false);}
+        });
+        btnLunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {btnClear.setChecked(false);}
+        });
+        btnDinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {btnClear.setChecked(false);}
         });
         //Button for adding meal to database
         Button addMealBtn = (Button)findViewById(R.id.AddMealButton);
@@ -110,6 +132,7 @@ public class AddMeal extends AppCompatActivity {
         RadioButton btnYes = findViewById(R.id.OfferYesButton);
         //Radio button for choosing no on offer option
         RadioButton btnNo = findViewById(R.id.OfferNoButton);
+        RadioButton btnClear = findViewById(R.id.ClearButton);
 
         //Make sure first name field isn't empty
         if(TextUtils.isEmpty(strName))
@@ -117,10 +140,11 @@ public class AddMeal extends AppCompatActivity {
             name.setError("This field cannot be empty");
             noErrors = false;
         }
-        //Make sure first name field isn't empty
-        if(TextUtils.isEmpty(strPrice))
-        {
-            price.setError("This field cannot be empty");
+
+        try {
+            Integer.parseInt(strPrice);
+        }catch (Exception e){
+            price.setError("invalid price input");
             noErrors = false;
         }
 
@@ -149,6 +173,12 @@ public class AddMeal extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "You must choose whether to make view visible to the public or not", Toast.LENGTH_LONG).show();
             noErrors = false;
         }
+        if(btnClear.isChecked())
+        {
+            Toast.makeText(getApplicationContext(), "Meal type cannot be N/A", Toast.LENGTH_LONG).show();
+            noErrors = false;
+        }
+
 
         return noErrors;
     }
@@ -175,6 +205,8 @@ public class AddMeal extends AppCompatActivity {
         RadioButton btnLunch = findViewById(R.id.LunchButton);
         //Radio button for dinner
         RadioButton btnDinner = findViewById(R.id.DinnerButton);
+        //radio button for no choice
+        RadioButton btnClear = findViewById(R.id.ClearButton);
         //Radio button for choosing yes on offer option
         RadioButton btnYes = findViewById(R.id.OfferYesButton);
         //Radio button for choosing no on offer option
@@ -190,6 +222,8 @@ public class AddMeal extends AppCompatActivity {
                 mealType = mealType + "Lunch ";
             }if (btnDinner.isChecked()) {
                 mealType = mealType + "Dinner ";
+            }if (btnClear.isChecked()){
+                mealType = "";
             }
 
             if(registrationErrors(strName,strPrice,strCuisineType,strDescription)) {
