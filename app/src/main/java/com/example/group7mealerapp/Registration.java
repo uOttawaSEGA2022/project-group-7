@@ -2,7 +2,6 @@ package com.example.group7mealerapp;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -17,8 +16,9 @@ import java.text.ParseException;
 import java.util.Date;
 
 import UserJavaFiles.CreditCard;
+
 import UserJavaFiles.Suspension;
-import UserJavaFiles.User;
+
 import UserJavaFiles.UserPOJO;
 /**
  * The registration page initially takes the basic info of a User (First name, Last name, Email,

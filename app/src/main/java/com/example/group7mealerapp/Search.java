@@ -61,13 +61,6 @@ public class Search extends AppCompatActivity {
     Button buttonAddMeal;
 
     protected void onCreate(Bundle savedInstanceState) {
-        //REMOVE In BETWEEN THESE COMMENTS ONLY FOR TESTING!!
-        //Meal meal = new Meal("Yakisoba", "Dinner", "Japanese", "japanese stirfry using buckwheat noodles and a slew of vegetables","cook@gmail.com", 5.25);
-        //meal.setOffered(true,meal);
-        //meal = new Meal("Pad Thai", "Lunch", "Thai","spicy stirfry with thai spices and thick noodles","nocturne@gmail.com", 5.49);
-        //meal.setOffered(true,meal);
-        //REMOVE UP TO HERE INCLUDING THIS LINE
-
         //get the user from welcome
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
@@ -83,6 +76,8 @@ public class Search extends AppCompatActivity {
         meals = new ArrayList<>();
         if (user.getClass() == Cook.class){
             isCook = true;
+
+            buttonAddMeal.setEnabled(true);
             SearchView searchBar = findViewById(R.id.search);
             searchBar.setVisibility(View.GONE);
             buttonAddMeal.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +90,7 @@ public class Search extends AppCompatActivity {
         else{
             isCook = false;
             buttonAddMeal.setVisibility((View.GONE));
+            buttonAddMeal.setEnabled(false);
             searchMeal();
             //sets the onclick for the list
         }
@@ -121,8 +117,6 @@ public class Search extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-        //add in code to populate list!
-
         if(isCook){
             Cook cook = (Cook) user;
             databaseReference.addValueEventListener(new ValueEventListener() {

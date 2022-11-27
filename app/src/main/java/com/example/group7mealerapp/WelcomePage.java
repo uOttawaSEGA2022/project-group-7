@@ -1,23 +1,35 @@
 package com.example.group7mealerapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
+
 import UserJavaFiles.Meal;
 import UserJavaFiles.Order;
+import UserJavaFiles.Rating;
 import UserJavaFiles.User;
 import codeModules.Modules;
 
+/**
+ * java class for the welcome page, does a multitude of things dependent on what user is
+ * logging in. simply displays a welcome msg for now
+ */
 public class WelcomePage extends AppCompatActivity {
     //sign out button
     Button buttonSignOut, complaintBtn, searchBtn, buttonMenu;
@@ -37,7 +49,16 @@ public class WelcomePage extends AppCompatActivity {
         buttonMenu = (Button)findViewById(R.id.btnEditMenu);
         buttonMenu.setVisibility((View.GONE));
 
+        //TESTING THE RATING (PUSHING A RATING)
+        /*Rating rating;
+        try {
+            rating = new Rating(5, "remy@gmail.com");
+            rating.setRatingDB();
+        }catch (Exception e){
+            System.out.println(e + " should be illegal argument!");
+        }*/
 
+        //END OF TESTING
         //get the user from login
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
@@ -58,13 +79,46 @@ public class WelcomePage extends AppCompatActivity {
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
                     buttonMenu.setVisibility((View.GONE));
                 }
-                else
-                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
+                //EXAMPLE CODE HERE FOR GETTING THE AVERAGE OF A COOKS RATING!
+                else {
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference = firebaseDatabase.getReference("Ratings");
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Iterable<DataSnapshot> children = snapshot.getChildren();
+                            Rating temp = new Rating();
+                            double total = 0;
+                            int size = 0;
+                            for (DataSnapshot child : children) {
+                                temp = child.getValue(Rating.class);
+                                if (temp.getEmail().equals(cook.getEmail())) {
+                                    total += temp.getRating();
+                                    size++;
+                                }
+                                temp = null;
+                            }
+                            //set the text within the function or else errors will occur!
+                            text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+
+                                    ", you are a cook with rating : " + total/size);
+                            databaseReference.removeEventListener(this);
+                        }
+                        //no need for this function but must be overridden
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
+                //END OF EXAMPLE CODE
             }catch(Exception e){
                 text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
             }
         }
         if (user.getClass() == Client.class ){
+            //TEST CODE FOR ORDERS CHECK HERE FOR REFERENCE (PUSHING ORDER TO DB)
+            /*Client client = (Client) user;
+            Meal meal = new Meal("sphagetti","Dinner","Itallian","sphagetti","remy@gmail.com",12.00,false);
+            client.addOrder("remy@gmail.com", meal);*/
+            //END OF TEST CODE
             searchBtn.setVisibility(View.VISIBLE);
             //if Client logs on then the complaint button is invisible
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
@@ -102,6 +156,7 @@ public class WelcomePage extends AppCompatActivity {
             public void onClick(View view) {btnMenuClick();}
         });
     }
+    //button click methods
     public void btnComplaintClick()
     {
         Intent switchPage = new Intent(this, complaints_page.class);
@@ -122,7 +177,6 @@ public class WelcomePage extends AppCompatActivity {
 
 
     }
-    //Method to take the user back to login page when they sign out
     public void openLogin(){
         Intent intent = new Intent(this, Login.class);
         //clear user
@@ -132,20 +186,13 @@ public class WelcomePage extends AppCompatActivity {
     }
     public void btnSearchClick(){
         Intent switchPage = new Intent(this, Search.class);
-
-
         if(user.getClass() == Administrator.class)
             switchPage.putExtra("Admin",user);
         else if(user.getClass() == Client.class){
             Client client = (Client) user;
-            client.getCreditCardInfo().setExpirationDate(null);
+            System.out.println(client.getCreditCardInfo());
             switchPage.putExtra("Client", client);
-
         }
-
-
-
-
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
 
@@ -153,7 +200,6 @@ public class WelcomePage extends AppCompatActivity {
     public void btnMenuClick(){
         Intent switchPage = new Intent(this, Search.class);
         Cook cook = (Cook) user;
-
         switchPage.putExtra("Cook",cook);
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
