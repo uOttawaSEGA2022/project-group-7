@@ -80,15 +80,22 @@
 
             <Button
                 android:id="@+id/btnEditMenu"
-                android:layout_width="wrap_content"
+                android:layout_width="104dp"
                 android:layout_height="wrap_content"
                 android:text="Edit Menu" />
 
             <Button
                 android:id="@+id/btnSearch"
-                android:layout_width="wrap_content"
+                android:layout_width="146dp"
                 android:layout_height="wrap_content"
                 android:text="Search for meals" />
+
+            <Button
+                android:id="@+id/btnStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Status of purchase" />
         </LinearLayout>
 
 

@@ -1,14 +1,18 @@
 package com.example.group7mealerapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
@@ -20,7 +24,7 @@ import codeModules.Modules;
 
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonStatus;
     TextView text;
     User user;
 
@@ -36,6 +40,8 @@ public class WelcomePage extends AppCompatActivity {
         buttonSignOut = (Button)findViewById(R.id.btnSO);
         buttonMenu = (Button)findViewById(R.id.btnEditMenu);
         buttonMenu.setVisibility((View.GONE));
+        buttonStatus = findViewById(R.id.btnStatus);
+
 
 
         //get the user from login
@@ -101,7 +107,26 @@ public class WelcomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {btnMenuClick();}
         });
+        buttonStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {btnStatusClick();}
+        });
     }
+    public void btnStatusClick(){
+        AlertDialog alertDialog = new AlertDialog.Builder(WelcomePage.this).create();
+        alertDialog.setTitle("Status of your purchase:");
+        //If statement to be added to tell client if the purchase was approved or not.
+        alertDialog.setMessage("Your purchase was approved");
+        alertDialog.setMessage("Your purchase was rejected");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
     public void btnComplaintClick()
     {
         Intent switchPage = new Intent(this, complaints_page.class);
