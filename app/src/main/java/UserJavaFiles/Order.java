@@ -11,6 +11,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * the order class that is decoupled and is standalone through the use of the DB.
+ * Simply contains the content of an order i.e the cooks email the users email the
+ * state of the order (pending accepted or rejected) as well as meal and a boolean
+ * that tracks if the order has been properly rated yet or not
+ */
 public class Order implements Serializable {
     private String cookEmail, userEmail, state, id;
     private Meal meal;
@@ -19,7 +25,16 @@ public class Order implements Serializable {
     private static String ACCEPTED = "ACCEPTED";
     private static String REJECTED = "REJECTED";
 
-
+    /**
+     * this constructor is only ever called by Firebase to create the object, other than that
+     * it is never called outside of the user method create order. this is because create order
+     * specifically sets an id in the user class, it also restricts a order being made without
+     * being logged into the database first!
+     * @param cookEmail
+     * @param userEmail
+     * @param meal
+     * @param id id is created by firebase and used by us the make sure we have the proper order
+     */
     public Order(String cookEmail, String userEmail, Meal meal, String id) {
         this.cookEmail = cookEmail;
         this.userEmail = userEmail;
@@ -43,8 +58,11 @@ public class Order implements Serializable {
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
 
-    //setters for the DB
-    //sets the state of the order either pending accepted or rejected
+    /**
+     * sets an orders state as in PENDING, ACCEPTED or REJECTED
+     * @param order a reference to the Order, has to be here due to visibility when using FB
+     * @param state state of the order
+     */
     public void setOrderState(Order order, String state){
         HashMap<String,Object> map = new HashMap<String,Object>();
         if(state == PENDING){
@@ -84,17 +102,20 @@ public class Order implements Serializable {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
-    //sets if the order has been rated or not in the DB
+
+    /**
+     * sets the order to rated or not this method should logically be only called when
+     * the order is not rated as this method does not set the order from rated to unrated
+     * @param order boolean value, false if not rated true otherwise
+     */
     public void setRatedState(Order order){
         HashMap<String,Object> map = new HashMap<String,Object>();
         if(!this.isRated){
             this.isRated = true;
             map.put("isRated", true);
         }
-
         else{
-            this.isRated = false;
-            map.put("isRated",false);
+            return;
         }
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference("Orders");
@@ -119,7 +140,7 @@ public class Order implements Serializable {
         });
     }
 
-
+    //equals method
     public boolean equals(Order orderToCompareTo) {
         return orderToCompareTo.id.equals(this.id);
     }
