@@ -14,10 +14,10 @@ public class Cook extends User{
     private Suspension status;
 
     //constructor
-    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status){
+    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status, String blankCheque){
         super(firstName,lastName,email,password,address);
         this.description = description;
-        this.blankCheque = null;
+        this.blankCheque = blankCheque;
         this.status = status;
     }
 

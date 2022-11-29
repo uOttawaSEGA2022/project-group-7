@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -15,6 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Base64;
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
@@ -35,6 +40,7 @@ public class WelcomePage extends AppCompatActivity {
     Button buttonSignOut, complaintBtn, searchBtn, buttonMenu;
     TextView text;
     User user;
+    ImageView blankCheque;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,8 @@ public class WelcomePage extends AppCompatActivity {
         buttonSignOut = (Button)findViewById(R.id.btnSO);
         buttonMenu = (Button)findViewById(R.id.btnEditMenu);
         buttonMenu.setVisibility((View.GONE));
+        blankCheque = (ImageView)findViewById(R.id.imageViewBlankCheque);
+        //blankCheque.setVisibility((View.GONE));
 
         //TESTING THE RATING (PUSHING A RATING)
         /*Rating rating;
@@ -78,10 +86,11 @@ public class WelcomePage extends AppCompatActivity {
                 else if (!cook.getSuspension().getBannedUntil().equals("OKAY") ){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
                     buttonMenu.setVisibility((View.GONE));
+
                 }
                 //EXAMPLE CODE HERE FOR GETTING THE AVERAGE OF A COOKS RATING!
                 else {
-                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    /*FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                     DatabaseReference databaseReference = firebaseDatabase.getReference("Ratings");
                     databaseReference.addValueEventListener(new ValueEventListener() {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -106,7 +115,13 @@ public class WelcomePage extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
-                    });
+                    });*/
+                    System.out.println("blank cheque" + cook.getBlankCheque());
+                    byte[] imageString = Base64.getDecoder().decode(cook.getBlankCheque());
+                    Bitmap image = BitmapFactory.decodeByteArray(imageString,0,imageString.length);
+                    blankCheque.setImageBitmap(image);
+                    blankCheque.setVisibility(View.VISIBLE);
+                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
                 }
                 //END OF EXAMPLE CODE
             }catch(Exception e){

@@ -19,10 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
-import java.util.Date;
 
-import UserJavaFiles.Suspension;
-import UserJavaFiles.UserPOJO;
 
 /**
  * sample code taken from stack overflow link below
@@ -109,7 +106,6 @@ public class Camera extends Activity
             byte[] byteArray = byteArrayOutputStream .toByteArray();
             String encodedimg = Base64.getEncoder().encodeToString(byteArray);
 
-            imageView.setImageBitmap(photo);
         }
     }
 }

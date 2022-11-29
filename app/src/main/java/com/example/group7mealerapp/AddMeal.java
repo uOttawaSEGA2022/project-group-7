@@ -234,7 +234,9 @@ public class AddMeal extends AppCompatActivity {
 
                             cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, true);
                         }
-                        cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, false);
+                        else{
+                            cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, false);
+                        }
                         finish();
 
                     } catch (Exception e) {
