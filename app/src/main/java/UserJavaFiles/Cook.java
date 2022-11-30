@@ -40,14 +40,14 @@ public class Cook extends User{
      * @param price
      * @param isActive
      */
-    public void addMeal(String name, String mealType, String cusineType, String description, double price, boolean isActive)
+    public void addMeal(String name, String mealType, String cusineType, String description, double price, boolean isActive,String ingredients, String allergens)
     {
         //calling the exists method to check if the meal is already in the menu if it is
         // then nothing is added to menu
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
         // if flag is -1 then it does not exist in the menu
-        Meal meal = new Meal(name,mealType,cusineType,description,this.getEmail(),price,isActive);
+        Meal meal = new Meal(name,mealType,cusineType,description,this.getEmail(),price,isActive,ingredients,allergens);
         //ADD TO THE DATABASE
         databaseReference.push().setValue(meal);
     }

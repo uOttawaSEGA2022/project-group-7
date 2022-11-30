@@ -111,9 +111,12 @@ public class AddMeal extends AppCompatActivity {
     * @param strCuisineType    The input of cuisineType converted to String
     * @param strDescription    The input of name description to String
      */
-    private boolean registrationErrors(String strName, String strPrice, String strCuisineType,String strDescription){
+    private boolean registrationErrors(String strName, String strPrice, String strCuisineType,String strDescription, String strIngredients, String strAllergens){
         boolean noErrors = true;
-
+        //EditText for the Allergens
+        EditText allergens = findViewById(R.id.editTextAllergens);
+        //EditText for the ingredients
+        EditText ingredients = findViewById(R.id.editTextIngredients);
         //EditText for the name
         EditText name = findViewById(R.id.editTextName);
         //EditText for the price
@@ -162,6 +165,24 @@ public class AddMeal extends AppCompatActivity {
             noErrors = false;
         }
 
+        if(TextUtils.isEmpty(strIngredients))
+        {
+            ingredients .setError("This field cannot be empty");
+            noErrors = false;
+        }
+
+        if(TextUtils.isEmpty(strAllergens))
+        {
+            allergens .setError("This field cannot be empty");
+            noErrors = false;
+        }
+
+        if(TextUtils.isEmpty(strDescription))
+        {
+            description .setError("This field cannot be empty");
+            noErrors = false;
+        }
+
         if(!btnBreakfast.isChecked() && !btnLunch.isChecked() && !btnDinner.isChecked())
         {
             Toast.makeText(getApplicationContext(), "A meal type must be selected", Toast.LENGTH_LONG).show();
@@ -183,6 +204,14 @@ public class AddMeal extends AppCompatActivity {
         return noErrors;
     }
     private void addMeal(){
+        //EditText for the Allergens
+        EditText allergens = findViewById(R.id.editTextAllergens);
+        //get the editText string
+        String strAllergens = allergens.getText().toString();
+        //EditText for the ingredients
+        EditText ingredients = findViewById(R.id.editTextIngredients);
+        //get the ingredients string
+        String strIngredients = ingredients.getText().toString();
         //EditText for the name
         EditText name = findViewById(R.id.editTextName);
         //Get name from EditText
@@ -226,16 +255,16 @@ public class AddMeal extends AppCompatActivity {
                 mealType = "";
             }
 
-            if(registrationErrors(strName,strPrice,strCuisineType,strDescription)) {
+            if(registrationErrors(strName,strPrice,strCuisineType,strDescription,strIngredients,strAllergens)) {
                 try {
                     dblPrice = Double.valueOf(strPrice);
                     try {
                         if (btnYes.isChecked()) {
 
-                            cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, true);
+                            cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, true,strIngredients,strAllergens);
                         }
                         else{
-                            cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, false);
+                            cook.addMeal(strName, mealType, strCuisineType, strDescription, dblPrice, false,strIngredients,strAllergens);
                         }
                         finish();
 

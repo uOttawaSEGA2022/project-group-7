@@ -1,6 +1,8 @@
 package com.example.group7mealerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.firebase.database.DatabaseReference;
 
 import android.Manifest;
@@ -430,15 +432,17 @@ public class Registration extends Activity
                 //where it asks the user for perms
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                 {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
                 }
                 else
                 {
+
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                    return;
-                }
 
+                }
+                return;
 
             }
             //we push all our information onto the database under UserInfo
@@ -517,6 +521,7 @@ public class Registration extends Activity
             System.out.println("this is the blank cheque" + user.getBlankCheque());
             databaseReference.push().setValue(user);
             Intent switchPage = new Intent(this, Login.class);
+            Toast.makeText(getApplicationContext(), "Registration Successful. Log in now", Toast.LENGTH_LONG).show();
             startActivity(switchPage);
         }
     }

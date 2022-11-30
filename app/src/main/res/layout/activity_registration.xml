@@ -183,6 +183,12 @@
                 android:hint="Enter Description"
                 android:inputType="textPersonName" />
 
+            <TextView
+                android:id="@+id/TextViewDisclaimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="registering as cook will require a blank cheque picture, please allow camera access and take a picture" />
+
         </RadioGroup>
 
         <Button
