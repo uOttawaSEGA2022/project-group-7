@@ -35,7 +35,7 @@ public class MealList extends ArrayAdapter<Meal> {
         View listViewItem = inflater.inflate(R.layout.layout_meal_list, null, true);
         //get the text views of the xml file
         TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
-        TextView textViewMealType = (TextView) listViewItem.findViewById(R.id.textViewMealType);
+        TextView textViewMealType = (TextView) listViewItem.findViewById(R.id.textViewComplaint);
         TextView textViewCusineType = (TextView) listViewItem.findViewById(R.id.textViewCusineType);
         TextView textViewPrice = (TextView) listViewItem.findViewById(R.id.textViewPrice);
         TextView textViewActive = (TextView) listViewItem.findViewById(R.id.textViewActive);
@@ -47,15 +47,15 @@ public class MealList extends ArrayAdapter<Meal> {
         //set the name based on the meals name
         textViewName.setText(meal.getName());
         //set the meal type
-        textViewMealType.setText(meal.getMealType());
+        textViewMealType.setText("meal type: " +meal.getMealType());
         //set the cusine type
-        textViewCusineType.setText(meal.getCusineType());
+        textViewCusineType.setText("cusine type: " +meal.getCusineType());
         //set the price by converting the price to a string
-        textViewPrice.setText(String.valueOf(meal.getPrice()));
+        textViewPrice.setText("price: $" +String.valueOf(meal.getPrice()));
         //set the ingredients text
-        textViewIngredients.setText(meal.getIngredients());
+        textViewIngredients.setText("ingredients: " + meal.getIngredients());
         //set the allergens text
-        textViewAllergens.setText(meal.getAllergens());
+        textViewAllergens.setText("allergens: " +meal.getAllergens());
         //IF THE USER IS A COOK THEN YOU CAN SHOW THIS IF NOT DO NOT
         if (meal.isOffered())
             textViewActive.setText("OFFERED");

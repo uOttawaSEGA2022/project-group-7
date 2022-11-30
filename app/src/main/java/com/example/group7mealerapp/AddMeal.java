@@ -145,7 +145,7 @@ public class AddMeal extends AppCompatActivity {
         }
 
         try {
-            Integer.parseInt(strPrice);
+            Double.parseDouble(strPrice);
         }catch (Exception e){
             price.setError("invalid price input");
             noErrors = false;

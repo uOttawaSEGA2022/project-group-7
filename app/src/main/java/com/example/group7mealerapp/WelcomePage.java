@@ -37,7 +37,7 @@ import codeModules.Modules;
  */
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory;
     TextView text;
     User user;
     ImageView blankCheque;
@@ -55,6 +55,8 @@ public class WelcomePage extends AppCompatActivity {
         buttonMenu = (Button)findViewById(R.id.btnEditMenu);
         buttonMenu.setVisibility((View.GONE));
         blankCheque = (ImageView)findViewById(R.id.imageViewBlankCheque);
+        buttonOrderHistory = (Button)findViewById(R.id.buttonOrderHistory);
+        buttonOrderHistory.setVisibility((View.GONE));
         //blankCheque.setVisibility((View.GONE));
 
         //TESTING THE RATING (PUSHING A RATING)
@@ -137,7 +139,7 @@ public class WelcomePage extends AppCompatActivity {
             searchBtn.setVisibility(View.VISIBLE);
             //if Client logs on then the complaint button is invisible
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
-
+            buttonOrderHistory.setVisibility(View.VISIBLE);
 
         }
         if (user.getClass() == Administrator.class ){
@@ -169,6 +171,10 @@ public class WelcomePage extends AppCompatActivity {
         buttonMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {btnMenuClick();}
+        });
+        buttonOrderHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {buttonOrderHistoryClick();}
         });
     }
     //button click methods
@@ -216,6 +222,13 @@ public class WelcomePage extends AppCompatActivity {
         Intent switchPage = new Intent(this, Search.class);
         Cook cook = (Cook) user;
         switchPage.putExtra("Cook",cook);
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
+    }
+    public void buttonOrderHistoryClick(){
+        Intent switchPage = new Intent(this, purchaseHistory.class);
+        Client client = (Client) user;
+        switchPage.putExtra("Client",client);
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
     }
