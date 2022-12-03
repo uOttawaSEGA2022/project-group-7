@@ -71,6 +71,7 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         buttonAddMeal = (Button)findViewById(R.id.btnAddMeal);
+        buttonAddMeal.setEnabled(false);
         listViewMeals = (ListView) findViewById(R.id.listViewMeals);
 
         meals = new ArrayList<>();
@@ -83,6 +84,7 @@ public class Search extends AppCompatActivity {
             buttonAddMeal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    System.out.println("why are you here for christ sake 3232");
                     btnAddMealClick(view);
                 }
             });
@@ -105,6 +107,7 @@ public class Search extends AppCompatActivity {
     }
 
     public void btnAddMealClick(View view){
+        System.out.println("why are you here for christ sake");
         Intent switchPage = new Intent(this, AddMeal.class);
         Cook cook = null;
         if(isCook)

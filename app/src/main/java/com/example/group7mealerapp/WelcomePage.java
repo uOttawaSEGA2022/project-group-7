@@ -118,7 +118,7 @@ public class WelcomePage extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });*/
-                    System.out.println("blank cheque" + cook.getBlankCheque());
+
                     byte[] imageString = Base64.getDecoder().decode(cook.getBlankCheque());
                     Bitmap image = BitmapFactory.decodeByteArray(imageString,0,imageString.length);
                     blankCheque.setImageBitmap(image);
@@ -211,7 +211,7 @@ public class WelcomePage extends AppCompatActivity {
             switchPage.putExtra("Admin",user);
         else if(user.getClass() == Client.class){
             Client client = (Client) user;
-            System.out.println(client.getCreditCardInfo());
+
             switchPage.putExtra("Client", client);
         }
         setResult(RESULT_OK, switchPage);
