@@ -46,7 +46,7 @@ public class Client extends User {
         DatabaseReference orderDB = firebaseDatabase.getReference("Orders");
         String id = orderDB.push().getKey();
         Order order = new Order(cookEmail,this.getEmail(),meal,id);
-        orderDB.push().setValue(order);
+        orderDB.child(id).setValue(order);
     }
 
     /**
@@ -76,6 +76,20 @@ public class Client extends User {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    /**
+     * adds a complaint to the DB using the user class
+     * @param complaint needs complaint with words
+     * @param email needs cooks email specifically the complaint is being issued against
+     */
+    public void addComplaintDB(String complaint, String email){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference complaintsDB = firebaseDatabase.getReference("Complaints");
+        String id = complaintsDB.push().getKey();
+        System.out.println("this is the id " + id);
+        Complaint complaintObj = new Complaint(email,complaint,id);
+        complaintsDB.child(id).setValue(complaintObj);
     }
 
 }

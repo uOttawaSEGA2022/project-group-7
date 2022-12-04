@@ -107,6 +107,34 @@
             android:inputType="textPersonName" />
 
         <TextView
+            android:id="@+id/IngredientsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingredients" />
+
+        <EditText
+            android:id="@+id/editTextIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="List your ingredients here"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/AllergensView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allergens" />
+
+        <EditText
+            android:id="@+id/editTextAllergens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="list possible allergens here"
+            android:inputType="textPersonName" />
+
+        <TextView
             android:id="@+id/DescriptionView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -51,18 +51,19 @@ public class Administrator extends User {
                     //comparing the email and password from the database with the inputted text fields
                     if (temp.getEmail().equals(email)){
                         String id = child.getKey();
-
                         firebaseDatabase.getReference("UserInfo").child(id).updateChildren(map);
-
+                        cookDatabaseReference.removeEventListener(this);
                         break;
                     }
                     temp = null;
                 }
             }
+
             //no need for this function but must be overridden
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
     }
     //equals to method
     public boolean equalsTo(Administrator admin){

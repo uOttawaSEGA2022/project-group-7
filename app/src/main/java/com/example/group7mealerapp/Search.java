@@ -37,6 +37,7 @@ import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Meal;
 
+import UserJavaFiles.Order;
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 import codeModules.Modules;
@@ -59,6 +60,7 @@ public class Search extends AppCompatActivity {
     User user;
     Boolean isCook;
     Button buttonAddMeal;
+    Cook cook;
 
     protected void onCreate(Bundle savedInstanceState) {
         //get the user from welcome
@@ -254,6 +256,14 @@ public class Search extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
+            //buttonPurchase.setOnClickListener(new View.OnClickListener() {
+               // @Override
+               // public void onClick(View view) {
+                //    Order order = new Order(cook.getEmail(),user.getEmail(),meal,user.);
+
+
+              //  }
+           // });
         }
     }
 

@@ -40,4 +40,12 @@ public class Complaint {
     public void setId(String id) {
         this.id = id;
     }
+    public boolean equals(Complaint complaintAgainst){
+        if(complaintAgainst.getId().equals(this.getId())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

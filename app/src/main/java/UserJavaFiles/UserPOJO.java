@@ -1,6 +1,7 @@
 package UserJavaFiles;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * in this form and structure, later the data in this class will be distributed to the client
  * cook or admin class depending on the type variable
  */
-public class UserPOJO {
+public class UserPOJO implements Serializable {
     /**
      * takes any and all fields from user to the subclasses in terms of variables
      * while the user class will make sure the basics of firstname - address are not null
@@ -147,7 +148,7 @@ public class UserPOJO {
         Cook cook;
         try{
             //blank cheque not needed for now
-            cook = new Cook(firstName,lastName,email,password,address,description,suspension);
+            cook = new Cook(firstName,lastName,email,password,address,description,suspension,blankCheque);
         }
         catch (Exception e){
             return null;

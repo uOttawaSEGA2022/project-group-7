@@ -17,14 +17,14 @@ import listViewFiles.MealList;
 
 public class Meal implements Serializable {
     //Instance variables
-    private String name,mealType,cusineType,description,email;
+    private String name,mealType,cusineType,description,email,ingredients,allergens;
 
     private double price;
 
     private boolean offered;
 
 
-    public Meal(String name, String mealType,String cusineType, String description,String email, double price,boolean offered)
+    public Meal(String name, String mealType,String cusineType, String description,String email, double price,boolean offered,String ingredients, String allergens)
     {
         this.name = name;
         this.price = price;
@@ -33,6 +33,8 @@ public class Meal implements Serializable {
         this.description = description;
         this.email = email;
         this.offered = offered;
+        this.ingredients = ingredients;
+        this.allergens = allergens;
     }
     //for firebase
     public Meal(){}
@@ -56,10 +58,7 @@ public class Meal implements Serializable {
 
     public String getDescription() {return description;}
 
-    public String getEmail() {
-        return email;
-
-    }
+    public String getEmail() {return email;}
 
     public void setName(String name) {
         this.name = name;
@@ -77,10 +76,7 @@ public class Meal implements Serializable {
         this.description = description;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-
-    }
+    public void setEmail(String email) {this.email = email;}
 
     public void setPrice(double price) {
         this.price = price;
@@ -89,6 +85,14 @@ public class Meal implements Serializable {
     public void setOffered(boolean offered) {
         this.offered = offered;
     }
+
+    public String getIngredients() {return ingredients;}
+
+    public void setIngredients(String ingredients) {this.ingredients = ingredients;}
+
+    public String getAllergens() {return allergens;}
+
+    public void setAllergens(String allergens) {this.allergens = allergens;}
 
     public void setOfferedDB(Meal meal){
         HashMap<String,Object> map = new HashMap<String,Object>();

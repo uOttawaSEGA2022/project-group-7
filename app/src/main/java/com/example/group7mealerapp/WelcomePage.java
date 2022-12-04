@@ -11,9 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -22,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Base64;
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
@@ -39,9 +44,9 @@ import codeModules.Modules;
  */
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonStatus;
-    TextView text;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory, buttonStatus; TextView text;
     User user;
+    ImageView blankCheque;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,10 @@ public class WelcomePage extends AppCompatActivity {
         buttonMenu.setVisibility((View.GONE));
         buttonStatus = findViewById(R.id.btnStatus);
 
+        blankCheque = (ImageView)findViewById(R.id.imageViewBlankCheque);
+        buttonOrderHistory = (Button)findViewById(R.id.buttonOrderHistory);
+        buttonOrderHistory.setVisibility((View.GONE));
+        //blankCheque.setVisibility((View.GONE));
 
         //TESTING THE RATING (PUSHING A RATING)
         /*Rating rating;
@@ -87,10 +96,11 @@ public class WelcomePage extends AppCompatActivity {
                 else if (!cook.getSuspension().getBannedUntil().equals("OKAY") ){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
                     buttonMenu.setVisibility((View.GONE));
+
                 }
                 //EXAMPLE CODE HERE FOR GETTING THE AVERAGE OF A COOKS RATING!
                 else {
-                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    /*FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                     DatabaseReference databaseReference = firebaseDatabase.getReference("Ratings");
                     databaseReference.addValueEventListener(new ValueEventListener() {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -115,7 +125,13 @@ public class WelcomePage extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
-                    });
+                    });*/
+                    System.out.println("blank cheque" + cook.getBlankCheque());
+                    byte[] imageString = Base64.getDecoder().decode(cook.getBlankCheque());
+                    Bitmap image = BitmapFactory.decodeByteArray(imageString,0,imageString.length);
+                    blankCheque.setImageBitmap(image);
+                    blankCheque.setVisibility(View.VISIBLE);
+                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
                 }
                 //END OF EXAMPLE CODE
             }catch(Exception e){
@@ -131,7 +147,7 @@ public class WelcomePage extends AppCompatActivity {
             searchBtn.setVisibility(View.VISIBLE);
             //if Client logs on then the complaint button is invisible
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");
-
+            buttonOrderHistory.setVisibility(View.VISIBLE);
 
         }
         if (user.getClass() == Administrator.class ){
@@ -168,13 +184,24 @@ public class WelcomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {btnStatusClick();}
         });
+        buttonOrderHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {buttonOrderHistoryClick();}
+        });
     }
     public void btnStatusClick(){
+        Order order = new Order();
         AlertDialog alertDialog = new AlertDialog.Builder(WelcomePage.this).create();
         alertDialog.setTitle("Status of your purchase:");
-        //If statement to be added to tell client if the purchase was approved or not.
-        alertDialog.setMessage("Your purchase was approved");
-        alertDialog.setMessage("Your purchase was rejected");
+        if (order.getState()=="ACCEPTED"){
+            alertDialog.setMessage("Your purchase was approved");
+        }
+        if (order.getState()=="REJECTED") {
+            alertDialog.setMessage("Your purchase was rejected");
+        }
+        if (order.getState()=="PENDING"){
+            alertDialog.setMessage("Your purchase status is pending");
+        }
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -229,6 +256,13 @@ public class WelcomePage extends AppCompatActivity {
         Intent switchPage = new Intent(this, Search.class);
         Cook cook = (Cook) user;
         switchPage.putExtra("Cook",cook);
+        setResult(RESULT_OK, switchPage);
+        startActivity(switchPage);
+    }
+    public void buttonOrderHistoryClick(){
+        Intent switchPage = new Intent(this, purchaseHistory.class);
+        Client client = (Client) user;
+        switchPage.putExtra("Client",client);
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
     }

@@ -1,32 +1,45 @@
 package com.example.group7mealerapp;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.firebase.database.DatabaseReference;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
+
 import android.widget.EditText;
 import com.google.firebase.database.FirebaseDatabase;
-import android.os.Bundle;
+
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Date;
 
 import UserJavaFiles.CreditCard;
-
 import UserJavaFiles.Suspension;
-
 import UserJavaFiles.UserPOJO;
+
+
+import android.os.Bundle;
+
+
 /**
  * The registration page initially takes the basic info of a User (First name, Last name, Email,
  * Password, Address and Role.
  * Upon selecting a role, role specific fields are shown and required as well (Client - Credit Card
  * information / Cook - Description)
  */
-public class Registration extends AppCompatActivity
+public class Registration extends Activity
 {
     //Global variables
 
@@ -36,6 +49,8 @@ public class Registration extends AppCompatActivity
     DatabaseReference databaseReference;
     //this POJO object will be used to store data within firebase in a digestible manner
     UserPOJO user;
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_PERMISSION_CODE = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -413,7 +428,21 @@ public class Registration extends AppCompatActivity
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
                         strCookDescription, null, null,new Suspension(false, (Date) null));
+                //ask for permission to use camera first this is done automatically through android
+                //where it asks the user for perms
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                {
 
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                }
+                else
+                {
+
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+                }
+                return;
 
             }
             //we push all our information onto the database under UserInfo
@@ -438,4 +467,63 @@ public class Registration extends AppCompatActivity
 
         }
     }
+
+    /**
+     * method that verifies the correct permissions and handles the cases
+     * @param requestCode if request code is 100 (camera permission code) allows access else denies
+     * @param permissions
+     * @param grantResults when results are permission granted then uses camera
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        System.out.println("starting camera" + requestCode + " " + CAMERA_PERMISSION_CODE);
+        if (requestCode == CAMERA_PERMISSION_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+            else
+            {
+
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /**
+     * gets the results of the camera picture being taken, saves it into a bitmap that is then
+     * encoded in base64 and saved in the database
+     * @param requestCode
+     * @param resultCode
+     * @param data bitmap that is encoded
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = databaseReference = firebaseDatabase.getReference("UserInfo");
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            //convert bitmap saved into a base 64 to be stored in Firebase
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String encodedimg = Base64.getEncoder().encodeToString(byteArray);
+
+            user.setBlankCheque(encodedimg);
+            System.out.println("this is the blank cheque" + user.getBlankCheque());
+            databaseReference.push().setValue(user);
+            Intent switchPage = new Intent(this, Login.class);
+            Toast.makeText(getApplicationContext(), "Registration Successful. Log in now", Toast.LENGTH_LONG).show();
+            startActivity(switchPage);
+        }
+    }
+
 }
