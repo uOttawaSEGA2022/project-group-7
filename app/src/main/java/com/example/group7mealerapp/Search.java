@@ -60,9 +60,8 @@ public class Search extends AppCompatActivity {
     User user;
     Boolean isCook;
     Button buttonAddMeal;
-    Cook cook;
-    Client client;
-    Order order;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         //get the user from welcome
@@ -264,8 +263,10 @@ public class Search extends AppCompatActivity {
             buttonPurchase.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    client.addOrder(cook.getEmail(),meal);
-                    order.setOrderState(order,order.getState());
+                    Client client = (Client) user;
+                    client.addOrder(meal.getEmail(),meal);
+                    Toast.makeText(getApplicationContext(), "meal purchased please await cooks response", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             });
         }

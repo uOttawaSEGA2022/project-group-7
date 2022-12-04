@@ -44,7 +44,8 @@ import codeModules.Modules;
  */
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory, buttonStatus; TextView text;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory;
+    TextView text;
     User user;
     ImageView blankCheque;
 
@@ -60,7 +61,7 @@ public class WelcomePage extends AppCompatActivity {
         buttonSignOut = (Button)findViewById(R.id.btnSO);
         buttonMenu = (Button)findViewById(R.id.btnEditMenu);
         buttonMenu.setVisibility((View.GONE));
-        buttonStatus = findViewById(R.id.btnStatus);
+
 
         blankCheque = (ImageView)findViewById(R.id.imageViewBlankCheque);
         buttonOrderHistory = (Button)findViewById(R.id.buttonOrderHistory);
@@ -180,36 +181,13 @@ public class WelcomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {btnMenuClick();}
         });
-        buttonStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {btnStatusClick();}
-        });
+
         buttonOrderHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {buttonOrderHistoryClick();}
         });
     }
-    public void btnStatusClick(){
-        Order order = new Order();
-        AlertDialog alertDialog = new AlertDialog.Builder(WelcomePage.this).create();
-        alertDialog.setTitle("Status of your purchase:");
-        if (order.getState()=="ACCEPTED"){
-            alertDialog.setMessage("Your purchase was approved");
-        }
-        if (order.getState()=="REJECTED") {
-            alertDialog.setMessage("Your purchase was rejected");
-        }
-        if (order.getState()=="PENDING"){
-            alertDialog.setMessage("Your purchase status is pending");
-        }
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                dialog.dismiss();
-            }
-        });
-        alertDialog.show();
-    }
+
 
     //button click methods
     public void btnComplaintClick()

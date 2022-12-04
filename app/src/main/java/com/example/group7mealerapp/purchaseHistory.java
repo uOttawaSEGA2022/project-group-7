@@ -59,6 +59,7 @@ public class purchaseHistory extends AppCompatActivity {
                 //will have to be added later but make sure cooks email is attached to this method
                 client.addComplaintDB(strComplaint,"remy@gmail.com");
                 Toast.makeText(getApplicationContext(), "complaint issued wait for a response from admin", Toast.LENGTH_LONG).show();
+
                 b.dismiss();
             }
         });
