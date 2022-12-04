@@ -118,7 +118,7 @@ public class complaints_page extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.activity_resolve_dialoge, null);
         dialogBuilder.setView(dialogView);
-        System.out.println(complaintId + " complaint id");
+
         //SETTING UP THE TEXT FIELDS AND BUTTONS
         final EditText editTextLengthToBan  = (EditText) dialogView.findViewById(R.id.editTextLengthToSuspend);
         final Button buttonBan = (Button) dialogView.findViewById(R.id.buttonBan);

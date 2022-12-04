@@ -1,4 +1,4 @@
-package com.example.group7mealerapp;
+package DEPRICATED;
 
 
 import android.Manifest;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.group7mealerapp.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

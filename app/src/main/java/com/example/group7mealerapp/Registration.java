@@ -478,7 +478,7 @@ public class Registration extends Activity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        System.out.println("starting camera" + requestCode + " " + CAMERA_PERMISSION_CODE);
+
         if (requestCode == CAMERA_PERMISSION_CODE)
         {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
@@ -518,7 +518,7 @@ public class Registration extends Activity
             String encodedimg = Base64.getEncoder().encodeToString(byteArray);
 
             user.setBlankCheque(encodedimg);
-            System.out.println("this is the blank cheque" + user.getBlankCheque());
+
             databaseReference.push().setValue(user);
             Intent switchPage = new Intent(this, Login.class);
             Toast.makeText(getApplicationContext(), "Registration Successful. Log in now", Toast.LENGTH_LONG).show();

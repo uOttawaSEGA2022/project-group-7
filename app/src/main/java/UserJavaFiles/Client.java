@@ -87,7 +87,7 @@ public class Client extends User {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference complaintsDB = firebaseDatabase.getReference("Complaints");
         String id = complaintsDB.push().getKey();
-        System.out.println("this is the id " + id);
+
         Complaint complaintObj = new Complaint(email,complaint,id);
         complaintsDB.child(id).setValue(complaintObj);
     }
