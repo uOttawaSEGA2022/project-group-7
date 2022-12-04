@@ -61,6 +61,8 @@ public class Search extends AppCompatActivity {
     Boolean isCook;
     Button buttonAddMeal;
     Cook cook;
+    Client client;
+    Order order;
 
     protected void onCreate(Bundle savedInstanceState) {
         //get the user from welcome
@@ -259,14 +261,13 @@ public class Search extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-            //buttonPurchase.setOnClickListener(new View.OnClickListener() {
-               // @Override
-               // public void onClick(View view) {
-                //    Order order = new Order(cook.getEmail(),user.getEmail(),meal,user.);
-
-
-              //  }
-           // });
+            buttonPurchase.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    client.addOrder(cook.getEmail(),meal);
+                    order.setOrderState(order,order.getState());
+                }
+            });
         }
     }
 
