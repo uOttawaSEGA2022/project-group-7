@@ -13,7 +13,7 @@ class SuspensionTest {
     @Test
     public void testCreateSuspension(){
         try {
-            Suspension status = new Suspension(false, "2022-12-01");
+            Suspension status = new Suspension(false, "2029-12-01");
             Suspension status2 = new Suspension(false, new Date(2022,12,01));
             assertNotNull(status);
             assertNotNull(status2);
@@ -29,8 +29,8 @@ class SuspensionTest {
     @Test
     void getBannedUntil() {
         try {
-            Suspension status = new Suspension(false, "2022-12-01");
-            assertEquals("Thu Dec 01 00:00:00 EST 2022",status.getBannedUntil());
+            Suspension status = new Suspension(false, "2029-12-01");
+            assertEquals("Sat Dec 01 00:00:00 EST 2029",status.getBannedUntil());
         }catch(Exception e) {
             e.printStackTrace();
             fail(e.toString());
@@ -40,7 +40,7 @@ class SuspensionTest {
     @Test
     void getPerma() {
         try {
-            Suspension status = new Suspension(false, "2022-12-01");
+            Suspension status = new Suspension(false, "2029-12-01");
             assertEquals(false,status.getPerma());
         }catch(Exception e) {
             e.printStackTrace();
@@ -51,7 +51,7 @@ class SuspensionTest {
     @Test
     void setPerma() {
         try {
-            Suspension status = new Suspension(false, "2022-12-01");
+            Suspension status = new Suspension(false, "2029-12-01");
             status.setPerma(true);
             assertEquals(true,status.getPerma());
         }catch(Exception e) {
@@ -63,9 +63,9 @@ class SuspensionTest {
     @Test
     void setBannedUntil() {
         try {
-            Suspension status = new Suspension(false, "2022-12-01");
-            status.setBannedUntil("2022-12-02");
-            assertEquals("2022-12-02",status.getBannedUntil());
+            Suspension status = new Suspension(false, "2029-12-01");
+            status.setBannedUntil("2023-12-02");
+            assertEquals("2023-12-02",status.getBannedUntil());
         }catch(Exception e) {
             e.printStackTrace();
             fail(e.toString());

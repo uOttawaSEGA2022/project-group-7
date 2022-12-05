@@ -3,6 +3,7 @@ package UserJavaFiles;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * this class is SPECIFICALLY meant for firebase integration, a very generic POJO class that
@@ -33,21 +34,6 @@ public class UserPOJO implements Serializable {
         this.blankCheque = blankCheque;
         this.description = description;
         this.suspension = suspension;
-    }
-
-    //constructor for UserPOJO with menu included. Might not be needed, depends on implementation
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, ArrayList<Meal> inputMenu){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.type = type;
-        this.creditCardInfo = creditCardInfo;
-        this.blankCheque = blankCheque;
-        this.description = description;
-        this.suspension = suspension;
-
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
@@ -167,10 +153,11 @@ public class UserPOJO implements Serializable {
         return administrator;
     }
 
-    public boolean equalsTo(UserPOJO user){
-        return this.address == user.getAddress() && this.firstName == user.getFirstName() && this.lastName == user.getLastName()
-                && this.email == user.getEmail() && this.password == user.getPassword() && this.type == user.getType()
-                && this.blankCheque == user.blankCheque && this.description == user.getDescription() && this.suspension.equalsTo(user.getSuspension())
-                && this.creditCardInfo.equalsTo(user.getCreditCardInfo());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserPOJO userPOJO = (UserPOJO) o;
+        return Objects.equals(firstName, userPOJO.firstName) && Objects.equals(lastName, userPOJO.lastName) && Objects.equals(email, userPOJO.email) && Objects.equals(password, userPOJO.password) && Objects.equals(address, userPOJO.address) && Objects.equals(type, userPOJO.type) && Objects.equals(description, userPOJO.description) && Objects.equals(creditCardInfo, userPOJO.creditCardInfo) && Objects.equals(blankCheque, userPOJO.blankCheque) && Objects.equals(suspension, userPOJO.suspension);
     }
 }
