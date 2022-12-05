@@ -123,7 +123,7 @@ public class Meal implements Serializable {
                     if (temp.equals(meal)){
 
                         String id = child.getKey();
-
+                        System.out.println("we in here");
                         firebaseDatabase.getReference("Meals").child(id).updateChildren(map);
 
                         databaseReference.removeEventListener(this);
@@ -187,16 +187,6 @@ public class Meal implements Serializable {
         else if(!name.equals(mealtoCompare.name))
             flag = false;
         else if(!(price == mealtoCompare.price))
-            flag = false;
-        else if(!(ingredients.equals(mealtoCompare.ingredients)))
-            flag = false;
-        else if(!(allergens.equals(mealtoCompare.allergens)))
-            flag = false;
-        else if(!(offered == mealtoCompare.offered))
-            flag = false;
-        else if(!(email.equals(mealtoCompare.email)))
-            flag = false;
-        else if(!(description.equals(mealtoCompare.description)))
             flag = false;
         return flag;
     }

@@ -411,7 +411,7 @@ public class Registration extends Activity
         {
             //Store user as Client
             type = "Client";
-            strCookDescription = "N/A";
+            strCookDescription = null;
         }
 
         if(btnCook.isChecked())
