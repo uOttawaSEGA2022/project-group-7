@@ -4,16 +4,20 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
+
 import java.util.HashMap;
 
+/**
+ * the admin class only differentiates itself from user with its unique methods that it only
+ * has access to, i.e suspending and banning a cook if need be
+ */
 public class Administrator extends User {
     public Administrator(String firstName,String lastName,String email,String password,String address) throws IllegalArgumentException{
         super(firstName,lastName,email,password,address);
@@ -47,19 +51,21 @@ public class Administrator extends User {
                     //comparing the email and password from the database with the inputted text fields
                     if (temp.getEmail().equals(email)){
                         String id = child.getKey();
-                        System.out.println(id + "this is the proper id");
-                        Task<Void> cookDatabaseReference = firebaseDatabase.getReference("UserInfo").child(id).updateChildren(map);
-                        System.out.println("this is the email" + temp.getEmail());
+                        firebaseDatabase.getReference("UserInfo").child(id).updateChildren(map);
+                        cookDatabaseReference.removeEventListener(this);
                         break;
                     }
                     temp = null;
                 }
             }
+
             //no need for this function but must be overridden
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
     }
+    //equals to method
     public boolean equalsTo(Administrator admin){
         return this.getAddress() == admin.getAddress() && this.getFirstName() == admin.getFirstName() && this.getLastName() == admin.getLastName()
                 && this.getEmail() == admin.getEmail() && this.getPassword() == admin.getPassword();

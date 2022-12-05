@@ -1,83 +1,61 @@
 package UserJavaFiles;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
-import java.util.ArrayList;
-
+/**
+ * Cook class that simply stores information relevant to a cook such as the blank cheque, description
+ * and status of the cooks account.
+ */
 public class Cook extends User{
+    //instance variables
     private String blankCheque;
     private String description;
     private Suspension status;
-    private ArrayList<Meal> menu;
-    private int rating;
-    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status, int rating, ArrayList<Meal> menu){
+
+    //constructor
+    public Cook(String firstName,String lastName,String email,String password,String address, String description,Suspension status, String blankCheque){
         super(firstName,lastName,email,password,address);
         this.description = description;
-        this.blankCheque = null;
+        this.blankCheque = blankCheque;
         this.status = status;
-        menu = new ArrayList<Meal>();
-        this.rating = 5;
     }
 
     //getters and setters
-    public String getBlankCheque() {
-        return this.blankCheque;
-    }
+    public String getBlankCheque() {return this.blankCheque;}
     public String getDescription() {return description;}
     public Suspension getSuspension() {return status;}
-    public void setBlankCheque(String blankCheque) {
-        this.blankCheque = blankCheque;
-    }
+    public void setBlankCheque(String blankCheque) {this.blankCheque = blankCheque;}
     public void setDescription(String description) {this.description = description;}
     public void setSuspension(Suspension suspend){this.status = suspend;}
 
+
+    /**
+     * adds a meal to the database of meals. Meals is decoupled from cook and as such you only access
+     * the menu when the cook is on the view menu screen which has no relation to cook
+     * @param name
+     * @param mealType
+     * @param cusineType
+     * @param description
+     * @param price
+     * @param isActive
+     */
+    public void addMeal(String name, String mealType, String cusineType, String description, double price, boolean isActive,String ingredients, String allergens)
+    {
+        //calling the exists method to check if the meal is already in the menu if it is
+        // then nothing is added to menu
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
+        // if flag is -1 then it does not exist in the menu
+        Meal meal = new Meal(name,mealType,cusineType,description,this.getEmail(),price,isActive,ingredients,allergens);
+        //ADD TO THE DATABASE
+        databaseReference.push().setValue(meal);
+    }
+
+    //equals method
     public boolean equalsTo(Cook cook){
         return this.getAddress() == cook.getAddress() && this.getFirstName() == cook.getFirstName() && this.getLastName() == cook.getLastName()
                 && this.getEmail() == cook.getEmail() && this.getPassword() == cook.getPassword() && this.getDescription() == cook.getDescription()
                 && this.getSuspension().equalsTo(cook.getSuspension());
     }
-
-    //adding a meal to the arraylist called menu
-    public void addMeal(String name, String mealType, String cuisineType, double price)
-    {
-        //calling the exists method to check if the meal is already in the menu if it is
-        // then nothing is added to menu
-        int flag = exists(name);
-
-        // if flag is -1 then it does not exist in the menu
-        if (flag == -1)
-        {
-            //add the meal to the list
-            menu.add(new Meal(name,mealType,cuisineType,description,this.getEmail(),price));
-        }
-    }
-
-    //method to delete a meal from the cooks menu
-    public void deleteMeal(String name)
-    {
-        // if exists returns -1 then the meal the cook is trying to delete was never added to the
-        // menu therefore it cannot be deleted
-        if(exists(name) != -1)
-        {
-            //removing the meal specified by getting the index from exists
-            menu.remove(exists(name));
-        }
-    }
-
-    // helper method which checks if a meal is already in the menu and if it is returns it's index
-    private int exists(String name)
-    {
-        int index = -1;
-        for(int i = 0; i< menu.size(); i++)
-        {
-            if (name.toLowerCase().equals(menu.get(i).getName().toLowerCase()))
-            {
-                //if it finds the meal with the name provided it gets its index
-                index = i;
-            }
-        }
-
-        //returns an index if the name was found in the menu and -1 if it was not
-        return index;
-    }
-
 }

@@ -1,6 +1,7 @@
 package UserJavaFiles;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * in this form and structure, later the data in this class will be distributed to the client
  * cook or admin class depending on the type variable
  */
-public class UserPOJO {
+public class UserPOJO implements Serializable {
     /**
      * takes any and all fields from user to the subclasses in terms of variables
      * while the user class will make sure the basics of firstname - address are not null
@@ -20,10 +21,8 @@ public class UserPOJO {
     private CreditCard creditCardInfo;
     private String blankCheque;
     private Suspension suspension;
-    private int rating;
-    private ArrayList<Meal> menu;
 
-    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, int rating, ArrayList<Meal> menu){
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -34,8 +33,21 @@ public class UserPOJO {
         this.blankCheque = blankCheque;
         this.description = description;
         this.suspension = suspension;
-        this.rating = rating;
-        this.menu = menu;
+    }
+
+    //constructor for UserPOJO with menu included. Might not be needed, depends on implementation
+    public UserPOJO(String firstName,String lastName,String email,String password,String address,String type, String description, CreditCard creditCardInfo, String blankCheque, Suspension suspension, ArrayList<Meal> inputMenu){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.type = type;
+        this.creditCardInfo = creditCardInfo;
+        this.blankCheque = blankCheque;
+        this.description = description;
+        this.suspension = suspension;
+
     }
     //must have a blank constructor for firebase use
     public  UserPOJO(){}
@@ -81,10 +93,6 @@ public class UserPOJO {
 
     public String getDescription() {return description;}
 
-    public int getRating() {return rating;}
-
-    public ArrayList<Meal> getMenu() {return menu;}
-
     //setters
 
     public void setSuspension(Suspension suspension) {
@@ -123,9 +131,6 @@ public class UserPOJO {
 
     public void setDescription(String description) {this.description = description;}
 
-    public void setRating(int rating) {this.rating = rating;}
-
-    public void setMenu(ArrayList<Meal> menu) {this.menu = menu;}
 
     //converts the POJO to an actual client class
     public Client convertToClient(){
@@ -143,7 +148,7 @@ public class UserPOJO {
         Cook cook;
         try{
             //blank cheque not needed for now
-            cook = new Cook(firstName,lastName,email,password,address,description,suspension, rating, menu);
+            cook = new Cook(firstName,lastName,email,password,address,description,suspension,blankCheque);
         }
         catch (Exception e){
             return null;

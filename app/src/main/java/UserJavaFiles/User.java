@@ -3,9 +3,12 @@ package UserJavaFiles;
 
 import java.io.Serializable;
 
+/**
+ * abstraction for the user, contains the basics in the first and last name, email
+ * password and address, what every user needs in their profile to function
+ */
 public abstract class User implements Serializable {
     private String firstName, lastName, email, password, address;
-
     //constructor for User, includes attributes firstName, lastName, email, password, address and checks if the input is correct.
     public User(String firstName,String lastName,String email,String password,String address) throws IllegalArgumentException{
         if(checkFirstName(firstName) && checkLastName(lastName) && checkEmail(email) && checkPassword(password) && checkAddress(address)){
@@ -18,8 +21,6 @@ public abstract class User implements Serializable {
             throw new IllegalArgumentException("Invalid parameter input");
         }
     }
-
-
     //getter and setter methods
     public String getFirstName(){
         return firstName;

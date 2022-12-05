@@ -1,30 +1,45 @@
 package com.example.group7mealerapp;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.firebase.database.DatabaseReference;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
+
 import android.widget.EditText;
 import com.google.firebase.database.FirebaseDatabase;
-import android.os.Bundle;
+
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.util.Base64;
 import java.util.Date;
 
 import UserJavaFiles.CreditCard;
 import UserJavaFiles.Suspension;
-import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
+
+
+import android.os.Bundle;
+
+
 /**
  * The registration page initially takes the basic info of a User (First name, Last name, Email,
  * Password, Address and Role.
  * Upon selecting a role, role specific fields are shown and required as well (Client - Credit Card
  * information / Cook - Description)
  */
-public class Registration extends AppCompatActivity
+public class Registration extends Activity
 {
     //Global variables
 
@@ -34,78 +49,8 @@ public class Registration extends AppCompatActivity
     DatabaseReference databaseReference;
     //this POJO object will be used to store data within firebase in a digestible manner
     UserPOJO user;
-//    //Text Field for first name
-//    EditText Fname = (EditText) findViewById(R.id.FirstNameField);
-//    //Get First Name of user
-//    String strFname = Fname.getText().toString();
-//    //Text field for last name
-//    EditText Lname = (EditText) findViewById(R.id.LastNameField);
-//    //Get Last Name of user
-//    String strLname = Lname.getText().toString();
-//    //Text field for email
-//    EditText Email = (EditText) findViewById(R.id.EmailField);
-//    //Get email of user
-//    String strEmail = Email.getText().toString();
-//    //Text field for password
-//    EditText Password = (EditText) findViewById(R.id.PasswordField);
-//    //Get password of user
-//    String strPassword = Password.getText().toString();
-//    //Text field for confirm password
-//    EditText rePassword = (EditText) findViewById(R.id.ConfirmPasswordField);
-//    //Get confirm password of user
-//    String strrePassword = rePassword.getText().toString();
-//    //TextField of Client and Cook Address
-//    EditText Address = (EditText) findViewById(R.id.Address);
-//    //Get address of client
-//    String strAddress = Address.getText().toString();
-//    //TextField of CookDescription
-//    EditText CookDescription = (EditText) findViewById(R.id.CookDescription);
-//    //Get description of cook
-//    String strCookDescription = CookDescription.getText().toString();
-//    //Radio button to store selection of client role
-//    RadioButton btnClient = (RadioButton) findViewById(R.id.ClientButton);
-//    //Radio button to store selection of cook role
-//    RadioButton btnCook = (RadioButton) findViewById(R.id.CookButton);
-//    //Stores user role
-//    String type = "";
-//    //TextField of credit card first name
-//    EditText CCfirstname = (EditText) findViewById(R.id.CCfname);
-//    //Get credit card first name
-//    String strCCfirstname = CCfirstname.getText().toString();
-//    //TextField of credit card last name
-//    EditText CClastname = (EditText) findViewById(R.id.CClname);
-//    //Get credit card last name
-//    String strCClastname = CClastname.getText().toString();
-//    //TextField of Client Credit Card Number
-//    EditText CCnumber = (EditText) findViewById(R.id.ClientCC);
-//    //Get Client Credit Card number
-//    String strCCnumber = CCnumber.getText().toString();
-//    //Store Credit card number as type Long
-//    Long CreditCardnumber = Long.parseLong(strCCnumber);
-//    //TextField of Client Credit Card Expiry Date
-//    EditText expDate = (EditText) findViewById(R.id.expDate);
-//    //Get client credit card expiry date as string for now
-//    String strexpDate = expDate.getText().toString();
-//    //TextField of Client Credit Card CVV
-//    EditText CCcvv = (EditText) findViewById(R.id.ClientCVV);
-//    //Get client credit card's cvv
-//    String strCCcvv = CCcvv.getText().toString();
-//    //Store Credit card cvv as type int
-//    int CVV = Integer.parseInt(strCCcvv);
-//    //TextField of expiration date
-//    EditText ccdate = (EditText) findViewById(R.id.expDate);
-//    //Store date as String
-//    String strccdate = ccdate.getText().toString();
-//    //Split date String by delimiter "/". Date String is now in a String array [month,year]
-//    String[] datearr = strccdate.split("/");
-//    //Store date as type date
-//    int month = Integer.parseInt(datearr[0]);
-//    int year = Integer.parseInt(datearr[1]);
-//    //Store date
-//    Date date = new Date(year,month,0);
-//    //Store Credit Card information as instance of CreditCard class
-//    CreditCard card = new CreditCard(strFname, strLname, strAddress,CreditCardnumber,CVV,date);
-
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_PERMISSION_CODE = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -319,9 +264,30 @@ public class Registration extends AppCompatActivity
         if(btnClient.isChecked() && (strCCcvv.isEmpty() || strCCnumber.isEmpty() || strexpDate.isEmpty()
         || strCCfirstname.isEmpty() || strCClastname.isEmpty()))
         {
-//            Toast.makeText(getApplicationContext(), "Credit Card Info must be filled", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Credit Card Info must be filled", Toast.LENGTH_LONG).show();
             btnClient.setError("All fields must be filled");
             f = false;
+        }
+        if(btnClient.isChecked())
+        {
+            CreditCard creditCard = null;
+            try{
+                creditCard = new CreditCard(strCCfirstname,strCClastname,strAddress,Integer.parseInt(strCCnumber),Integer.parseInt(strCCcvv),strexpDate);
+            }catch(ParseException e){
+                f = false;
+                btnClient.setError("incorrect date format");
+                Toast.makeText(getApplicationContext(), "exp date format wrong", Toast.LENGTH_LONG).show();
+            }catch(IllegalArgumentException e) {
+                f = false;
+                if(e.getMessage().equals("Credit card number is either too long or too short"))
+                    Toast.makeText(getApplicationContext(), "credit card number is invalid", Toast.LENGTH_LONG).show();
+                else if(e.getMessage().equals("credit card pin is invalid"))
+                    Toast.makeText(getApplicationContext(), "credit card pin is invalid", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                f = false;
+                btnClient.setError("credit card is expired!");
+                Toast.makeText(getApplicationContext(), "credit card expired " + e, Toast.LENGTH_LONG).show();
+            }
         }
 
 
@@ -397,10 +363,6 @@ public class Registration extends AppCompatActivity
         long CreditCardnumber = 0;
         //Store Credit card cvv as type int
         int CVV = 0;
-        //Store credit card expiry month as type int
-        int month = 0;
-        //Store credit card expiry year as type int
-        int year = 0;
 
         //Error handling
         try
@@ -421,28 +383,13 @@ public class Registration extends AppCompatActivity
         {
             System.out.println(e + "e");
         }
-        //Split date String by delimiter "/". Date String is now in a String array [month,year]
-        String[] datearr = strexpDate.split("/");
-        try {
-            //Convert month to type int
-            month = Integer.parseInt(datearr[0]);
-        }
-        catch(Exception e)
-        {
-            System.out.println(e + "e");
-        }
-        try {
-            //Convert year to type int
-            year = Integer.parseInt(datearr[1]);
-        }
-        catch(Exception e)
-        {
-            System.out.println(e + "e");
-        }
+        CreditCard card = null;
+        try{
+            card = new CreditCard(strCCfirstname, strCClastname, strAddress, CreditCardnumber, CVV, strexpDate);
+        }catch(Exception e){}
 
-        Date date = new Date(year,month,0);
-        //Store Credit Card information as instance of CreditCard class
-        CreditCard card = new CreditCard(strCCfirstname, strCClastname, strAddress, CreditCardnumber, CVV, date);
+
+
         //dummy bitmap for the blank cheque pic
         //IMPORTANT NOTE, bitmaps are not storable in firebase so store bitmap as ID or something else
         Bitmap cheque = null;
@@ -467,22 +414,35 @@ public class Registration extends AppCompatActivity
 
         if(RegistrationErrors())
         {
-            Intent switchPage = new Intent(Registration.this, Login.class);
+            Intent switchPage = new Intent(this, Login.class);
 
             if(type.equals("Client"))
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
-                        strCookDescription, card, null,null,0,null);
-
+                        strCookDescription, card, null,null);
 
             }
             if(type.equals("Cook"))
             {
                 //creates a POJO user with a type, type will be used to specify what object to create
                 user = new UserPOJO(strFname, strLname, strEmail, strPassword, strAddress, type,
-                        strCookDescription, null, null,new Suspension(false, (Date) null),5, null);
+                        strCookDescription, null, null,new Suspension(false, (Date) null));
+                //ask for permission to use camera first this is done automatically through android
+                //where it asks the user for perms
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                {
 
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+                }
+                else
+                {
+
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+                }
+                return;
 
             }
             //we push all our information onto the database under UserInfo
@@ -501,13 +461,69 @@ public class Registration extends AppCompatActivity
             CCnumber.setText(null);
             CCcvv.setText(null);
             expDate.setText(null);
-            //Clear remaining fields
-
-            setResult(RESULT_OK, switchPage);
             //go back to login
             startActivity(switchPage);
 
 
         }
     }
+
+    /**
+     * method that verifies the correct permissions and handles the cases
+     * @param requestCode if request code is 100 (camera permission code) allows access else denies
+     * @param permissions
+     * @param grantResults when results are permission granted then uses camera
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CAMERA_PERMISSION_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+            else
+            {
+
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /**
+     * gets the results of the camera picture being taken, saves it into a bitmap that is then
+     * encoded in base64 and saved in the database
+     * @param requestCode
+     * @param resultCode
+     * @param data bitmap that is encoded
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = databaseReference = firebaseDatabase.getReference("UserInfo");
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            //convert bitmap saved into a base 64 to be stored in Firebase
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String encodedimg = Base64.getEncoder().encodeToString(byteArray);
+
+            user.setBlankCheque(encodedimg);
+
+            databaseReference.push().setValue(user);
+            Intent switchPage = new Intent(this, Login.class);
+            Toast.makeText(getApplicationContext(), "Registration Successful. Log in now", Toast.LENGTH_LONG).show();
+            startActivity(switchPage);
+        }
+    }
+
 }

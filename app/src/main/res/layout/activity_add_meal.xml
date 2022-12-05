@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddMeal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/AddMealView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Add Meal"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/NameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name" />
+
+        <EditText
+            android:id="@+id/editTextName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter the name of the dish"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/PriceView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price" />
+
+        <EditText
+            android:id="@+id/editTextPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter the price of the dish"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/MealTypeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Meal Type" />
+
+        <RadioGroup
+            android:id="@+id/RadioGroupMealType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/BreakfastButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="Breakfast" />
+
+                <RadioButton
+                    android:id="@+id/LunchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="Lunch" />
+
+                <RadioButton
+                    android:id="@+id/DinnerButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="Dinner" />
+
+                <RadioButton
+                    android:id="@+id/ClearButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="N/A" />
+
+
+            </LinearLayout>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/CuisineTypeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuisine Type" />
+
+        <EditText
+            android:id="@+id/editTextCuisineType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter the type of cuisine"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/IngredientsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingredients" />
+
+        <EditText
+            android:id="@+id/editTextIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="List your ingredients here"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/AllergensView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Allergens" />
+
+        <EditText
+            android:id="@+id/editTextAllergens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="list possible allergens here"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/DescriptionView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description" />
+
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter a description for your dish"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/OfferView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Do you want to offer this meal to clients immediately?" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/OfferYesButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="Yes" />
+
+                <RadioButton
+                    android:id="@+id/OfferNoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:hint="No" />
+
+            </LinearLayout>
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/AddMealButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="50dp"
+                android:onClick="RegisterButtonClick"
+                android:text="Add meal" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

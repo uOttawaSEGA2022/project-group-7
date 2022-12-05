@@ -31,7 +31,7 @@ public class ComplaintList extends ArrayAdapter<Complaint> {
         View listViewItem = inflater.inflate(R.layout.layout_complaint_list, null, true);
 
         TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
-        TextView textViewDescription = (TextView) listViewItem.findViewById(R.id.textViewMealType);
+        TextView textViewDescription = (TextView) listViewItem.findViewById(R.id.textViewComplaint);
 
         Complaint complaint = complaints.get(position);
         textViewName.setText(complaint.getEmail());

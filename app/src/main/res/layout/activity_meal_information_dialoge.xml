@@ -51,6 +51,20 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delete" />
+
+        <Button
+            android:id="@+id/buttonSetActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="setActive" />
+
+        <Button
             android:id="@+id/buttonPurchase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

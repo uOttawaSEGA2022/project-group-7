@@ -10,6 +10,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +23,7 @@ import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Complaint;
 import UserJavaFiles.Cook;
+import UserJavaFiles.Meal;
 import UserJavaFiles.UserPOJO;
 
 public class Login extends AppCompatActivity {
@@ -31,11 +33,11 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     //reference to the actual database in firebase
     DatabaseReference databaseReference;
-
+    EditText email,password = null;
 
     // Variable for sending user
     int type = 0;
-
+    Button btnLoginCLick;
     //User variable to send
     UserPOJO user = new UserPOJO();
     @Override
@@ -43,34 +45,44 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button loginButton = (Button) findViewById(R.id.btnLogin);
+
+
         //see comments in registration for explanation
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("UserInfo");
+        email =  findViewById(R.id.loginEmail);
+        password =  findViewById(R.id.loginPassword);
 
+
+
+        btnLoginCLick = (Button)findViewById(R.id.btnLogin);
+        btnLoginCLick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnLoginClick(view);
+            }
+        });
     }
     //navigate to registration page
     public void btnRegisterClick(View view)
     {
-        Intent intent = new Intent(getApplicationContext(),Registration.class);
-        startActivityForResult(intent,0);//convert this method, it is depricated
+        Intent intent = new Intent(this,Registration.class);
+        startActivity(intent);
 
     }
-    /**
-     * what is implemented now is just the grabbing of the user data and
-     * storing it into a user object,
-     */
-    public void btnLoginClick(View view){
+
+    private void btnLoginClick(View view){
+
         //text field variables
-        EditText email =  findViewById(R.id.loginEmail);
-        EditText password =  findViewById(R.id.loginPassword);
+
 
         //listens to the database in real time
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             //method called on start and whenever data is changed
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 //Variables for toast display
                 boolean flag = false;
                 Context context = getApplicationContext();
@@ -118,6 +130,14 @@ public class Login extends AppCompatActivity {
                             type = 3;
                             sendUser(type);
                         }
+                        /*
+                        this simple line of code removes the bug of auto logging in
+                        when the user logins then goes back to register, cause the event
+                        listener is still going it listens to change and auto logs on
+                        make VERY sure every time ur done listening to event
+                        that the event listener is remove from firebase!!!!
+                         */
+                        databaseReference.removeEventListener(this);
                         break;
                     }
 
@@ -171,8 +191,8 @@ public class Login extends AppCompatActivity {
 
     }
 
-    // Was going to be the function to send user to welcome page
-    public void sendUser(int type)
+
+    private void sendUser(int type)
     {
        Intent switchPage = new Intent(Login.this, WelcomePage.class);
         //call either convert to client or convert to cook here or convert to admin
@@ -181,7 +201,7 @@ public class Login extends AppCompatActivity {
         if(type == 1)
         {
             Client currentUser = user.convertToClient();//surround in try and catch block
-           switchPage.putExtra("Client",currentUser);
+            switchPage.putExtra("Client",currentUser);
         }
 
         //Type 2 is cook so convert user into cook
@@ -201,8 +221,11 @@ public class Login extends AppCompatActivity {
 
            switchPage.putExtra("Admin",currentUser);
        }
+
+
         setResult(RESULT_OK, switchPage);
         startActivity(switchPage);
 
     }
+
 }
