@@ -188,10 +188,20 @@ public class Meal implements Serializable {
             flag = false;
         else if(!(price == mealtoCompare.price))
             flag = false;
+        else if(!(ingredients.equals(mealtoCompare.ingredients)))
+            flag = false;
+        else if(!(allergens.equals(mealtoCompare.allergens)))
+            flag = false;
+        else if(!(offered == mealtoCompare.offered))
+            flag = false;
+        else if(!(email.equals(mealtoCompare.email)))
+            flag = false;
+        else if(!(description.equals(mealtoCompare.description)))
+            flag = false;
         return flag;
     }
     public String toString(){
-        return name + " " + mealType + " " + cusineType + " " + price;
+        return name + " " + mealType + " " + cusineType + " " + price + " " + ingredients + " " + allergens + " " + offered + " " + email + " " + description;
     }
 
 }

@@ -14,7 +14,7 @@ import UserJavaFiles.Suspension;
 public class MealTest {
     @Test
     void createMeal(){
-        Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5, true);
+        Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5, true,"","");
 
         try{
             assertNotNull(testMeal);
@@ -27,7 +27,7 @@ public class MealTest {
     @Test
     void getDescription() {
         try {
-            Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5, true);
+            Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5, true,"","");
             assertEquals("verygood",testMeal.getDescription());
         }catch(Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class MealTest {
     @Test
     void getName() {
         try {
-            Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5, true);
+            Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5, true,"","");
             assertEquals("John",testMeal.getName());
         }catch(Exception e) {
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class MealTest {
     @Test
     void getMealType() {
         try {
-            Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5,true);
+            Meal testMeal = new Meal("John", "hot", "goood", "verygood", "@hotmail", 2.5,true,"","");
             assertEquals("hot",testMeal.getMealType());
         }catch(Exception e) {
             e.printStackTrace();
