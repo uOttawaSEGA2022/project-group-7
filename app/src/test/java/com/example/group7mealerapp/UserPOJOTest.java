@@ -14,10 +14,10 @@ import UserJavaFiles.Suspension;
 import UserJavaFiles.UserPOJO;
 
 class UserPOJOTest {
-
+    Long num = Long.parseLong("1234123412341234");
     @Test
     void convertToClient() throws Exception {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,"01/24");
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         Suspension status = new Suspension(false,new Date(0,1,1));
         Client testClient = new Client("Jane","Doe","something@mail.com","114514","114 514 Drive",testCC);
         UserPOJO user = new UserPOJO("Jane","Doe","something@mail.com","114514","114 514 Drive","Client","boring person",testCC,"",status);
@@ -28,7 +28,7 @@ class UserPOJOTest {
 
     @Test
     void convertToCook() throws Exception {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,"01/24");
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         Suspension status = new Suspension(false,new Date(0,1,1));
         Cook testCook = new Cook("Jane","Doe","something@mail.com","114514","114 514 Drive","boring person",status, "");
         UserPOJO user = new UserPOJO("Jane","Doe","something@mail.com","114514","114 514 Drive","Cook","boring person",testCC,"",status);
@@ -39,7 +39,7 @@ class UserPOJOTest {
 
     @Test
     void convertToAdministrator() throws Exception {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,"01/24");
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         Suspension status = new Suspension(false,new Date(0,1,1));
         Administrator testAdmin = new Administrator("Jane","Doe","something@mail.com","114514","114 514 Drive");
         UserPOJO user = new UserPOJO("Jane","Doe","something@mail.com","114514","114 514 Drive","Administrator","boring person",testCC,"",status);
