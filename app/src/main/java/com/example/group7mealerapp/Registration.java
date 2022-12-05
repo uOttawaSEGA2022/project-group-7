@@ -272,21 +272,29 @@ public class Registration extends Activity
         {
             CreditCard creditCard = null;
             try{
-                creditCard = new CreditCard(strCCfirstname,strCClastname,strAddress,Integer.parseInt(strCCnumber),Integer.parseInt(strCCcvv),strexpDate);
+                creditCard = new CreditCard(strCCfirstname,strCClastname,strAddress,Long.parseLong(strCCnumber),Integer.parseInt(strCCcvv),strexpDate);
             }catch(ParseException e){
                 f = false;
-                btnClient.setError("incorrect date format");
+                expDate.setError("invalid expiry date format");
                 Toast.makeText(getApplicationContext(), "exp date format wrong", Toast.LENGTH_LONG).show();
             }catch(IllegalArgumentException e) {
                 f = false;
-                if(e.getMessage().equals("Credit card number is either too long or too short"))
+                System.out.println("workaholic " + e.getMessage());
+                if(e.getMessage().equals("Credit card number must be 16 digits long")){
                     Toast.makeText(getApplicationContext(), "credit card number is invalid", Toast.LENGTH_LONG).show();
-                else if(e.getMessage().equals("credit card pin is invalid"))
+                    CCnumber.setError("credit card number is invalid");
+                }
+
+                else if(e.getMessage().equals("PIN is invalid")){
                     Toast.makeText(getApplicationContext(), "credit card pin is invalid", Toast.LENGTH_LONG).show();
+                    CCcvv.setError("credit card pin is invalid");
+                }
+
             } catch (Exception e) {
                 f = false;
                 btnClient.setError("credit card is expired!");
                 Toast.makeText(getApplicationContext(), "credit card expired " + e, Toast.LENGTH_LONG).show();
+                expDate.setError("card expired");
             }
         }
 
@@ -359,7 +367,7 @@ public class Registration extends Activity
         EditText CCcvv = (EditText) findViewById(R.id.ClientCVV);
         //Get client credit card's cvv
         String strCCcvv = CCcvv.getText().toString();
-        //Store Credit card number as type Long
+        //Store Credit card number as type int
         long CreditCardnumber = 0;
         //Store Credit card cvv as type int
         int CVV = 0;

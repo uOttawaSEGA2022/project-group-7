@@ -32,9 +32,10 @@ public class CreditCard implements Serializable {
             throw new IllegalArgumentException("Last name is invalid");
         }else if(address == null || address.isEmpty()){
             throw new IllegalArgumentException("Address is invalid");
-        }else if(String.valueOf(number).length()>19 || String.valueOf(number).length()<8){
-            throw new IllegalArgumentException("Credit card number is either too long or too short");
-        }else if(String.valueOf(pin).length() != 3){
+        }else if(String.valueOf(number).length() != 16){
+            System.out.println(String.valueOf(number).length());
+            throw new IllegalArgumentException("Credit card number must be 16 digits long");
+        }else if(Integer.toString(pin).length() != 3){
             throw new IllegalArgumentException("PIN is invalid");
         }
         this.firstName = firstName;
