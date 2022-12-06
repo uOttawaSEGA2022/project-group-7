@@ -68,8 +68,8 @@ public class purchaseHistory extends AppCompatActivity {
         listViewOrders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //only able to rate and compain if you are client
-                if(user.getClass() == Client.class){
+                //only able to rate and compain if you are client and the state of the order is accepted
+                if(user.getClass() == Client.class && orders.get(i).getState().equals("ACCEPTED")){
                     Order order = orders.get(i);
                     showOrderDialogue(order);
 
@@ -89,7 +89,7 @@ public class purchaseHistory extends AppCompatActivity {
                 orders.clear();
                 for(DataSnapshot postSnapshot : snapshot.getChildren()){
                     Order order = postSnapshot.getValue(Order.class);
-                    if(user.getClass() == Client.class && order.getUserEmail().equals(order.getUserEmail())){
+                    if(user.getClass() == Client.class && order.getUserEmail().equals(user.getEmail())){
                         orders.add(order);
                     }
 
