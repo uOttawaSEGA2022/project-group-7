@@ -46,8 +46,9 @@ public class cook_profile extends AppCompatActivity
 
         if(user.getClass() == Cook.class)
         {
+            //Display cook name
             name.setText("Name: " + user.getFirstName() + " " + user.getLastName());
-            //TODO: show rating
+            //Display cook rating
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = firebaseDatabase.getReference("Ratings");
             databaseReference.addValueEventListener(new ValueEventListener() {

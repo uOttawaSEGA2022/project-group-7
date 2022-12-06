@@ -53,9 +53,6 @@ public class complaints_page extends AppCompatActivity {
 
         complaints = new ArrayList<>();
         String id = databaseReference.push().getKey();
-        //creates a complaint since we dont have any atm
-        /*complaint = new Complaint("cook@gmail.com", "there was rat in my soup!", id);
-        databaseReference.child(id).setValue(complaint);*/
 
         //remove between these comments once done with this temp
         //catching user information and loading it to page
