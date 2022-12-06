@@ -109,10 +109,11 @@ public class Order implements Serializable {
      * @param order boolean value, false if not rated true otherwise
      */
     public void setRatedState(Order order){
+
         HashMap<String,Object> map = new HashMap<String,Object>();
         if(!this.isRated){
             this.isRated = true;
-            map.put("isRated", true);
+            map.put("rated", true);
         }
         else{
             return;
@@ -125,7 +126,9 @@ public class Order implements Serializable {
                 Order temp = new Order();
                 for (DataSnapshot child: children){
                     temp = child.getValue(Order.class);
-                    if (temp.equals(meal)){
+                    System.out.println("im in boss " + order.getId() + " " + temp.getId());
+                    if (temp.equals(order)){
+
                         String id = child.getKey();
                         firebaseDatabase.getReference("Orders").child(id).updateChildren(map);
                         databaseReference.removeEventListener(this);
@@ -142,6 +145,9 @@ public class Order implements Serializable {
 
     //equals method
     public boolean equals(Order orderToCompareTo) {
-        return orderToCompareTo.id.equals(this.id);
+        if (orderToCompareTo.getId() == id)
+            return true;
+        else
+            return false;
     }
 }

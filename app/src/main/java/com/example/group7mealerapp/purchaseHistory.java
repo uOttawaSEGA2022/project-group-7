@@ -69,7 +69,7 @@ public class purchaseHistory extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //only able to rate and compain if you are client and the state of the order is accepted
-                if(user.getClass() == Client.class && orders.get(i).getState().equals("ACCEPTED")){
+                if(user.getClass() == Client.class && orders.get(i).getState().equals("ACCEPTED") && !orders.get(i).isRated()){
                     Order order = orders.get(i);
                     showOrderDialogue(order);
 
@@ -160,8 +160,10 @@ public class purchaseHistory extends AppCompatActivity {
 
                     if(flag)
                     {
+                        order.setRatedState(order);
                         rating.setRatingDB();
-                        order.setRated(true);
+
+
                         finish();
                         b.dismiss();
                     }

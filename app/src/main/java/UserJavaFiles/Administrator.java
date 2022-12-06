@@ -59,12 +59,58 @@ public class Administrator extends User {
                 }
             }
 
+
+            //no need for this function but must be overridden
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        setAllInactive(email);
+    }
+
+    /**
+     * helper method that sets all the cooks meals to inactive once banned/suspended
+     * @param email email of the cook being banned/suspended
+     */
+    private void setAllInactive(String email){
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("offered",false);
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Meals");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //calls an iterator on the children in the database IE all users stored
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                Meal temp = new Meal();
+                //this loop iterates through the DB under the userInfo block
+                for (DataSnapshot child: children){
+
+                    //no logic just stores the value onto user
+                    temp = child.getValue(Meal.class);
+
+                    //comparing the email and password from the database with the inputted text fields
+                    if (temp.getEmail().equals(email) && temp.isOffered()){
+
+                        String id = child.getKey();
+
+                        firebaseDatabase.getReference("Meals").child(id).updateChildren(map);
+
+                        databaseReference.removeEventListener(this);
+                        break;
+
+                    }
+
+                    temp = null;
+                }
+            }
+
             //no need for this function but must be overridden
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
 
     }
+
     //equals to method
     public boolean equalsTo(Administrator admin){
         return this.getAddress() == admin.getAddress() && this.getFirstName() == admin.getFirstName() && this.getLastName() == admin.getLastName()
