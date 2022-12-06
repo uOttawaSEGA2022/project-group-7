@@ -220,6 +220,8 @@ public class purchaseHistory extends AppCompatActivity {
                 if(flag && order.getState().equals("ACCEPTED"))
                 {
                     client.addComplaintDB(strComplaint,email);
+                    //after a complaint is sent the client cannot rate it or complain again
+                    order.setRatedState(order);
                     Toast.makeText(getApplicationContext(), "complaint issued wait for a response from admin", Toast.LENGTH_LONG).show();
                     b.dismiss();
                 }
