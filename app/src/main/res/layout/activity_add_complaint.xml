@@ -12,8 +12,9 @@
             android:id="@+id/complaintDescriptionView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="complaint description"
-            android:textSize="34sp" />
+            android:text="We're sorry for your negative experience"
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/editTextComplaintDescription"
