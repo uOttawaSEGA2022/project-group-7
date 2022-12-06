@@ -34,8 +34,8 @@ public class MealList extends ArrayAdapter<Meal> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.layout_meal_list, null, true);
         //get the text views of the xml file
-        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
-        TextView textViewMealType = (TextView) listViewItem.findViewById(R.id.textViewComplaint);
+        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewMeal);
+        TextView textViewMealType = (TextView) listViewItem.findViewById(R.id.textViewEmail);
         TextView textViewCusineType = (TextView) listViewItem.findViewById(R.id.textViewCusineType);
         TextView textViewPrice = (TextView) listViewItem.findViewById(R.id.textViewPrice);
         TextView textViewActive = (TextView) listViewItem.findViewById(R.id.textViewActive);

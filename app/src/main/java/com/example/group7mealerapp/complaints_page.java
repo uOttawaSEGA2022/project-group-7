@@ -33,7 +33,6 @@ import listViewFiles.ComplaintList;
 import UserJavaFiles.Cook;
 import UserJavaFiles.Suspension;
 import UserJavaFiles.User;
-import UserJavaFiles.UserPOJO;
 
 public class complaints_page extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
