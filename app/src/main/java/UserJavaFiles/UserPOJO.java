@@ -61,6 +61,7 @@ public class UserPOJO implements Serializable {
         return password;
     }
 
+
     public String getAddress() {
         return address;
     }
