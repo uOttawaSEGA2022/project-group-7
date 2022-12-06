@@ -1,9 +1,12 @@
 package com.example.group7mealerapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Base64;
+
 import UserJavaFiles.Cook;
 import UserJavaFiles.Rating;
 import UserJavaFiles.User;
@@ -23,9 +28,9 @@ import codeModules.Modules;
 public class cook_profile extends AppCompatActivity
 {
     Button btnSignOut, btnPendingOrders, btnApprove, btnDecline;
-    TextView name, description, rating;
+    TextView name, description, rating,email,address;
     User user;
-
+    ImageView blankCheque;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -39,15 +44,26 @@ public class cook_profile extends AppCompatActivity
         //initialize text fields
         name = (TextView)findViewById(R.id.txtName);
         rating = (TextView)findViewById(R.id.txtRating);
-
+        description = (TextView)findViewById(R.id.txtDescription);
+        email = (TextView)findViewById((R.id.txtEmail));
+        address = (TextView)findViewById(R.id.txtAddress);
+        blankCheque = (ImageView)findViewById(R.id.imgBlankCheque);
         //get user info from welcome page
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
 
+
         if(user.getClass() == Cook.class)
         {
+            Cook cook = (Cook) user;
             //Display cook name
             name.setText("Name: " + user.getFirstName() + " " + user.getLastName());
+            description.setText("description: " + cook.getDescription());
+            email.setText(("email: " + cook.getEmail()));
+            address.setText("Address: " + cook.getAddress());
+            byte[] imageString = Base64.getDecoder().decode(cook.getBlankCheque());
+            Bitmap image = BitmapFactory.decodeByteArray(imageString,0,imageString.length);
+            blankCheque.setImageBitmap(image);
             //Display cook rating
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = firebaseDatabase.getReference("Ratings");
@@ -65,10 +81,10 @@ public class cook_profile extends AppCompatActivity
                         }
                         temp = null;
                     }
-                    //set the text within the function or else errors will occur!
-//                    text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+
-//                            ", you are a cook with rating : " + total/size);
+
                     rating.setText("Rating: " + total/size);
+                    if(size == 0)
+                        rating.setText("unrated");
                     databaseReference.removeEventListener(this);
                 }
                 //no need for this function but must be overridden

@@ -32,9 +32,12 @@ public class PendingPurchasesList extends ArrayAdapter<Order>
         View listViewItem = inflater.inflate(R.layout.layout_pending_orders, null, true);
 
         TextView textViewMeal = (TextView) listViewItem.findViewById(R.id.textViewMeal);
-
+        TextView textViewPrice = (TextView) listViewItem.findViewById(R.id.textViewMealPrice);
+        TextView textViewClient = (TextView) listViewItem.findViewById(R.id.textViewMealClient);
         Order order = orders.get(position);
-        textViewMeal.setText(String.valueOf(order.getMeal()));
+        textViewMeal.setText(order.getMeal().getName());
+        textViewPrice.setText("$" + order.getMeal().getPrice());
+        textViewClient.setText(order.getUserEmail());
         return listViewItem;
     }
 }

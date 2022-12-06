@@ -47,7 +47,7 @@ public class WelcomePage extends AppCompatActivity {
     Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory, btnProfile;
     TextView text;
     User user;
-    ImageView blankCheque;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class WelcomePage extends AppCompatActivity {
         btnProfile.setVisibility((View.GONE));
 
 
-        blankCheque = (ImageView)findViewById(R.id.imageViewBlankCheque);
+
         buttonOrderHistory = (Button)findViewById(R.id.buttonOrderHistory);
         buttonOrderHistory.setVisibility((View.GONE));
         //blankCheque.setVisibility((View.GONE));
@@ -96,10 +96,12 @@ public class WelcomePage extends AppCompatActivity {
                 if (cook.getSuspension().getPerma() == true){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently banned until further notice!");
                     buttonMenu.setVisibility((View.GONE));
+                    btnProfile.setVisibility(View.GONE);
                 }
                 else if (!cook.getSuspension().getBannedUntil().equals("OKAY") ){
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are currently suspended until " + cook.getSuspension().getBannedUntil());
                     buttonMenu.setVisibility((View.GONE));
+                    btnProfile.setVisibility(View.GONE);
 
                 }
                 //EXAMPLE CODE HERE FOR GETTING THE AVERAGE OF A COOKS RATING!
@@ -131,10 +133,7 @@ public class WelcomePage extends AppCompatActivity {
                         }
                     });*/
 
-                    byte[] imageString = Base64.getDecoder().decode(cook.getBlankCheque());
-                    Bitmap image = BitmapFactory.decodeByteArray(imageString,0,imageString.length);
-                    blankCheque.setImageBitmap(image);
-                    blankCheque.setVisibility(View.VISIBLE);
+
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
                 }
                 //END OF EXAMPLE CODE

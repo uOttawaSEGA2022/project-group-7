@@ -43,7 +43,6 @@ public class pending_orders extends AppCompatActivity
     DatabaseReference databaseReference, cookDatabaseReference;
     ListView listView;
     List<Order> orders;
-    Order order;
     User user;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +120,7 @@ public class pending_orders extends AppCompatActivity
         final AlertDialog b = dialogBuilder.create();
         b.show();
 
-        //TODO: change state of orders to accepted or rejected after onClick
+
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

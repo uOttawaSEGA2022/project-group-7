@@ -88,7 +88,7 @@ public class Order implements Serializable {
                 Order temp = new Order();
                 for (DataSnapshot child: children){
                     temp = child.getValue(Order.class);
-                    if (temp.equals(meal)){
+                    if (temp.equals(order)){
                         String id = child.getKey();
                         firebaseDatabase.getReference("Orders").child(id).updateChildren(map);
                         databaseReference.removeEventListener(this);
