@@ -12,12 +12,12 @@ import java.text.SimpleDateFormat;
 import UserJavaFiles.CreditCard;
 
 class CreditCardTest {
-
+    Long num = Long.parseLong("1234123412341234");
     @Test
     void createCreditCard(){
         CreditCard testCC = null;
         try{
-            testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,"01/24");
+            testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         }
         catch (Exception e){
             System.out.println("what went wrong" + e);
@@ -30,11 +30,11 @@ class CreditCardTest {
         }
     }
 
-    /*//Testing to see if illegal params for the constructor throws errors.
+    //Testing to see if illegal params for the constructor throws errors.
     @Test
     void testCreateException(){
         try {
-            CreditCard firstNameWrong = new CreditCard("", "Doe", "114 514 Drive", 1145141919, 114, null);
+            CreditCard firstNameWrong = new CreditCard("", "Doe", "114 514 Drive", num, 114, "01/24");
             fail();
         }catch(IllegalArgumentException e){
 
@@ -43,7 +43,7 @@ class CreditCardTest {
         }
 
         try {
-            CreditCard lastNameWrong = new CreditCard("Jane","","114 514 Drive",1145141919,114,null);
+            CreditCard lastNameWrong = new CreditCard("Jane","","114 514 Drive",num,114,"01/24");
             fail();
         }catch(IllegalArgumentException e){
 
@@ -52,7 +52,7 @@ class CreditCardTest {
         }
 
         try {
-            CreditCard addressWrong = new CreditCard("Jane","Doe","",1145141919,114,null);
+            CreditCard addressWrong = new CreditCard("Jane","Doe","",num,114,"01/24");
             fail();
         }catch(IllegalArgumentException e){
 
@@ -61,7 +61,7 @@ class CreditCardTest {
         }
 
         try {
-            CreditCard numberWrong = new CreditCard("Jane","Doe","114 514 Drive",114,114,null);
+            CreditCard numberWrong = new CreditCard("Jane","Doe","114 514 Drive",114,114,"01/24");
             fail();
         }catch(IllegalArgumentException e){
 
@@ -70,7 +70,7 @@ class CreditCardTest {
         }
 
         try {
-            CreditCard pinWrong = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114514,null);
+            CreditCard pinWrong = new CreditCard("Jane","Doe","114 514 Drive",num,114514,"01/24");
             fail();
         }catch(IllegalArgumentException e){
 
@@ -80,8 +80,8 @@ class CreditCardTest {
     }
 
     @Test
-    void getFirstName() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void getFirstName() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         //try{
             assertEquals("Jane",testCC.getFirstName());
         //}catch(AssertionError e){
@@ -91,61 +91,61 @@ class CreditCardTest {
     }
 
     @Test
-    void setFirstName() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void setFirstName() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         testCC.setFirstName("John");
         assertEquals("John",testCC.getFirstName());
     }
 
     @Test
-    void getLastName() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void getLastName() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         assertEquals("Doe",testCC.getLastName());
     }
 
     @Test
-    void setLastName() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void setLastName() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         testCC.setLastName("Dove");
         assertEquals("Dove",testCC.getLastName());
     }
 
     @Test
-    void getAddress() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void getAddress() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         assertEquals("114 514 Drive",testCC.getAddress());
     }
 
     @Test
-    void setAddress() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void setAddress() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         testCC.setAddress("1919 Drive");
         assertEquals("1919 Drive",testCC.getAddress());
     }
 
     @Test
-    void getNumber() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
-        assertEquals((long)1145141919,testCC.getNumber());
+    void getNumber() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
+        assertEquals((long)num,testCC.getNumber());
     }
 
     @Test
-    void setNumber() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void setNumber() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         testCC.setNumber(1919114514);
         assertEquals((long)1919114514,testCC.getNumber());
     }
 
     @Test
-    void getPin() {
-        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",1145141919,114,null);
+    void getPin() throws Exception {
+        CreditCard testCC = new CreditCard("Jane","Doe","114 514 Drive",num,114,"01/24");
         assertEquals(114,testCC.getPin());
     }
 
     @Test
-    void setPin() {
-        CreditCard testCC = new CreditCard("Jane", "Doe", "114 514 Drive", 1145141919, 114, null);
+    void setPin() throws Exception {
+        CreditCard testCC = new CreditCard("Jane", "Doe", "114 514 Drive", num, 114, "01/24");
         testCC.setPin(514);
         assertEquals(514, testCC.getPin());
-    }*/
+    }
 }

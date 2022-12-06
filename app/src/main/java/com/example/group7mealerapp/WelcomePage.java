@@ -44,7 +44,7 @@ import codeModules.Modules;
  */
 public class WelcomePage extends AppCompatActivity {
     //sign out button
-    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory;
+    Button buttonSignOut, complaintBtn, searchBtn, buttonMenu, buttonOrderHistory, btnProfile;
     TextView text;
     User user;
     ImageView blankCheque;
@@ -61,6 +61,8 @@ public class WelcomePage extends AppCompatActivity {
         buttonSignOut = (Button)findViewById(R.id.btnSO);
         buttonMenu = (Button)findViewById(R.id.btnEditMenu);
         buttonMenu.setVisibility((View.GONE));
+        btnProfile = findViewById(R.id.btnProfile);
+        btnProfile.setVisibility((View.GONE));
 
 
         blankCheque = (ImageView)findViewById(R.id.imageViewBlankCheque);
@@ -87,6 +89,7 @@ public class WelcomePage extends AppCompatActivity {
         if (user.getClass() == Cook.class){
             complaintBtn.setVisibility(View.VISIBLE);
             buttonMenu.setVisibility(View.VISIBLE);
+            btnProfile.setVisibility(View.VISIBLE);
             Cook cook = (Cook) user;
             //for now cooks cant search and purchase meals for themselves
             try{
@@ -186,8 +189,12 @@ public class WelcomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {buttonOrderHistoryClick();}
         });
-    }
 
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {openCookProfile();}
+        });
+    }
 
     //button click methods
     public void btnComplaintClick()
@@ -215,7 +222,14 @@ public class WelcomePage extends AppCompatActivity {
         //clear user
         user = null;
         startActivity(intent);
+    }
 
+    public void openCookProfile(){
+        Intent intent = new Intent(this, cook_profile.class);
+        Cook cook = (Cook) user;
+        intent.putExtra("Cook", cook);
+        setResult(RESULT_OK, intent);
+        startActivity(intent);
     }
     public void btnSearchClick(){
         Intent switchPage = new Intent(this, Search.class);
