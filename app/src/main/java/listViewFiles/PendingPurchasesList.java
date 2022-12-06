@@ -11,7 +11,7 @@ import com.example.group7mealerapp.R;
 
 import java.util.List;
 
-import UserJavaFiles.Complaint;
+
 import UserJavaFiles.Order;
 
 public class PendingPurchasesList extends ArrayAdapter<Order>

@@ -1,40 +1,27 @@
 package com.example.group7mealerapp;
 
-import androidx.appcompat.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.view.View;
 import android.widget.Button;
 import android.os.Bundle;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.Base64;
+
+
 
 import UserJavaFiles.Administrator;
 import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
 
-import UserJavaFiles.Meal;
-import UserJavaFiles.Order;
-import UserJavaFiles.Rating;
 import UserJavaFiles.User;
 import codeModules.Modules;
 
@@ -68,18 +55,7 @@ public class WelcomePage extends AppCompatActivity {
 
         buttonOrderHistory = (Button)findViewById(R.id.buttonOrderHistory);
         buttonOrderHistory.setVisibility((View.GONE));
-        //blankCheque.setVisibility((View.GONE));
 
-        //TESTING THE RATING (PUSHING A RATING)
-        /*Rating rating;
-        try {
-            rating = new Rating(5, "remy@gmail.com");
-            rating.setRatingDB();
-        }catch (Exception e){
-            System.out.println(e + " should be illegal argument!");
-        }*/
-
-        //END OF TESTING
         //get the user from login
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
@@ -106,34 +82,6 @@ public class WelcomePage extends AppCompatActivity {
                 }
                 //EXAMPLE CODE HERE FOR GETTING THE AVERAGE OF A COOKS RATING!
                 else {
-                    /*FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                    DatabaseReference databaseReference = firebaseDatabase.getReference("Ratings");
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Iterable<DataSnapshot> children = snapshot.getChildren();
-                            Rating temp = new Rating();
-                            double total = 0;
-                            int size = 0;
-                            for (DataSnapshot child : children) {
-                                temp = child.getValue(Rating.class);
-                                if (temp.getEmail().equals(cook.getEmail())) {
-                                    total += temp.getRating();
-                                    size++;
-                                }
-                                temp = null;
-                            }
-                            //set the text within the function or else errors will occur!
-                            text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+
-                                    ", you are a cook with rating : " + total/size);
-                            databaseReference.removeEventListener(this);
-                        }
-                        //no need for this function but must be overridden
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });*/
-
-
                     text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a cook.");
                 }
                 //END OF EXAMPLE CODE
@@ -142,11 +90,6 @@ public class WelcomePage extends AppCompatActivity {
             }
         }
         if (user.getClass() == Client.class ){
-            //TEST CODE FOR ORDERS CHECK HERE FOR REFERENCE (PUSHING ORDER TO DB)
-            /*Client client = (Client) user;
-            Meal meal = new Meal("sphagetti","Dinner","Itallian","sphagetti","remy@gmail.com",12.00,false);
-            client.addOrder("remy@gmail.com", meal);*/
-            //END OF TEST CODE
             searchBtn.setVisibility(View.VISIBLE);
             //if Client logs on then the complaint button is invisible
             text.setText("welcome," +user.getFirstName()+' '+user.getLastName()+ ", you are a client.");

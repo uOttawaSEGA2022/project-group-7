@@ -20,15 +20,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Base64;
 
+import UserJavaFiles.Client;
 import UserJavaFiles.Cook;
+import UserJavaFiles.Order;
 import UserJavaFiles.Rating;
 import UserJavaFiles.User;
 import codeModules.Modules;
+import listViewFiles.OrderList;
 
 public class cook_profile extends AppCompatActivity
 {
     Button btnSignOut, btnPendingOrders, btnApprove, btnDecline;
-    TextView name, description, rating,email,address;
+    TextView name, description, rating,email,address,numberSold;
     User user;
     ImageView blankCheque;
     @Override
@@ -48,6 +51,7 @@ public class cook_profile extends AppCompatActivity
         email = (TextView)findViewById((R.id.txtEmail));
         address = (TextView)findViewById(R.id.txtAddress);
         blankCheque = (ImageView)findViewById(R.id.imgBlankCheque);
+        numberSold = (TextView)findViewById(R.id.txtNumberSold);
         //get user info from welcome page
         Modules modules = new Modules();
         user = modules.catchUser(getIntent());
@@ -90,6 +94,25 @@ public class cook_profile extends AppCompatActivity
                 //no need for this function but must be overridden
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+            DatabaseReference databaseReferenceOrders = firebaseDatabase.getReference("Orders");
+            databaseReferenceOrders.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int noSold = 0;
+                    for(DataSnapshot postSnapshot : snapshot.getChildren()){
+                        Order order = postSnapshot.getValue(Order.class);
+                        if(order.getCookEmail().equals(user.getEmail()) && order.getState().equals("ACCEPTED")){
+                            noSold++;
+                        }
+                    }
+                    numberSold.setText("number of meals sold " + noSold);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
             });
         }
