@@ -108,7 +108,7 @@ public class cook_profile extends AppCompatActivity
                         }
                     }
                     numberSold.setText("number of meals sold " + noSold);
-                    databaseReference.removeEventListener(this);
+                    databaseReferenceOrders.removeEventListener(this);
                 }
 
                 @Override
