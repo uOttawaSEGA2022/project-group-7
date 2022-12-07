@@ -86,7 +86,7 @@ public class cook_profile extends AppCompatActivity
                         temp = null;
                     }
 
-                    rating.setText("Rating: " + (double)Math.round(total/size));
+                    rating.setText("Cook Rating: " + (double)Math.round((total/size) * 10)/10);
                     if(size == 0)
                         rating.setText("unrated");
                     databaseReference.removeEventListener(this);

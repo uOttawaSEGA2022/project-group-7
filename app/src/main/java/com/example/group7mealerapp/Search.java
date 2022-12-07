@@ -261,7 +261,7 @@ public class Search extends AppCompatActivity {
                                         temp = null;
                                     }
 
-                                    editTextViewRating.setText("Cook Rating: " + (double)Math.round(total/size));
+                                    editTextViewRating.setText("Cook Rating: " + (double)Math.round((total/size) * 10)/10);
                                     if(size == 0)
                                         editTextViewRating.setText("unrated");
                                     databaseReference.removeEventListener(this);
