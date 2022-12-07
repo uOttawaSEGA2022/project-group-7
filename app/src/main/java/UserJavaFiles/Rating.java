@@ -28,7 +28,12 @@ public class Rating implements Serializable {
     public Rating(){}
     //getters and setters
     public double getRating() {return rating;}
-    public void setRating(double rating) {this.rating = rating;}
+    public void setRating(double rating) {
+        if(rating>5 || rating <0){
+            throw new IllegalArgumentException();
+        }
+        this.rating = rating;
+    }
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
 
