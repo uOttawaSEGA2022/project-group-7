@@ -30,7 +30,7 @@ import listViewFiles.OrderList;
 
 public class cook_profile extends AppCompatActivity
 {
-    Button btnSignOut, btnPendingOrders, btnApprove, btnDecline;
+    Button btnSignOut, btnPendingOrders;
     TextView name, description, rating,email,address,numberSold;
     User user;
     ImageView blankCheque;
@@ -86,7 +86,7 @@ public class cook_profile extends AppCompatActivity
                         temp = null;
                     }
 
-                    rating.setText("Rating: " + total/size);
+                    rating.setText("Rating: " + (double)Math.round(total/size));
                     if(size == 0)
                         rating.setText("unrated");
                     databaseReference.removeEventListener(this);
@@ -108,6 +108,7 @@ public class cook_profile extends AppCompatActivity
                         }
                     }
                     numberSold.setText("number of meals sold " + noSold);
+                    databaseReference.removeEventListener(this);
                 }
 
                 @Override
