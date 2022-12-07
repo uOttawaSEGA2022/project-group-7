@@ -274,6 +274,7 @@ public class Search extends AppCompatActivity {
                             editTextViewMealName.setText("Meal: " + meal.getName());
                             editTextViewMealDescription.setText("Meal Desc: " + meal.getDescription());
                             final AlertDialog b = dialogBuilder.create();
+                            cookDatabaseReference.removeEventListener(this);
                             b.show();
                             break;
                         }
