@@ -100,12 +100,15 @@ public class cook_profile extends AppCompatActivity
             databaseReferenceOrders.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Iterable<DataSnapshot> children = snapshot.getChildren();
                     int noSold = 0;
-                    for(DataSnapshot postSnapshot : snapshot.getChildren()){
-                        Order order = postSnapshot.getValue(Order.class);
-                        if(order.getCookEmail().equals(user.getEmail()) && order.getState().equals("ACCEPTED")){
+                    Order temp = new Order();
+                    for (DataSnapshot child : children) {
+                        temp = child.getValue(Order.class);
+                        if(temp.getCookEmail().equals(user.getEmail()) && temp.getState().equals("ACCEPTED")){
                             noSold++;
                         }
+                        temp = null;
                     }
                     numberSold.setText("number of meals sold " + noSold);
                     databaseReferenceOrders.removeEventListener(this);
