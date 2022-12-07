@@ -38,6 +38,7 @@ import UserJavaFiles.Cook;
 import UserJavaFiles.Meal;
 
 import UserJavaFiles.Order;
+import UserJavaFiles.Rating;
 import UserJavaFiles.User;
 import UserJavaFiles.UserPOJO;
 import codeModules.Modules;
@@ -243,7 +244,33 @@ public class Search extends AppCompatActivity {
                             dialogBuilder.setTitle(meal.getEmail());
                             editTextViewName.setText("Name: " + currentCook.getFirstName());
                             editTextCookDescription.setText("Cook Desc: " + currentCook.getDescription());
-                            editTextViewRating.setText("Rating: " + "5");//needs to go in cook finder
+                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                            DatabaseReference databaseReferenceRating = firebaseDatabase.getReference("Ratings");
+                            databaseReferenceRating.addValueEventListener(new ValueEventListener() {
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Iterable<DataSnapshot> children = snapshot.getChildren();
+                                    Rating temp = new Rating();
+                                    double total = 0;
+                                    int size = 0;
+                                    for (DataSnapshot child : children) {
+                                        temp = child.getValue(Rating.class);
+                                        if (temp.getEmail().equals(meal.getEmail())) {
+                                            total += temp.getRating();
+                                            size++;
+                                        }
+                                        temp = null;
+                                    }
+
+                                    editTextViewRating.setText("Cook Rating: " + (double)Math.round((total/size) * 10)/10);
+                                    if(size == 0)
+                                        editTextViewRating.setText("unrated");
+                                    databaseReferenceRating.removeEventListener(this);
+                                }
+                                //no need for this function but must be overridden
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
                             editTextViewMealName.setText("Meal: " + meal.getName());
                             editTextViewMealDescription.setText("Meal Desc: " + meal.getDescription());
                             final AlertDialog b = dialogBuilder.create();
