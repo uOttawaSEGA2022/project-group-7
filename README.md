@@ -14,7 +14,7 @@ password:admin
 
 COOK LOGN
 ---------------
-user:cook@gmail.com
+user:cooker@gmail.com
 password:123
 
 CLIENT LOGIN
